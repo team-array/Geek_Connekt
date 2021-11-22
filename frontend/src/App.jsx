@@ -5,6 +5,7 @@ import 'antd/dist/antd.css';
 import Home from "./pages/Home/Home";
 import Signin from "./pages/Signin/Signin";
 import Signup from "./pages/Signup/Signup";
+import Profile from "./pages/Geeks-Connect/Profile/Profile";
 
 config.console(config.MODE);
 
@@ -16,6 +17,7 @@ const App = () => {
           <Route  path="/" element={<Home/>} />
           <Route  path="/signin" element={<Signin/>} />
           <Route  path="/signup" element={<Signup/>} />
+          <Route  path="/profile" element={<Profile/>} />
         </Routes>
       </HashRouter>
     </div>
