@@ -49,7 +49,7 @@ const UserSchema = new Schema({
 
 UserSchema.methods.generateAuthToken = async function () {
     try {
-        console.log("Generating token for: ", this);
+        // console.log("Generating token for: ", this);
         const userToken = jwt.sign(
             {
                 username: this.username.toString(),
@@ -59,13 +59,13 @@ UserSchema.methods.generateAuthToken = async function () {
             },
             process.env.JWT_SCRECT
         );
-        this,
-            tokens.push({
-                token: userToken,
-            });
+        console.log("Token generated");
+        this.tokens.push({ token: userToken.toString() });
         await this.save();
         return userToken;
     } catch (error) {
         console.log(error);
     }
 };
+
+module.exports = mongoose.model("User", UserSchema);
