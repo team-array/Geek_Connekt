@@ -1,10 +1,17 @@
 import React from 'react'
+import {Navbar} from './components/Navbar'
+import { Profilepage } from './components/Profilepage'
+
 
 const Profile = () => {
     return (
-        <div>
-            <h1>Profile</h1>
-        </div>
+       <div style={{background:'#efefef'}}>
+           {/* <Navbar/> */}
+            <Profilepage/>
+       </div>
+
+
+
     )
 }
 
