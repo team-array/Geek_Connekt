@@ -1,10 +1,13 @@
 import React from 'react'
+import { Profilepage } from './components/Profilepage'
+
 
 const Profile = () => {
     return (
-        <div>
-            <h1>Profile</h1>
-        </div>
+       <div style={{background:'#efefef'}}>
+            <Profilepage/>
+       </div>
+
     )
 }
 

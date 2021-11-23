@@ -1,0 +1,290 @@
+.ProfilepageComponent{
+    .profile-container{
+        padding: 20px 5rem;
+        color: #626262;
+        @media screen and (max-width: 768px){
+            padding: 20px 2rem;
+        }
+        @media screen and (max-width: 450px){
+            padding: 20px 1rem;
+        }
+    }
+    
+    .cover-img{
+        width: 100%;
+        height: 55vh;
+        border-radius: 6px;
+        margin-bottom: 14px;
+        @media screen and (max-width: 768px){
+            height: 43vh;
+        }
+        @media screen and (max-width: 500px){
+            height: 33vh;
+        }
+    }
+    .profile-details{
+        background: #fff;
+        padding: 20px;
+        border-radius: 4px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+        flex-wrap: wrap;
+    }
+    .pd-row{
+        display: flex;
+        align-items: flex-start;
+        
+    }
+    .pd-img{
+        width: 100px;
+        margin-right: 20px;
+        border-radius: 6px;
+    
+    }
+    .pd-row div h3{
+        font-size: 25px;
+        font-weight: 600;
+        margin-bottom: 0px;
+    }
+    .pd-row div p{
+        font-size: 15px; 
+        margin-bottom: 0px;
+    }
+    .pd-row div img{ 
+        width: 25px;
+        border-radius:50%;
+        margin-top: 0px;
+    }
+    .pd-right button{
+        background: #1876f2;
+        border: 0;
+        outline: 0;
+        padding: 6px 10px;
+        display: block;
+        color: #fff;
+        border-radius: 3px;
+        margin-left: 10px;
+        cursor: pointer;
+        
+    }
+    .pd-right{
+        @media screen and (max-width: 495px){
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+    }
+    .pd-right button:hover{
+        background: #0f5ec7;
+    }
+    .pd-right button img{
+        height: 15px;
+        margin-right: 10px;
+    }
+    .write-post-container{
+        width: 100%;
+        background: #fff;
+        border-radius: 6px;
+        padding: 20px; 
+        box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+        columns: #626262;
+    }
+    .user-profile{
+        display: flex;
+        align-items: center;
+        
+        
+    }
+    .user-profile img{
+        width: 45px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+    .user-profile div p{
+        margin-bottom: -5px;
+        font-weight: 600; 
+        color: #626262;
+    }
+    .user-profile small{
+        font-size: 12px;
+        color: #626262;
+    }
+    .post-input-container{
+        padding-left:55px ;
+        padding-top: 20px;
+    }
+    .post-input-container textarea{
+        width: 100%;
+        border: 0;
+        outline: 0;
+        border-bottom:1px solid #ccc;
+        background: transparent;
+        resize: none;
+    }
+    .add-post-links{
+        display: flex;
+        flex-wrap:wrap;
+    }
+    .add-post-links a{
+        text-decoration: none;
+        color: #626262;
+        display: flex;
+        align-items: center;
+        margin-right: 30px;
+        font-size: 13px;
+        margin-top: 10px;
+
+    }
+    .add-post-links a img{
+        width: 20px;
+        margin-right: 10px;
+    }
+    .post-container{
+        width: 100%;
+        background: #fff;
+        border-radius: 6px;
+        padding: 20px;
+        color: #626262;
+        margin: 20px 0;
+    }
+    .user-profile span{
+        font-size: 12px;
+        color: #9a9a9a;
+    }
+    .post-text{
+        color: #9a9a9a;
+        margin :15px 0;
+        font-size: 15px;
+    }
+    .post-img{
+        width: 100%;
+        border-radius: 4px;
+        margin-bottom: 5px;
+    }
+    .post-row{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .activity-icons div img{
+        width: 18px;
+        margin-right: 10px;
+    }
+    .activity-icons div{
+        display:inline-flex;
+        align-items: center;
+        margin-right: 30px;
+    }
+    .post-porfile-icon{
+        display: flex;
+        align-items: center;
+        
+    }
+    .post-profile-icon img{
+        width: 20px;
+        border-radius: 50%;
+        margin-right: 5px;
+    }
+    .profile-info{
+        display: flex;
+        justify-content: space-between;
+        width:30vw;
+        margin-right: 3rem;
+        
+    }
+    .profile-info1{
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        width:58vw;
+        @media screen and (max-width: 900px){
+            width:100%;
+        }
+    }
+    
+    .ProfileBlog{
+        display: flex;
+        margin-top: 20px;
+        flex-direction: row;
+    }
+    
+    .profile-intro{
+        background: #fff;
+        padding: 20px;
+        margin-bottom: 20px;
+        border-radius: 4px;
+    }
+    .profile-intro h3{
+        
+        font-weight: 600;
+        
+    }
+    .intro-text{
+        text-align: center;
+        margin: 10px 0;
+        font-size: 15px;
+    }
+    .profile-intro hr{
+        border: 0;
+        height: 1px;
+        background: #ccc;
+        margin: 24px 0;
+    }
+    .profile-intro ul li{
+        list-style: none;
+        font-size: 15px;
+        margin: 15px 0;
+        display: flex;
+        align-items: center;
+    }
+    .profile-intro ul li img{
+        width: 26px;
+        margin-right: 10px;
+    }
+    
+    .title-box{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        
+    }
+    .title-box a{
+        text-decoration: none;
+        color: #1876f2;
+        font-size: 14px;
+        
+    }
+    .postsbox{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        align-items: center;
+    }
+    .postsbox img{
+        width:150px;
+        height:150px;
+        margin-bottom: 20px;
+    }
+    .photo-box div img{
+        width: 100%;
+        cursor: pointer;
+    }
+    
+    @media screen and (max-width:900px){
+        .profile-info{
+            width:100%;
+        }
+        .ProfileBlog{
+            flex-direction: column;
+        }
+        .info-col{
+            width:100vw;
+        }
+        .post-col{
+            width:100vw;
+        }
+    }
+}
