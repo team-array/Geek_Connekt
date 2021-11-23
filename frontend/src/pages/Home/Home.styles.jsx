@@ -16,8 +16,8 @@ export const Main = styled.div`
     flex-direction: row;
     justify-content: space-around; !important;
     align-items: center;
-    margin: 4rem;
-    height:80vh;
+    margin: 1.6rem 3rem;
+    height:77vh;
     @media (max-width: 500px) {
         margin: 2rem;
     }
@@ -27,7 +27,7 @@ export const MainContext = styled.div`
     self-align: center;
     width: 50vw;
     margin-right: auto;
-    margin-bottom: 5rem;
+    margin-top: 1rem;
     @media (max-width: 1000px) {
         margin-right: auto;
         margin-left: auto;
@@ -42,10 +42,10 @@ export const MainContext = styled.div`
         width: 100%;
         p{
             text-align: justify;
-            font-size: 1.2rem!important;
+            font-size: 1rem!important;
         }
         h1{
-            font-size: 1.7rem!important;
+            font-size: 1.4rem!important;
         }
         .MainContextButton{
             font-size: 1rem!important;
@@ -63,15 +63,18 @@ export const ImgContainer = styled.div`
     height: 100%;
     background-image: url(${SocialUpdate});
     background-repeat: no-repeat;
-    margin-top: 5rem;
+    margin-top: 3rem;
     @media (max-width: 1600px) {
         background-image: url(${SocialUpdate1600});
     }
     @media (max-width: 1300px) {
         background-image: url(${SocialUpdate1300});
+        margin-top: 0rem;
+
     }
     @media (max-width: 1000px) {
         width: 0%;
         display: none;
+        margin-top: 0rem;
     }
 `

@@ -16,6 +16,8 @@ import job from './img/profile-job.png'
 import study from './img/profile-study.png'
 import home from './img/profile-home.png'
 import location from './img/profile-location.png'
+import { Button } from 'antd';
+
 
 import post1 from './img/photo1.png'
 import post2 from './img/photo2.png'
@@ -26,30 +28,30 @@ import post6 from './img/photo6.png'
 
 
 
-import './porfilepage.css'
+import './porfilepage.scss';
 
 export const Profilepage = () => {
     return (
-        <div>
+        <div className="ProfilepageComponent">
             <div className="profile-container">
-                <img src={coverimg} alt="" className="cover-img"/>
-                <div className="profile-details">
-                    <div className="pd-left">
+                <img src={coverimg} alt="coverimg" className="cover-img"/>
+                <div className="profile-details mt-1">
+                    <div className="pd-left mr-auto my-2">
                         <div className="pd-row">
-                            <img src={profileimg} alt="" className="pd-img"/>
+                            <img src={profileimg} alt="profileimg" className="pd-img"/>
                             <div>
                             <h3>Kranthi Kumar</h3>
                             <p>Student connection</p>
-                            <img src={star} alt="" />
+                            <img src={star} alt="star" />
                         </div>
                     </div>
                 </div>
-                <div className="pd-right">
-                    <button type="button">
-                    <img src={info} alt="" />Informative</button>
-                    <button type="button">
+                <div className="pd-right my-3 mb-0 ml-auto" style={{width:"max-content"}}>
+                    <Button type="button" className="mb-3">
+                    <img src={info} alt="" />Informative</Button>
+                    <Button type="button">
                         <img src={micon} alt="" />
-                        message</button>
+                        message &nbsp; </Button>
 
                 </div>
                 </div>
@@ -77,7 +79,7 @@ export const Profilepage = () => {
                             <div className="title-box">
                             <h3 style={{marginLeft:"9px"}}
                             >info & posts</h3>
-                            <a href="#" style={{marginRight:"9px"}}>All photos</a>
+                            <a href="/" style={{marginRight:"9px"}}>All photos</a>
                             </div>
                             
                             <div className="postsbox">
@@ -104,9 +106,9 @@ export const Profilepage = () => {
                             <div className="post-input-container">
                                 <textarea row="3" placeholder="Write a post..."></textarea>
                                 <div className="add-post-links">
-                                    <a href="#"><img src={live} alt="" />Live Video</a>
-                                    <a href="#"><img src={photo} alt="" />Photo/Video</a>
-                                    <a href="#"><img src={feeling} alt="" />Feeling</a>
+                                    <a href="/"><img src={live} alt="" />Live Video</a>
+                                    <a href="/"><img src={photo} alt="" />Photo/Video</a>
+                                    <a href="/"><img src={feeling} alt="" />Feeling</a>
                                 </div>
                             </div>
                         </div>
