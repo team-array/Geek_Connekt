@@ -22,7 +22,7 @@ const UserType = new GraphQLObjectType({
         tokens: {
             type: new GraphQLList(GraphQLString),
             resolve(parent, args) {
-                console.log("parent: ", parent.tokens);
+                // console.log("parent: ", parent.tokens);
                 return parent.tokens.map((token) => token.token);
             },
         },
@@ -62,33 +62,6 @@ const RootQuery = new graphql.GraphQLObjectType({
             },
             resolve(parent, args) {
                 return userResolver(args);
-                // let tokenGenerated = { token: "testing" };
-                // User.findOne({ username: args.username }).then((user) => {
-                //     if (!user) {
-                //         throw new Error("User not found");
-                //     }
-                //     bcrypt
-                //         .compare(args.password, user.password)
-                //         .then((result) => {
-                //             if (result) {
-                //                 user.generateAuthToken()
-                //                     .then((token) => {
-                //                         tokenGenerated = {
-                //                             token,
-                //                         };
-                //                         console.log("token: ", tokenGenerated);
-                //                         return tokenGenerated;
-                //                     })
-                //                     .catch((err) => {
-                //                         console.log(err);
-                //                     });
-                //             } else {
-                //                 throw new Error("Password not matched");
-                //             }
-                //         });
-                //     console.log("user token: ", tokenGenerated);
-                //     return tokenGenerated;
-                // });
             },
         },
     },

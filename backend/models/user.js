@@ -59,7 +59,7 @@ UserSchema.methods.generateAuthToken = async function () {
             },
             process.env.JWT_SCRECT
         );
-        console.log("Token generated");
+        // console.log("Token generated");
         this.tokens.push({ token: userToken.toString() });
         await this.save();
         return userToken;

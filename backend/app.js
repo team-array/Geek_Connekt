@@ -38,12 +38,15 @@ mongoose
     )
     .then((result) => {
         console.log(chalk.green("Connected to MongoDB"));
-        app.listen(process.env.PORT || 8000, (e) => {
+        const port = process.env.PORT || 8000;
+        app.listen(port, (e) => {
             if (e) {
                 console.log(e);
             } else {
                 console.log(
-                    chalk.green(`CONNECTION TO EXPRESS ESTABLISHED at port`)
+                    chalk.green(
+                        `CONNECTION TO EXPRESS ESTABLISHED at port: ${port}`
+                    )
                 );
             }
         });

@@ -21,7 +21,7 @@ const userResolver = async (args) => {
                 process.env.JWT_SCRECT
             );
             user.tokens.push({ token: userToken.toString() });
-            console.log("userToken: ", userToken);
+            // console.log("userToken: ", userToken);
             await user.save();
             return {
                 token: userToken,
@@ -46,7 +46,7 @@ const userCreateResolver = async (args) => {
     });
     user.password = bcrypt.hashSync(user.password, 10);
     const token = await user.generateAuthToken();
-    console.log("Token: ", token);
+    // console.log("Token: ", token);
     return { token: token };
 };
 
