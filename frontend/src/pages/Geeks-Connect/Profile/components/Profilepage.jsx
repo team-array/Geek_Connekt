@@ -27,12 +27,30 @@ import post5 from './img/photo5.png'
 import post6 from './img/photo6.png'
 
 
-
 import './porfilepage.scss';
 
 export const Profilepage = () => {
+    const [edit,setedit] = React.useState(false);
     return (
         <div className="ProfilepageComponent">
+            <div className="EditForm shadow" 
+                style={{
+                    display:(edit)?"block":"none",
+                    height:"20rem",
+                    width:"50rem",
+                    backgroundColor:"#fff",
+                    borderRadius:"10px",
+                    position:"absolute",
+                    top:"50%",
+                    left:"50%",
+                    transform:"translate(-50%,-50%)",
+                    zIndex:"999",
+                    overflowY:"scroll",
+                    padding:"1rem",
+
+                }}>
+
+            </div>
             <div className="profile-container">
                 <img src={coverimg} alt="coverimg" className="cover-img"/>
                 <div className="profile-details mt-1">
@@ -43,6 +61,9 @@ export const Profilepage = () => {
                             <h3>Kranthi Kumar</h3>
                             <p>Student connection</p>
                             <img src={star} alt="star" />
+                            <Button type="button" className="my-2 mx-2" onClick={()=>{
+                                setedit(!edit);
+                            }}>Edit profile</Button>
                         </div>
                     </div>
                 </div>
