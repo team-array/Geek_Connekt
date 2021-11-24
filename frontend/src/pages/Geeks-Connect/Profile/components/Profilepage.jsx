@@ -30,14 +30,29 @@ import post6 from './img/photo6.png'
 import './porfilepage.scss';
 
 export const Profilepage = () => {
+    // const tabBtn =document.querySelectorAll('.tab');
+    // const tabR = document.querySelectorAll('.tabShow');
+    // function tabs(panelIndex){
+    //     tabR.forEach(function(node){
+    //         node.style.display = 'none';
+
+    //     });
+    //     tabR[panelIndex].style.display = 'block';
+        
+    // }
+    // tabs(0);
+    const tabBtn =document.querySelectorAll('.tab');
+    const [tab,setTab]=React.useState(0);
+
+
     const [edit,setedit] = React.useState(false);
     return (
         <div className="ProfilepageComponent">
             <div className="EditForm shadow" 
                 style={{
                     display:(edit)?"block":"none",
-                    height:"20rem",
-                    width:"50rem",
+                    height:"33rem",
+                    width:"rem",
                     backgroundColor:"#fff",
                     borderRadius:"10px",
                     position:"absolute",
@@ -45,10 +60,101 @@ export const Profilepage = () => {
                     left:"50%",
                     transform:"translate(-50%,-50%)",
                     zIndex:"999",
-                    overflowY:"scroll",
+                    // overflowY:"scroll",
                     padding:"1rem",
-
+                    // background:"#0000ff"
+                    overflowX:"hidden"
                 }}>
+
+                {/* eddit00 */}
+                <div className="edit-container">
+                    <div className="leftbox">
+                        <nav>
+                        <a onClick={()=>{
+                            setTab(0);
+                        }}  className="tab active"><i className="fa fa-user"></i></a>
+                        <a onClick={()=>{
+                            setTab(1);
+                        }} className="tab"><i className="fa fa-camera"></i></a>
+                        <a onClick={()=>{
+                            setTab(2);
+                        }} className="tab"><i className="fa fa-address-card"></i></a>
+                        <a onClick={()=>{
+                            setTab(3);
+                        }}  className="tab"><i class="fas fa-location"></i></a>
+                        <a onClick={()=>{
+                            setTab(4);
+                        }} className="tab" ><i className="fa fa-cog"></i></a>
+                        </nav>
+                    </div>
+
+                  <div className="rightbox">
+                        {
+                            tab===0 ? <div className="profile-edit tabShow">
+                            <h1>Personal Info</h1>
+                            <h2>Full Name</h2>
+                            <input type="text" className="input" value="" />
+                            <h2>Birthday</h2>
+                            <input type="text" className="input" value="" />
+                            <h2>email</h2>
+                            <input type="text" className="input" value="" />
+                            <h2>Password</h2>
+                            <input type="password" className="input" value="" />
+                            <button className="btnU">Update</button>
+                        </div> : null
+                        }
+                        { tab ===1 ?<div className="camera-edit tabShow">
+                            <h1>Update Profile Pic</h1>
+                            <h2>Profile Pic</h2>
+                            <label for="myfile">Select a file:</label>
+                            <input type="file" id="myfile" name="myfile"/>
+                            <h2>Cover Pic</h2>
+                            <label for="myfile">Select a file:</label>
+                            <input type="file" id="myfile" name="myfile"/>
+                            <button className="btnU">Update</button>
+                        </div> : null}
+                        { tab ===2 ? <div className="profile-edit tabShow"
+                        >
+                            <h1>Intro</h1>
+                            <h2>Say something</h2>
+                            <input type="text" className="input" value="" />
+                            <h2>Secondary school</h2>
+                            <input type="text" className="input" value="" />
+                            <h2>Primary school</h2>
+                            <input type="text" className="input" value="" />
+                            
+                            
+                            <button className="btnU">Update</button>
+                        </div>
+                        : null}
+                        {
+                             tab ===3 ?<div className="profile-edit tabShow">
+                             <h1>Location</h1>  
+                            <h2>Live Location</h2>
+                            <input type="text" className="input" value="" />
+                            <h2>Home town</h2>
+                            <input type="text" className="input" value="" />
+                            <button className="btnU">Update</button>
+                        </div>: null
+                        }
+                       
+                        
+                       { tab ===4 ? <div className="profile-edit tabShow">
+                            <h1>Personal Info</h1>
+                            <h2>Full Name</h2>
+                            <input type="text" className="input" value="" />
+                            <h2>Birthday</h2>
+                            <input type="text" className="input" value="" />
+                            <h2>email</h2>
+                            <input type="text" className="input" value="" />
+                            <h2>Password</h2>
+                            <input type="password" className="input" value="" />
+                            <button className="btnU">Update</button>
+                        </div> : null}
+
+                    </div>
+                </div>
+
 
             </div>
             <div className="profile-container">

@@ -4,20 +4,26 @@
     "description": "",
     "main": "app.js",
     "dependencies": {
+        "bcrypt": "^5.0.1",
         "body-parser": "^1.19.0",
         "chalk": "^4.1.2",
         "cors": "^2.8.5",
         "dotenv": "^10.0.0",
         "express": "^4.17.1",
+        "express-graphql": "^0.12.0",
+        "graphql": "^16.0.1",
+        "jsonwebtoken": "^8.5.1",
         "mongoose": "^6.0.13",
-        "morgan": "^1.10.0"
+        "morgan": "^1.10.0",
+        "validator": "^13.7.0"
     },
     "devDependencies": {
         "nodemon": "^2.0.15"
     },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "nodemon app.js"
+        "start": "node app.js",
+        "dev": "nodemon app.js"
     },
     "author": "",
     "license": "ISC"
