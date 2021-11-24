@@ -1,0 +1,24 @@
+.emoji-mart{
+    position: absolute;
+    bottom: 0;
+    right:0;
+}
+
+.AddPost{
+    .onCropContainer{
+        width:430px;
+        @media screen and (max-width: 768px){
+            width:300px;
+        }
+    }
+    .Crop{
+        max-width:430px;
+        @media screen and (max-width: 768px){
+            max-width:300px;
+        } 
+    }
+    .Croped{
+        width:430px;
+
+    }
+}

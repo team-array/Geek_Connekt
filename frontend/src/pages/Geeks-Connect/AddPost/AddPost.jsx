@@ -12,6 +12,7 @@ import TextField from '@mui/material/TextField';
 import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import { Picker } from "emoji-mart";  
 import "emoji-mart/css/emoji-mart.css"; 
+import "./AddPost.scss";
 
 const AddPost = () => {
   const open = React.useState(true);
@@ -101,7 +102,7 @@ const AddPost = () => {
       setcaption(caption + emoji);
     };  
   return (
-    <div>
+    <div className="AddPost">
       <Backdrop
         sx={{
           color: "#fff",
@@ -159,12 +160,11 @@ const AddPost = () => {
             </Dragger>
           ) : (
             <div
+              className="onCropContainer"
               style={{
-                width: "max-content",
                 margin: "auto",
                 display: "flex",
                 flexDirection: "column",
-                width:"430px"
               }}
             >
               {
@@ -183,7 +183,7 @@ const AddPost = () => {
                     crop
                   </Button>
                   <ReactCrop
-                    style={{ maxWidth: "430px" }}
+                    className="Crop"
                     src={src}
                     crop={crop}
                     onImageLoaded={setImage}
@@ -197,7 +197,7 @@ const AddPost = () => {
                     src && (
                       <div className="">
                         <img
-                          src={src}
+                          src={result}
                           alt="cropped img"
                           style={{ width: "100%" }}
                         />
@@ -208,7 +208,7 @@ const AddPost = () => {
               {
               (curr===1)?(
                 result && (
-                  <div className="mt-3">
+                  <div className="mt-3 ">
                     <img
                       src={result}
                       alt="cropped img"
