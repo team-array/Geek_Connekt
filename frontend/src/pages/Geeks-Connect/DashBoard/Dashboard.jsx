@@ -8,6 +8,7 @@ import Feed from "../Feed/Feed";
 import Favorites from "../Favorites/Favorites";
 import Events from "../Events/Events";
 import {useSelector} from "react-redux";
+import AddPost from "../AddPost/AddPost";
 
 const Dashboard = () => {
     const currentPage = useSelector(state => state.currentPage);
@@ -24,7 +25,6 @@ const Dashboard = () => {
     const notifications = () => {
 
     }
-    console.log(currentPage);
     return (
         <div className="dashboard">
             <Navbar name={AppName} logout={logout} myprofile={myprofile} others_profile={others_profile}
@@ -32,8 +32,9 @@ const Dashboard = () => {
             {
                 currentPage === 0 ? <Feed/> :
                     currentPage === 1 ? <Favorites/> :
-                        currentPage === 3 ? <Events/> :
-                            currentPage === 4 ? <ProfilePage/> : <></>
+                        currentPage === 2 ? <AddPost/> :
+                            currentPage === 3 ? <Events/> :
+                                currentPage === 4 ? <ProfilePage/> : <></>
             }
             <Footer/>
         </div>

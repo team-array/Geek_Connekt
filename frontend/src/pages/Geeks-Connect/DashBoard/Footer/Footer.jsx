@@ -8,21 +8,20 @@ import FeedIcon from '@mui/icons-material/Feed';
 import PersonIcon from '@mui/icons-material/Person';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import "./Footer.scss";
-import {useDispatch} from "react-redux";
+import {useDispatch,useSelector} from "react-redux";
 
 
 export default function Footer() {
   const disp = useDispatch();
-  const [value, setValue] = React.useState(0);
+  const currentPage = useSelector(state => state.currentPage);
 
   return (
     <Box className="shadow-lg" color="primary" sx={{ width: "100vw",position:"fixed",bottom:"0",zIndex:"999999"}}>
       <BottomNavigation
         showLabels
-        value={value}
+        value={currentPage}
         onChange={(event, newValue) => {
           disp({type:"SET_CURRENT_PAGE",payload:newValue});
-          setValue(newValue);
         }}
       >
         <BottomNavigationAction 
