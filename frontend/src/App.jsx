@@ -6,6 +6,7 @@ import Home from "./pages/Home/Home";
 import Signin from "./pages/Signin/Signin";
 import Dashboard from "./pages/Geeks-Connect/DashBoard/Dashboard";
 import AOS from "aos";
+import 'react-image-crop/dist/ReactCrop.css';
 
 
 config.console(config.MODE);
