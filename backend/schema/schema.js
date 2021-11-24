@@ -1,7 +1,13 @@
 const graphql = require("graphql");
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
-const { userResolver, userCreateResolver } = require("./userResolver");
+const {
+    userResolver,
+    userCreateResolver,
+    editUserResolver,
+    editUserBioResolver,
+    editUserLocationResolver
+} = require("./userResolver");
 
 const {
     GraphQLObjectType,
@@ -94,8 +100,40 @@ const Mutation = new graphql.GraphQLObjectType({
             },
         },
         editUser: {
-            
-        }
+            type: AuthType,
+            args: {
+                token: { type: graphql.GraphQLString },
+                username: { type: graphql.GraphQLString },
+                email: { type: graphql.GraphQLString },
+                birthDate: { type: graphql.GraphQLString },
+            },
+            resolve(parent, args) {
+                return editUserResolver(args);
+            },
+        },
+        editUserBio: {
+            type: AuthType,
+            args: {
+                token: { type: graphql.GraphQLString },
+                bio: { type: graphql.GraphQLString },
+                secondarySchool: { type: graphql.GraphQLString },
+                primarySchool: { type: graphql.GraphQLString },
+            },
+            resolve(parent, args) {
+                return editUserBioResolver(args);
+            },
+        },
+        editUserLocation: {
+            type: AuthType,
+            args: {
+                token: { type: graphql.GraphQLString },
+                location: { type: graphql.GraphQLString },
+                hometown: { type: graphql.GraphQLString },
+            },
+            resolve(parent, args) {
+                return editUserLocationResolver(args);
+            },
+        },
     },
 });
 

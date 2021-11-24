@@ -53,6 +53,10 @@ const UserSchema = new Schema({
         type: String,
         default: "India",
     },
+    hometown: {
+        type: String,
+        default: "Hyderabad",
+    },
     bio: {
         type: String,
         default: "Hola, I'm using Geek Connect 👋",
@@ -66,6 +70,17 @@ const UserSchema = new Schema({
         type: String,
         default:
             "https://res.cloudinary.com/geek-connekt/image/upload/v1637765536/backgroundPic_buqp8j.png",
+    },
+    birthDate: {
+        type: Date,
+    },
+    secondarySchool: {
+        type: String,
+        default: "",
+    },
+    primarySchool: {
+        type: String,
+        default: "",
     },
 });
 

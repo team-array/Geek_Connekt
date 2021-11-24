@@ -43,9 +43,10 @@ const userResolver = async (args) => {
 
 const userCreateResolver = async (args) => {
     try {
-        const dupUser = User.findOne({ username: args.username });
+        const dupUser = await User.findOne({ username: args.username });
+        // console.log("dupUser: ", dupUser);
         if (dupUser) {
-            return { token: "", result: "Error" };
+            return { token: "", result: "UserName already taken!" };
         }
         const user = new User({
             username: args.username,
@@ -65,7 +66,108 @@ const userCreateResolver = async (args) => {
     }
 };
 
+const editUserResolver = async (args) => {
+    try {
+        const { username } = jwt.verify(args.token, process.env.JWT_SCRECT);
+        const user = await User.findOne({ username: username });
+        if (user) {
+            // console.log("editUserResolver: ", username);
+            const dupUser = await User.findOne({ username: args.username });
+            if (user.username === args.username || dupUser === null) {
+                // console.log(dupUser);
+                // console.log("User not found");
+                user.username = args.username;
+                user.email = args.email;
+                const token = jwt.sign(
+                    {
+                        username: user.username.toString(),
+                        email: user.email.toString(),
+                        role: user.role.toString(),
+                        rollNumber: user.rollNumber.toString(),
+                    },
+                    process.env.JWT_SCRECT
+                );
+                user.tokens = [];
+                user.tokens.push({ token: token.toString() });
+                await user.save();
+                return { token: token, result: "Success" };
+            } else {
+                return {
+                    token: args.token,
+                    result: "Username Already taken",
+                };
+            }
+        }
+        return {
+            token: "",
+            result: "User doesn't Exist!",
+        };
+    } catch (error) {
+        console.log(error);
+        return {
+            token: "",
+            result: "Error",
+        };
+    }
+};
+
+const editUserBioResolver = async (args) => {
+    try {
+        const { username } = jwt.verify(args.token, process.env.JWT_SCRECT);
+        const user = await User.findOne({ username: username });
+        if (user) {
+            user.bio = args.bio;
+            user.secondarySchool = args.secondarySchool;
+            user.primarySchool = args.primarySchool;
+            await user.save();
+            return {
+                token: args.token,
+                result: "Success",
+            };
+        }
+        return {
+            token: "",
+            result: "User doesn't Exist!",
+        };
+    } catch (error) {
+        console.log(error);
+        return {
+            token: "",
+            result: "Error",
+        };
+    }
+};
+
+const editUserLocationResolver = async (args) => {
+    try {
+        const { username } = jwt.verify(args.token, process.env.JWT_SCRECT);
+        const user = await User.findOne({ username: username });
+        if (user) {
+            user.location = args.location;
+            user.homeTown = args.homeTown;
+            await user.save();
+            return {
+                token: args.token,
+                result: "Success",
+            };
+        }
+        return {
+            token: "",
+            result: "User doesn't Exist!",
+        };
+    } catch (error) {
+        console.log(error);
+        return {
+            token: "",
+            result: "Error",
+        };
+    }
+};
+
 module.exports = {
     userResolver,
     userCreateResolver,
+    editUserResolver,
+    editUserBioResolver,
+    editUserLocationResolver,
 };
