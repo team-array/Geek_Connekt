@@ -28,6 +28,7 @@ const UserType = new GraphQLObjectType({
         },
         role: { type: GraphQLString },
         rollNumber: { type: GraphQLString },
+        college: { type: GraphQLString },
     }),
 });
 
@@ -35,6 +36,7 @@ const AuthType = new GraphQLObjectType({
     name: "Auth",
     fields: () => ({
         token: { type: GraphQLString },
+        result: { type: GraphQLString },
     }),
 });
 
@@ -48,17 +50,12 @@ const RootQuery = new graphql.GraphQLObjectType({
                 return User.findById(args.id);
             },
         },
-        AuthCheck: {
-            type: AuthType,
-            resolve(parent, args) {
-                return { token: "asdasdasd" };
-            },
-        },
         auth: {
             type: AuthType,
             args: {
                 username: { type: GraphQLString },
                 password: { type: GraphQLString },
+                college: { type: GraphQLString },
             },
             resolve(parent, args) {
                 return userResolver(args);
@@ -88,11 +85,17 @@ const Mutation = new graphql.GraphQLObjectType({
                 rollNumber: {
                     type: new graphql.GraphQLNonNull(graphql.GraphQLString),
                 },
+                college: {
+                    type: new graphql.GraphQLNonNull(graphql.GraphQLString),
+                },
             },
             resolve(parent, args) {
                 return userCreateResolver(args);
             },
         },
+        editUser: {
+            
+        }
     },
 });
 
