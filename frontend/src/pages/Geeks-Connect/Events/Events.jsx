@@ -14,13 +14,22 @@ import "./Events.scss"
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import AddBoxIcon from '@mui/icons-material/AddBox';
+import AddEvents from "./AddEvents/AddEvents";
+import {useDispatch} from 'react-redux';
+import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 
 const Events = () => {
   const [value, setValue] = React.useState(new Date());
+  const dispatch = useDispatch();
+  const eventform = () => {
+    dispatch({ type: "SET_ADD_EVENTS", payload: true });
+  }
   return (
+    <>
+        <AddEvents/>
     <EventsContainer  data-aos="fade-down" className="Events">
-        <Button className="mb-4"><AddBoxIcon style={{marginBottom:"0.2rem"}}/> &nbsp; Add Events</Button>
-      <div className="shadow" style={{display: 'flex', flexDirection: 'row',justifyContent: 'space-between',flexWrap:"wrap"}}>
+        <Button className="mb-4" onClick={eventform}><AddBoxIcon style={{marginBottom:"0.2rem"}}/> &nbsp; Add Events</Button>
+      <div className="shadow-sm card" style={{display: 'flex', flexDirection: 'row',justifyContent: 'space-between',flexWrap:"wrap"}}>
         <LocalizationProvider className="mx-auto" style={{fontSize:"2rem",width:"600px"}} dateAdapter={AdapterDateFns}>
           <StaticDatePicker
             orientation="landscape"
@@ -39,7 +48,7 @@ const Events = () => {
             sx={{ width: "100%", bgcolor: "background.paper", }}
             className="mt-3 mx-0"
           >
-          <p className="text-center mb-0" style={{zIndex:"9999",fontSize:"1.4rem"}}>Events</p>
+          <p className="text-center mb-0" style={{zIndex:"9999",fontSize:"1.4rem"}}><EventAvailableIcon style={{marginBottom:"0.22rem"}}/>  Events</p>
           <p className="text-center text-muted font-italic mb-3" style={{zIndex:"9999",fontSize:"0.8rem"}}>on {`${
             value.getDate()}-${value.getMonth() + 1}-${value.getFullYear()}`}
           </p>
@@ -119,6 +128,7 @@ const Events = () => {
         </div>
       </div>
     </EventsContainer>
+    </>
   );
 };
 

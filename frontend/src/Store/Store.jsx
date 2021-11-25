@@ -1,9 +1,10 @@
 import { createStore, combineReducers } from "redux";
 
-import {currentPage} from "./reducers";
+import {currentPage,AddEvents} from "./reducers";
 
 const reducers =  combineReducers({
-    currentPage: currentPage
+    currentPage: currentPage,
+    AddEvents
 });
 
 const Store = createStore(reducers);

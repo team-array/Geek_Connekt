@@ -9,3 +9,16 @@ export const currentPage = (
             return state;
     }
 };
+
+
+export const AddEvents = (
+    state = false,
+    action
+) => {
+    switch (action.type) {
+        case "SET_ADD_EVENTS":
+            return action.payload;
+        default:
+            return state;
+    }
+};
