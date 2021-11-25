@@ -7,6 +7,8 @@ const morgan = require("morgan");
 const chalk = require("chalk");
 const { graphqlHTTP } = require("express-graphql");
 const schema = require("./schema/schema");
+const routes = require("./routes");
+const fileUpload = require("express-fileupload");
 
 const app = express();
 
@@ -15,6 +17,8 @@ app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: "50mb" }));
+app.use(fileUpload({ useTempFiles: true, tempFileDir: "/tmp/" }));
 
 app.use(
     "/graphql",
@@ -24,9 +28,7 @@ app.use(
     })
 );
 
-app.get("/", (req, res, next) => {
-    res.send("<h1>Welcome to Geek ConnecKt API!</h1>");
-});
+app.use(routes);
 
 mongoose
     .connect(

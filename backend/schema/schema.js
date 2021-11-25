@@ -6,8 +6,10 @@ const {
     userCreateResolver,
     editUserResolver,
     editUserBioResolver,
-    editUserLocationResolver
+    editUserLocationResolver,
 } = require("./userResolver");
+
+const { profilePicUploadResolver } = require("./fileuploadResolver");
 
 const {
     GraphQLObjectType,
@@ -17,6 +19,7 @@ const {
     GraphQLInt,
     GraphQLList,
     GraphQLNonNull,
+    GraphQLUpload,
 } = graphql;
 
 const UserType = new GraphQLObjectType({
@@ -43,6 +46,15 @@ const AuthType = new GraphQLObjectType({
     fields: () => ({
         token: { type: GraphQLString },
         result: { type: GraphQLString },
+    }),
+});
+
+const FileType = new GraphQLObjectType({
+    name: "File",
+    fields: () => ({
+        filename: { type: GraphQLString },
+        mimetype: { type: GraphQLString },
+        encoding: { type: GraphQLString },
     }),
 });
 
