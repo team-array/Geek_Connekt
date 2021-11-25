@@ -1,0 +1,7 @@
+.EventsForm{
+    @media screen and (max-width:500px){
+        overflow-y:scroll;
+        overflow-x:hidden;
+        padding:2rem;
+    }
+}

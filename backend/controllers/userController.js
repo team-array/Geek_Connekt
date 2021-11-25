@@ -1,4 +1,3 @@
-require("dotenv").config();
 const { cloudinary } = require("../utils/cloudinary");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
