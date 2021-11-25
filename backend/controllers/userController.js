@@ -62,3 +62,35 @@ exports.editProfilePic = async (req, res, next) => {
         });
     }
 };
+
+exports.uploadPost = async (req, res, next) => {
+    try {
+        console.log(req.files.image.tempFilePath);
+        // const uploadCloudinary = await cloudinary.uploader.upload(
+        //     req.files.file.tempFilePath,
+        //     {
+        //         upload_preset: "khq1jtjg",
+        //     }
+        // );
+        // console.log(uploadCloudinary);
+        // const token = req.body.token;
+        // const { username } = jwt.verify(token, process.env.JWT_SECRET);
+        // const user = await User.findOne({ username: username });
+        // if (user) {
+        //     user.posts.push(uploadCloudinary.secure_url);
+        //     await user.save();
+        //     res.status(200).json({
+        //         message: "Post uploaded successfully",
+        //     });
+        // } else {
+        //     res.status(404).json({
+        //         message: "User not found",
+        //     });
+        // }
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            message: "Internal server error",
+        });
+    }
+};
