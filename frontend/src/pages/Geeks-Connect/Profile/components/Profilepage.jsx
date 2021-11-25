@@ -18,6 +18,7 @@ import home from "./img/profile-home.png";
 import location from "./img/profile-location.png";
 import { Button } from "antd";
 import axios from "axios";
+import { useDispatch } from "react-redux";
 
 import post1 from "./img/photo1.png";
 import post2 from "./img/photo2.png";
@@ -29,17 +30,7 @@ import post6 from "./img/photo6.png";
 import "./porfilepage.scss";
 
 export const Profilepage = () => {
-    // const tabBtn =document.querySelectorAll('.tab');
-    // const tabR = document.querySelectorAll('.tabShow');
-    // function tabs(panelIndex){
-    //     tabR.forEach(function(node){
-    //         node.style.display = 'none';
-
-    //     });
-    //     tabR[panelIndex].style.display = 'block';
-
-    // }
-    // tabs(0);
+    const dispatch = useDispatch();
     const tabBtn = document.querySelectorAll(".tab");
     const [tab, setTab] = React.useState(0);
 
@@ -252,6 +243,7 @@ export const Profilepage = () => {
                                     className="my-2 mx-2"
                                     onClick={() => {
                                         setedit(!edit);
+                                        dispatch({type:"SET_EDIT_PROFILE",payload:true})
                                     }}
                                 >
                                     Edit profile

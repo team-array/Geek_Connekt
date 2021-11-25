@@ -22,3 +22,15 @@ export const AddEvents = (
             return state;
     }
 };
+
+export const EditProfile = (
+    state = false,
+    action
+) => {
+    switch (action.type) {
+        case "SET_EDIT_PROFILE":
+            return action.payload;
+        default:
+            return state;
+    }
+};
