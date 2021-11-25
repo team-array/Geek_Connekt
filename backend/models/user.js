@@ -20,6 +20,10 @@ const UserSchema = new Schema({
         type: String,
         required: true,
     },
+    college: {
+        type: String,
+        required: true,
+    },
     email: {
         type: String,
         required: true,
@@ -44,6 +48,39 @@ const UserSchema = new Schema({
     },
     rollNumber: {
         type: String,
+    },
+    location: {
+        type: String,
+        default: "India",
+    },
+    hometown: {
+        type: String,
+        default: "Hyderabad",
+    },
+    bio: {
+        type: String,
+        default: "Hola, I'm using Geek Connect 👋",
+    },
+    profilePic: {
+        type: String,
+        default:
+            "https://res.cloudinary.com/geek-connekt/image/upload/v1637765287/profilePic_llsevw.png",
+    },
+    backgroundPic: {
+        type: String,
+        default:
+            "https://res.cloudinary.com/geek-connekt/image/upload/v1637765536/backgroundPic_buqp8j.png",
+    },
+    birthDate: {
+        type: Date,
+    },
+    secondarySchool: {
+        type: String,
+        default: "",
+    },
+    primarySchool: {
+        type: String,
+        default: "",
     },
 });
 

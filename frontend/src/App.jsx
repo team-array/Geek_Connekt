@@ -7,6 +7,8 @@ import Signin from "./pages/Signin/Signin";
 import Dashboard from "./pages/Geeks-Connect/DashBoard/Dashboard";
 import AOS from "aos";
 import 'react-image-crop/dist/ReactCrop.css';
+import Profile from "./pages/Geeks-Connect/Profile/Profile";
+import { Profilepage } from "./pages/Geeks-Connect/Profile/components/Profilepage";
 
 
 config.console(config.MODE);

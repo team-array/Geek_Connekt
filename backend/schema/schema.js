@@ -1,7 +1,15 @@
 const graphql = require("graphql");
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
-const { userResolver, userCreateResolver } = require("./userResolver");
+const {
+    userResolver,
+    userCreateResolver,
+    editUserResolver,
+    editUserBioResolver,
+    editUserLocationResolver,
+} = require("./userResolver");
+
+const { profilePicUploadResolver } = require("./fileuploadResolver");
 
 const {
     GraphQLObjectType,
@@ -11,6 +19,7 @@ const {
     GraphQLInt,
     GraphQLList,
     GraphQLNonNull,
+    GraphQLUpload,
 } = graphql;
 
 const UserType = new GraphQLObjectType({
@@ -28,6 +37,7 @@ const UserType = new GraphQLObjectType({
         },
         role: { type: GraphQLString },
         rollNumber: { type: GraphQLString },
+        college: { type: GraphQLString },
     }),
 });
 
@@ -35,6 +45,16 @@ const AuthType = new GraphQLObjectType({
     name: "Auth",
     fields: () => ({
         token: { type: GraphQLString },
+        result: { type: GraphQLString },
+    }),
+});
+
+const FileType = new GraphQLObjectType({
+    name: "File",
+    fields: () => ({
+        filename: { type: GraphQLString },
+        mimetype: { type: GraphQLString },
+        encoding: { type: GraphQLString },
     }),
 });
 
@@ -48,17 +68,12 @@ const RootQuery = new graphql.GraphQLObjectType({
                 return User.findById(args.id);
             },
         },
-        AuthCheck: {
-            type: AuthType,
-            resolve(parent, args) {
-                return { token: "asdasdasd" };
-            },
-        },
         auth: {
             type: AuthType,
             args: {
                 username: { type: GraphQLString },
                 password: { type: GraphQLString },
+                college: { type: GraphQLString },
             },
             resolve(parent, args) {
                 return userResolver(args);
@@ -88,9 +103,47 @@ const Mutation = new graphql.GraphQLObjectType({
                 rollNumber: {
                     type: new graphql.GraphQLNonNull(graphql.GraphQLString),
                 },
+                college: {
+                    type: new graphql.GraphQLNonNull(graphql.GraphQLString),
+                },
             },
             resolve(parent, args) {
                 return userCreateResolver(args);
+            },
+        },
+        editUser: {
+            type: AuthType,
+            args: {
+                token: { type: graphql.GraphQLString },
+                username: { type: graphql.GraphQLString },
+                email: { type: graphql.GraphQLString },
+                birthDate: { type: graphql.GraphQLString },
+            },
+            resolve(parent, args) {
+                return editUserResolver(args);
+            },
+        },
+        editUserBio: {
+            type: AuthType,
+            args: {
+                token: { type: graphql.GraphQLString },
+                bio: { type: graphql.GraphQLString },
+                secondarySchool: { type: graphql.GraphQLString },
+                primarySchool: { type: graphql.GraphQLString },
+            },
+            resolve(parent, args) {
+                return editUserBioResolver(args);
+            },
+        },
+        editUserLocation: {
+            type: AuthType,
+            args: {
+                token: { type: graphql.GraphQLString },
+                location: { type: graphql.GraphQLString },
+                hometown: { type: graphql.GraphQLString },
+            },
+            resolve(parent, args) {
+                return editUserLocationResolver(args);
             },
         },
     },

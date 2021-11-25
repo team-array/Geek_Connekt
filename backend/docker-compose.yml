@@ -1,10 +1,10 @@
 version: '3'
 services:
   geek_connekt:
-    build: .
+    build:
+      context: .
     ports:
       - "8000:8000"
-    volumes:
-      - ./:/app
-      - /app/node_modules
-    
+    # volumes:
+    #   - ./:/app
+    #   - /app/node_modules
