@@ -55,7 +55,11 @@ const AddPost = () => {
             const formData = new FormData();
             const file = dataURLtoFile(result);
             formData.append("image", file, file.name);
-            formData.append("data", caption);
+            formData.append("caption", caption);
+            formData.append(
+                "token",
+                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkRlZXBlc2ggRHJhZ29uZWVsIiwiZW1haWwiOiJkZWVwZXNoYXNoNDQ0QGdtYWlsLmNvbSIsInJvbGUiOiJTdHVkZW50Iiwicm9sbE51bWJlciI6IjE5SDUxQTA1RzIiLCJpYXQiOjE2Mzc4MTYzNzF9.yrId7SkljS7Tl7b-iCx2LtT4wQakOWd9won9HzrNAms"
+            );
             const response = await axios({
                 method: "POST",
                 url: "http://localhost:8000/uploadPost",
