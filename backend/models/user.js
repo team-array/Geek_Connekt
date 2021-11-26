@@ -20,6 +20,13 @@ const UserSchema = new Schema({
         type: String,
         required: true,
     },
+<<<<<<< HEAD
+=======
+    college: {
+        type: String,
+        required: true,
+    },
+>>>>>>> c70c6c41bc9efc0c23b24978ef6d15878d51f5fd
     email: {
         type: String,
         required: true,
@@ -45,6 +52,48 @@ const UserSchema = new Schema({
     rollNumber: {
         type: String,
     },
+<<<<<<< HEAD
+=======
+    location: {
+        type: String,
+        default: "India",
+    },
+    hometown: {
+        type: String,
+        default: "Hyderabad",
+    },
+    bio: {
+        type: String,
+        default: "Hola, I'm using Geek Connect 👋",
+    },
+    profilePic: {
+        type: String,
+        default:
+            "https://res.cloudinary.com/geek-connekt/image/upload/v1637765287/profilePic_llsevw.png",
+    },
+    backgroundPic: {
+        type: String,
+        default:
+            "https://res.cloudinary.com/geek-connekt/image/upload/v1637765536/backgroundPic_buqp8j.png",
+    },
+    birthDate: {
+        type: Date,
+    },
+    secondarySchool: {
+        type: String,
+        default: "",
+    },
+    primarySchool: {
+        type: String,
+        default: "",
+    },
+    posts: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: "Post",
+        },
+    ],
+>>>>>>> c70c6c41bc9efc0c23b24978ef6d15878d51f5fd
 });
 
 UserSchema.methods.generateAuthToken = async function () {

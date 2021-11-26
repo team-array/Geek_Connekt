@@ -1,0 +1,21 @@
+.Events{
+    .EventBox{
+        border-left: 1px solid #bbb;
+        @media (max-width: 930px){
+            border-left: none;
+            margin-bottom:5rem;
+        }
+    }
+    .css-l0iinn {
+        font-size:1.3rem;
+    }
+    .css-bkrceb-MuiButtonBase-root-MuiPickersDay-root {
+        font-size:0.95rem;
+    }
+    .css-h9p2l5-MuiTypography-root{
+        font-size: 1.8rem;
+    }
+    .css-4l7j15{
+        margin:auto
+    }
+}
