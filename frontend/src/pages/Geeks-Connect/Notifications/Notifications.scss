@@ -1,0 +1,114 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,600,700|Trade+Winds&display=swap');
+.notifications{
+    margin-right: 25px;
+  }
+  .notification_ul{
+    padding-left: 1rem;
+  }
+
+  .notifications .icon_wrap{
+    font-size: 28px;
+  }
+  notifications{
+    position: relative;
+  }
+  .notification_dd{
+    position: absolute;
+    top: 70px;
+    right: 50px;
+    user-select: none;
+    background: #fff;
+    border: 1px solid #c7d8e2;
+    width: 380px;
+    height: auto;
+    // display: none;
+    border-radius: 3px;
+    box-shadow: 10px 10px 35px rgba(0,0,0,0.125),
+                -10px -10px 35px rgba(0,0,0,0.125);
+  }
+  .notification_dd:before{
+    content: "";
+    position: absolute;
+    top: -20px;
+    right: 15px;
+    border: 10px solid;
+    border-color: transparent transparent #fff transparent;
+}
+.notification_dd li {
+    border-bottom: 1px solid #f1f2f4;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+}
+.notification_dd li .notify_icon{
+    display: flex;
+  }
+  
+  .notification_dd li .notify_icon .icon{
+    display: inline-block;
+    background: url('https://i.imgur.com/MVJNkqW.png') no-repeat 0 0;
+      width: 40px;
+      height: 42px;
+  }
+  
+  .notification_dd li.baskin_robbins .notify_icon .icon{
+    background-position: 0 -43px;
+  }
+  
+  .notification_dd li.mcd .notify_icon .icon{
+    background-position: 0 -86px;
+  }
+  
+  .notification_dd li.pizzahut .notify_icon .icon{
+    background-position: 0 -129px;
+  }
+  .notification_dd li.kfc .notify_icon .icon{
+    background-position: 0 -178px;
+  }
+  
+  .notification_dd li .notify_data{
+    margin: 0 15px;
+    width: 185px;
+  }
+  
+  .notification_dd li .notify_data .title{
+    color: #000;
+    font-weight: 600;
+  }
+  
+  .notification_dd li .notify_data .sub_title{
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 5px;
+  }
+  
+  .notification_dd li .notify_status p{
+    font-size: 12px;
+  }
+  
+  .notification_dd li.success .notify_status p{
+    color: #0d1df5;
+  }
+  .notification_dd li.failed .notify_status p{
+    color: #fb9700;
+  }
+  
+  .notification_dd li.show_all{
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .notification_dd li.show_all p{
+    font-weight: 700;
+    color: #3b80f9;
+    cursor: pointer;
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+  
+  .notification_dd li.show_all p:hover{
+    text-decoration: underline;
+  }
