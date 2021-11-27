@@ -276,14 +276,14 @@ const EditProfile = () => {
             <TabPanel value={value} index={1}>
               <ImgCrop grid
                   cropSize={{
-                      width:"200",
+                      width:200,
                       height:200
                   }}
                   modalTitle="Crop Image"
                   onModalOk={(file) => {
-                        console.log(file);
-                  }
-                }
+                            console.log(file);
+                        }
+                    }
               >
                 <Upload
                   fileList={fileList}
