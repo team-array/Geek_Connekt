@@ -5,11 +5,11 @@ import comment from '../Profile/components/img/comments.png';
 import share from '../Profile/components/img/share.png';
 import feed from '../Profile/components/img/feed-image-1.png'
 import "./Feed.scss";
-
+import Comment from "../CommentBox/Comment";
 const Feed = () => {
   return (
     <div className="feed-container">
-
+      <Comment/>
     <div className="Feed ">
       <div className="post-container mb-5 card mx-auto shadow-sm">
         <div className="post-row">

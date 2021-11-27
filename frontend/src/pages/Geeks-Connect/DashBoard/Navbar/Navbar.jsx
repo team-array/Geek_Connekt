@@ -115,7 +115,7 @@ export default function PrimarySearchAppBar(props) {
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
     </Menu>
   );
-
+  const dispatch = useDispatch();
   const mobileMenuId = 'primary-search-account-menu-mobile';
   const renderMobileMenu = (
     <Menu
@@ -164,11 +164,13 @@ export default function PrimarySearchAppBar(props) {
         </IconButton>
         <p  className="mt-2">star Of Month</p>
       </MenuItem>
-      <MenuItem onClick={props.tools} >
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit"
-           onClick={()=>{
+      <MenuItem onClick={props.tools} 
+            onClick={()=>{
             dispatch({type:"SET_CURRENT_PAGE", payload: 5});
           }}
+      >
+        <IconButton size="large" aria-label="show 4 new mails" color="inherit"
+
         >
             <HomeRepairServiceIcon/>
         </IconButton>
@@ -182,7 +184,6 @@ export default function PrimarySearchAppBar(props) {
       </MenuItem>
     </Menu>
   );
-  const dispatch = useDispatch();
   return (
     <Box sx={{ flexGrow: 1 }} className="NavbarGk">
       <AppBar position="static" className="py-0" style={{position:"fixed",top:0,zIndex:"999999"}}>
