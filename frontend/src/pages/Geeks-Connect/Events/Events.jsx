@@ -1,16 +1,3 @@
-<<<<<<< HEAD
-import React from 'react'
-
-const Events = () => {
-    return (
-        <div>
-            
-        </div>
-    )
-}
-
-export default Events
-=======
 import React from "react";
 import { EventsContainer } from "./Events.styles";
 import isWeekend from "date-fns/isWeekend";
@@ -148,4 +135,3 @@ const Events = () => {
 
 export default Events;
 
->>>>>>> c70c6c41bc9efc0c23b24978ef6d15878d51f5fd
