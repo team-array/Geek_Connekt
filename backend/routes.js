@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+const express = require('express');
+const router = express.Router();
+
+=======
 const express = require("express");
 const router = express.Router();
 const userController = require("./controllers/userController");
@@ -11,3 +16,4 @@ router.get("/", (req, res, next) => {
 });
 
 module.exports = router;
+>>>>>>> c70c6c41bc9efc0c23b24978ef6d15878d51f5fd

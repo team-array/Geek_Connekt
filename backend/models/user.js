@@ -20,10 +20,13 @@ const UserSchema = new Schema({
         type: String,
         required: true,
     },
+<<<<<<< HEAD
+=======
     college: {
         type: String,
         required: true,
     },
+>>>>>>> c70c6c41bc9efc0c23b24978ef6d15878d51f5fd
     email: {
         type: String,
         required: true,
@@ -49,6 +52,8 @@ const UserSchema = new Schema({
     rollNumber: {
         type: String,
     },
+<<<<<<< HEAD
+=======
     location: {
         type: String,
         default: "India",
@@ -88,6 +93,7 @@ const UserSchema = new Schema({
             ref: "Post",
         },
     ],
+>>>>>>> c70c6c41bc9efc0c23b24978ef6d15878d51f5fd
 });
 
 UserSchema.methods.generateAuthToken = async function () {
