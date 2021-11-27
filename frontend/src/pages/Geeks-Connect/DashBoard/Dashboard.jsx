@@ -9,6 +9,7 @@ import Favorites from "../Favorites/Favorites";
 import Events from "../Events/Events";
 import {useSelector} from "react-redux";
 import AddPost from "../AddPost/AddPost";
+import ProfessionalTools from "../ProfessionalTools/ProfessionalTools";
 
 const Dashboard = () => {
     const currentPage = useSelector(state => state.currentPage);
@@ -28,13 +29,14 @@ const Dashboard = () => {
     return (
         <div className="dashboard">
             <Navbar name={AppName} logout={logout} myprofile={myprofile} others_profile={others_profile}
-                notifications={notifications}/>
+                notifications={notifications} />
             {
                 currentPage === 0 ? <Feed/> :
                     currentPage === 1 ? <Favorites/> :
                         currentPage === 2 ? <AddPost/> :
                             currentPage === 3 ? <Events/> :
-                                currentPage === 4 ? <ProfilePage/> : <></>
+                                currentPage === 4 ? <ProfilePage/> :
+                                    currentPage === 5 ? <ProfessionalTools/> : <></>
             }
             <Footer/>
         </div>

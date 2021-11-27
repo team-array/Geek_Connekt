@@ -14,7 +14,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import StarIcon from '@mui/icons-material/Star';
 import HomeRepairServiceIcon from '@mui/icons-material/HomeRepairService';
 import { Input, AutoComplete } from 'antd';
-
+import {useDispatch,} from 'react-redux';
 
 function getRandomInt(max, min = 0) {
     return Math.floor(Math.random() * (max - min + 1)) + min; // eslint-disable-line no-mixed-operators
@@ -165,7 +165,11 @@ export default function PrimarySearchAppBar(props) {
         <p  className="mt-2">star Of Month</p>
       </MenuItem>
       <MenuItem onClick={props.tools} >
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+        <IconButton size="large" aria-label="show 4 new mails" color="inherit"
+           onClick={()=>{
+            dispatch({type:"SET_CURRENT_PAGE", payload: 5});
+          }}
+        >
             <HomeRepairServiceIcon/>
         </IconButton>
         <p  className="mt-2">Professional Tools</p>
@@ -178,7 +182,7 @@ export default function PrimarySearchAppBar(props) {
       </MenuItem>
     </Menu>
   );
-
+  const dispatch = useDispatch();
   return (
     <Box sx={{ flexGrow: 1 }} className="NavbarGk">
       <AppBar position="static" className="py-0" style={{position:"fixed",top:0,zIndex:"999999"}}>
@@ -208,8 +212,12 @@ export default function PrimarySearchAppBar(props) {
               size="large"
               color="inherit"
               className="mx-1"
+              onClick={()=>{
+                dispatch({type:"SET_CURRENT_PAGE", payload: 5});
+              }}
             >
-                <HomeRepairServiceIcon />
+                <HomeRepairServiceIcon 
+                />
             </IconButton>
             <IconButton
               size="large"
