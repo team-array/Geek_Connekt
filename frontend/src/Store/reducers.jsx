@@ -34,3 +34,15 @@ export const EditProfile = (
             return state;
     }
 };
+
+export const AddUtility = (
+    state = false,
+    action
+) => {
+    switch (action.type) {
+        case "SET_ADD_UTILITY":
+            return action.payload;
+        default:
+            return state;
+    }
+};
