@@ -3,14 +3,10 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const userResolver = async (args) => {
-<<<<<<< HEAD
-    const user = await User.findOne({ username: args.username });
-=======
     const user = await User.findOne({
         username: args.username,
         college: args.college,
     });
->>>>>>> c70c6c41bc9efc0c23b24978ef6d15878d51f5fd
     console.log(user);
     if (user) {
         const passMatch = await bcrypt.compare(args.password, user.password);
@@ -18,30 +14,11 @@ const userResolver = async (args) => {
         if (passMatch) {
             // const token = await user.authTokenGeneration();
             // console.log("User LoggedIn with Token: ", token);
-            const userToken = jwt.sign(
-                {
-                    username: user.username.toString(),
-                    email: user.email.toString(),
-                    role: user.role.toString(),
-                    rollNumber: user.rollNumber.toString(),
-                },
-                process.env.JWT_SCRECT
-            );
-            user.tokens.push({ token: userToken.toString() });
+            const userToken = await user.generateAuthToken();
             // console.log("userToken: ", userToken);
-            await user.save();
+            // await user.save();
             return {
                 token: userToken,
-<<<<<<< HEAD
-            };
-        } else {
-            return {
-                token: "Error",
-            };
-        }
-    } else {
-        return { token: "Error" };
-=======
                 result: "Success",
             };
         } else {
@@ -52,24 +29,10 @@ const userResolver = async (args) => {
         }
     } else {
         return { token: "", result: "User dosn't Exist!" };
->>>>>>> c70c6c41bc9efc0c23b24978ef6d15878d51f5fd
     }
 };
 
 const userCreateResolver = async (args) => {
-<<<<<<< HEAD
-    const user = new User({
-        username: args.username,
-        password: args.password,
-        email: args.email,
-        role: args.role,
-        rollNumber: args.rollNumber,
-    });
-    user.password = bcrypt.hashSync(user.password, 10);
-    const token = await user.generateAuthToken();
-    // console.log("Token: ", token);
-    return { token: token };
-=======
     try {
         const dupUser = await User.findOne({ username: args.username });
         // console.log("dupUser: ", dupUser);
@@ -190,16 +153,12 @@ const editUserLocationResolver = async (args) => {
             result: "Error",
         };
     }
->>>>>>> c70c6c41bc9efc0c23b24978ef6d15878d51f5fd
 };
 
 module.exports = {
     userResolver,
     userCreateResolver,
-<<<<<<< HEAD
-=======
     editUserResolver,
     editUserBioResolver,
     editUserLocationResolver,
->>>>>>> c70c6c41bc9efc0c23b24978ef6d15878d51f5fd
 };
