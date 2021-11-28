@@ -57,6 +57,32 @@ const userCreateResolver = async (args) => {
     }
 };
 
+const userAuthCheck = async (args) => {
+    try {
+        const { username } = jwt.verify(args.token, process.env.JWT_SECRET);
+        const user = await User.findOne({ username: username });
+        if (user) {
+            return {
+                id: user.id,
+                username: user.username,
+                result: "Success",
+            };
+        }
+        return {
+            id: "",
+            username: "",
+            result: "User doesn't Exist!",
+        };
+    } catch (error) {
+        console.log(error);
+        return {
+            id: "",
+            username: "",
+            result: "Error",
+        };
+    }
+};
+
 const editUserResolver = async (args) => {
     try {
         const { username } = jwt.verify(args.token, process.env.JWT_SCRECT);
@@ -161,4 +187,5 @@ module.exports = {
     editUserResolver,
     editUserBioResolver,
     editUserLocationResolver,
+    userAuthCheck,
 };

@@ -5,6 +5,7 @@ import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { useLazyQuery, useQuery, gql } from "@apollo/client";
 import CircularProgress from "@mui/material/CircularProgress";
 import Alert from "@mui/material/Alert";
+import { useNavigate } from "react-router-dom";
 
 import "./Signin.css";
 
@@ -20,6 +21,7 @@ const LOGIN_USER = gql`
 const Signin = () => {
     const [loginUser, { data, loading, error }] = useLazyQuery(LOGIN_USER);
 
+    const navigation = useNavigate();
     const [errorMsg, setErrorMsg] = useState("");
 
     useEffect(() => {
@@ -30,6 +32,7 @@ const Signin = () => {
                 if (data.auth.result === "Success") {
                     localStorage.setItem("jwt", data.auth.token);
                     setErrorMsg("");
+                    navigation("/");
                 } else {
                     setErrorMsg("Invalid Credentials");
                 }
@@ -67,7 +70,9 @@ const Signin = () => {
                     Sign in
                 </h2>
                 {errorMsg === "" ? null : (
-                    <Alert severity="error" className="m-2">{errorMsg}</Alert>
+                    <Alert severity="error" className="m-2">
+                        {errorMsg}
+                    </Alert>
                 )}
                 <Form
                     data-aos="fade-right"

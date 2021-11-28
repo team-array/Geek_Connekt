@@ -7,6 +7,7 @@ const {
     editUserResolver,
     editUserBioResolver,
     editUserLocationResolver,
+    userAuthCheck
 } = require("./userResolver");
 
 const { profilePicUploadResolver } = require("./fileuploadResolver");
@@ -49,6 +50,15 @@ const AuthType = new GraphQLObjectType({
     }),
 });
 
+const authCheckType = new GraphQLObjectType({
+    name: "AuthCheck",
+    fields: () => ({
+        result: { type: GraphQLString },
+        id: { type: GraphQLString },
+        username: { type: GraphQLString },
+    }),
+});
+
 const FileType = new GraphQLObjectType({
     name: "File",
     fields: () => ({
@@ -77,6 +87,16 @@ const RootQuery = new graphql.GraphQLObjectType({
             },
             resolve(parent, args) {
                 return userResolver(args);
+            },
+        },
+        authCheck: {
+            type: authCheckType,
+            args: {
+                token: { type: GraphQLString },
+            },
+            resolve(parent, args) {
+                console.log("Hellp");
+                return userAuthCheck(args);
             },
         },
     },
