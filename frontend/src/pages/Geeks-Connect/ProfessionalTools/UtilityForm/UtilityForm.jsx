@@ -179,7 +179,7 @@ const UtilityForm = () => {
                       icon={<PlusOutlined />}
                       
                     >
-                      Add field
+                      Add feature
                     </Button>
                     <Button
                       type="dashed"
@@ -189,7 +189,7 @@ const UtilityForm = () => {
                       style={{ width: "100%", marginTop: "20px" }}
                       icon={<PlusOutlined />}
                     >
-                      Add field at head
+                      Add feature at head
                     </Button>
                     <Form.ErrorList errors={errors} />
                   </Form.Item>

@@ -217,23 +217,21 @@ const EditProfile = () => {
                 onFinish={updatePersonalInfo}
                 validateMessages={validateMessages}
               >
-                <Form.Item name={["name"]} label="Full Name">
-                  <Input />
+                <Form.Item name={["name"]} >
+                  <Input placeholder="full name"/>
                 </Form.Item>
                 <Form.Item
                   name={["email"]}
-                  label="Email ID"
                   rules={[
                     {
                       type: "email",
                     },
                   ]}
                 >
-                  <Input />
+                  <Input placeholder="email id"/>
                 </Form.Item>
                 <Form.Item
-                  name={["user", "age"]}
-                  label="Your Age"
+                  name={["age"]}
                   rules={[
                     {
                       type: "number",
@@ -242,11 +240,10 @@ const EditProfile = () => {
                     },
                   ]}
                 >
-                  <InputNumber />
+                  <InputNumber placeholder="your age"/>
                 </Form.Item>
                 <Form.Item
                   name="website"
-                  label="Website"
                   rules={[
                     {
                       type: "url",
@@ -260,13 +257,13 @@ const EditProfile = () => {
                 >
                   <Input placeholder="website url" />
                 </Form.Item>
-                <Form.Item label="Birthday" name={["date"]}>
-                  <input type="date" className="ant-input" />
+                <Form.Item  name={["date"]}>
+                  <input type="date" className="ant-input" placeholder="Birthday" />
                 </Form.Item>
                 {/* <Form.Item name={["user", "introduction"]} label="Introduction">
                   <Input.TextArea />
                 </Form.Item> */}
-                <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
+                <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 0 }}>
                   <Button type="primary" htmlType="submit">
                     update
                   </Button>

@@ -7,6 +7,7 @@ import pp from "../Profile/components/img/profile-pic.png";
 import "./Comment.scss";
 import { Comment, Avatar, Form, Button, List, Input } from "antd";
 import moment from "moment";
+import { useDispatch, useSelector} from "react-redux";
 
 const { TextArea } = Input;
 
@@ -40,6 +41,8 @@ const Editor = ({ onChange, onSubmit, submitting, value }) => (
 const CommentBox = () => {
   const [msg, setmsg] = React.useState("");
   const [submitting, setSubmitting] = React.useState(false);
+  const dispatch = useDispatch();
+  const Comment_Box = useSelector((state) => state.Comment_Box);
   const [comments, setComments] = React.useState([
     {
         author: 'Akshay',
@@ -69,7 +72,12 @@ const CommentBox = () => {
   const sendmsg = () => {
     setSubmitting(true); // for load effect
     console.log(msg);
-    // setComments("new comment");
+    setComments({
+        author: 'Murari',
+        avatar: pp,
+        datetime: moment().fromNow(),
+        content: <p> {msg} </p>,
+    });
     setmsg("");
     setSubmitting(false); // stop loading effect
   };
@@ -81,7 +89,7 @@ const CommentBox = () => {
           zIndex: "9999999",
           backgroundColor: "rgba(0,0,0,.85)",
         }}
-        open={true}
+        open={Comment_Box}
       >
         <IconButton
           aria-label="delete"
@@ -91,7 +99,9 @@ const CommentBox = () => {
             right: "15px",
             zIndex: "9999999",
           }}
-          // onClick={}
+          onClick={()=>{
+            dispatch({type:"SET_COMMENT_BOX", payload:false})
+          }}
         >
           <CloseIcon
             style={{

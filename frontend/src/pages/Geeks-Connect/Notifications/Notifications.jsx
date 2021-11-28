@@ -2,10 +2,6 @@ import React from 'react'
 import './Notifications.scss'
 export default function Notifications() {
     return (
-        <div>
-            <div class="notifications">
-        <div class="icon_wrap"><i class="far fa-bell"></i></div>
-        
         <div class="notification_dd">
             <ul class="notification_ul">
                 <li class="starbucks success">
@@ -92,9 +88,6 @@ export default function Notifications() {
                     <p class="link">Show All Activities</p>
                 </li> 
             </ul>
-        </div>
-        
-      </div>
         </div>
     )
 }

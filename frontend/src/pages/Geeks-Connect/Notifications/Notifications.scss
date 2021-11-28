@@ -14,17 +14,25 @@
   }
   .notification_dd{
     position: absolute;
-    top: 70px;
-    right: 50px;
+    top: 75px;
+    right: 138px;
     user-select: none;
     background: #fff;
     border: 1px solid #c7d8e2;
     width: 380px;
     height: auto;
+    z-index: 9999;
     // display: none;
     border-radius: 3px;
     box-shadow: 10px 10px 35px rgba(0,0,0,0.125),
                 -10px -10px 35px rgba(0,0,0,0.125);
+    @media (max-width:897px){
+      right: 24px;
+    }
+    @media screen and (max-width: 415px){
+      overflow:scroll;
+      width: 340px;
+    }
   }
   .notification_dd:before{
     content: "";

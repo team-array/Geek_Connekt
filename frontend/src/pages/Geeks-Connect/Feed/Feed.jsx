@@ -6,7 +6,12 @@ import share from '../Profile/components/img/share.png';
 import feed from '../Profile/components/img/feed-image-1.png'
 import "./Feed.scss";
 import Comment from "../CommentBox/Comment";
+import {useDispatch} from 'react-redux';
 const Feed = () => {
+  const dispatch = useDispatch();
+  const show_comments = () => {
+    dispatch({type: 'SET_COMMENT_BOX', payload: true});
+  }
   return (
     <div className="feed-container">
       <Comment/>
@@ -35,7 +40,7 @@ const Feed = () => {
               <img src={like} alt="" />
               120
             </div>
-            <div>
+            <div onClick={show_comments} style={{cursor: 'pointer'}}>
               <img src={comment} alt="" />
               120
             </div>

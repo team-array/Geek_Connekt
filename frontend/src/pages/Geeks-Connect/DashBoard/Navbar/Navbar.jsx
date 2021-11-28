@@ -146,7 +146,9 @@ export default function PrimarySearchAppBar(props) {
         </IconButton>
         <p>Profile</p>
       </MenuItem>
-      <MenuItem>
+      <MenuItem
+        onClick={props.notifications}
+      >
         <IconButton
           size="large"
           aria-label="show 17 new notifications"
@@ -158,7 +160,11 @@ export default function PrimarySearchAppBar(props) {
         </IconButton>
         <p>Notifications</p>
       </MenuItem>
-      <MenuItem onClick={props.star} >
+      <MenuItem onClick={props.star} 
+            onClick={()=>{
+            dispatch({type:"SET_CURRENT_PAGE", payload: 6});
+          }}
+      >
         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
             <StarIcon />
         </IconButton>
@@ -224,6 +230,9 @@ export default function PrimarySearchAppBar(props) {
               size="large"
               color="inherit"
               className="mx-1"
+              onClick={()=>{
+                dispatch({type:"SET_CURRENT_PAGE", payload: 6});
+              }}
             >
                 <StarIcon />
             </IconButton>
@@ -232,6 +241,7 @@ export default function PrimarySearchAppBar(props) {
               aria-label="show 17 new notifications"
               color="inherit"
               className="mx-1"
+              onClick={props.notifications}
             >
               <Badge badgeContent={17} color="error">
                 <NotificationsIcon />

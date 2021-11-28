@@ -46,3 +46,29 @@ export const AddUtility = (
             return state;
     }
 };
+
+export const Comment_Box = (
+    state = false,
+    action
+) => {
+    switch (action.type) {
+        case "SET_COMMENT_BOX":
+            return action.payload;
+        default:
+            return state;
+    }
+};
+
+
+export const showNotifications = (
+    state = false,
+    action
+) => {
+    switch (action.type) {
+        case "SET_NOTIFICATIONS":
+            return action.payload;
+        default:
+            return state;
+    }
+};
+

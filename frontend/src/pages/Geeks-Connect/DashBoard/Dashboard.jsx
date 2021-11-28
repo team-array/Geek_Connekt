@@ -7,12 +7,16 @@ import Footer from './Footer/Footer';
 import Feed from "../Feed/Feed";
 import Favorites from "../Favorites/Favorites";
 import Events from "../Events/Events";
-import {useSelector} from "react-redux";
+import {useSelector,useDispatch} from "react-redux";
 import AddPost from "../AddPost/AddPost";
 import ProfessionalTools from "../ProfessionalTools/ProfessionalTools";
+import Notifications from "../Notifications/Notifications";
+import StarOfTheMonth from '../StarOfTheMonth/StarOfTheMonth';
 
 const Dashboard = () => {
     const currentPage = useSelector(state => state.currentPage);
+    const showNotifications = useSelector(state => state.showNotifications);
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const logout = () => {
         navigate("/");
@@ -24,21 +28,28 @@ const Dashboard = () => {
         
     }
     const notifications = () => {
-
+        dispatch({type: "SET_NOTIFICATIONS",payload:!showNotifications});
     }
     return (
         <div className="dashboard">
             <Navbar name={AppName} logout={logout} myprofile={myprofile} others_profile={others_profile}
                 notifications={notifications} />
+                {
+                    showNotifications
+                        ? <Notifications />
+                            : ""
+                }
             {
                 currentPage === 0 ? <Feed/> :
                     currentPage === 1 ? <Favorites/> :
                         currentPage === 2 ? <AddPost/> :
                             currentPage === 3 ? <Events/> :
                                 currentPage === 4 ? <ProfilePage/> :
-                                    currentPage === 5 ? <ProfessionalTools/> : <></>
+                                    currentPage === 5 ? <ProfessionalTools/> : 
+                                        currentPage === 6 ? <StarOfTheMonth/> : ""
             }
             <Footer/>
+
         </div>
     )
 }
