@@ -1,22 +1,57 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ImgBlock, FormBox, BgCover } from "./Signin.styles";
 import { Form, Input, Button, Checkbox } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import {
-    ApolloClient,
-    InMemoryCache,
-    ApolloProvider,
-    useQuery,
-    gql,
-} from "@apollo/client";
+import { useLazyQuery, useQuery, gql } from "@apollo/client";
+import CircularProgress from "@mui/material/CircularProgress";
+import Alert from "@mui/material/Alert";
 
 import "./Signin.css";
 
-
+const LOGIN_USER = gql`
+    query auth($username: String!, $password: String!, $college: String!) {
+        auth(username: $username, password: $password, college: $college) {
+            token
+            result
+        }
+    }
+`;
 
 const Signin = () => {
+    const [loginUser, { data, loading, error }] = useLazyQuery(LOGIN_USER);
+
+    const [errorMsg, setErrorMsg] = useState("");
+
+    useEffect(() => {
+        if (!loading) {
+            console.log(data);
+            if (data !== undefined && data !== null) {
+                console.log(data.auth.result);
+                if (data.auth.result === "Success") {
+                    localStorage.setItem("jwt", data.auth.token);
+                    setErrorMsg("");
+                } else {
+                    setErrorMsg("Invalid Credentials");
+                }
+            }
+        }
+    }, [data, loading]);
+
+    useEffect(() => {
+        if (error) {
+            console.log(error);
+        }
+    }, [error]);
+
     const login = (values) => {
         console.log("Received values of form: ", values);
+        loginUser({
+            variables: {
+                username: values.username,
+                password: values.password,
+                college: "CMRCET",
+            },
+        });
     };
     return (
         <div className="Signin">
@@ -31,6 +66,9 @@ const Signin = () => {
                 >
                     Sign in
                 </h2>
+                {errorMsg === "" ? null : (
+                    <Alert severity="error" className="m-2">{errorMsg}</Alert>
+                )}
                 <Form
                     data-aos="fade-right"
                     name="normal_login"
@@ -85,15 +123,28 @@ const Signin = () => {
                     </Form.Item>
 
                     <Form.Item>
-                        <Button
-                            size="large"
-                            style={{ width: "100%" }}
-                            type="primary"
-                            htmlType="submit"
-                            className="login-form-button"
-                        >
-                            Sign in
-                        </Button>
+                        {loading ? (
+                            <div
+                                style={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    width: "100%",
+                                }}
+                            >
+                                <CircularProgress />
+                            </div>
+                        ) : (
+                            <Button
+                                size="large"
+                                style={{ width: "100%" }}
+                                type="primary"
+                                htmlType="submit"
+                                className="login-form-button"
+                            >
+                                Sign in
+                            </Button>
+                        )}
                     </Form.Item>
                 </Form>
             </FormBox>

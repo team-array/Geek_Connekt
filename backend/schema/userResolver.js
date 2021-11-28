@@ -7,7 +7,7 @@ const userResolver = async (args) => {
         username: args.username,
         college: args.college,
     });
-    console.log(user);
+    // console.log(user);
     if (user) {
         const passMatch = await bcrypt.compare(args.password, user.password);
         console.log(passMatch);
