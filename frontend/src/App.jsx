@@ -6,29 +6,30 @@ import Home from "./pages/Home/Home";
 import Signin from "./pages/Signin/Signin";
 import Dashboard from "./pages/Geeks-Connect/DashBoard/Dashboard";
 import AOS from "aos";
-import 'react-image-crop/dist/ReactCrop.css';
+import "react-image-crop/dist/ReactCrop.css";
 import Notifications from "./pages/Geeks-Connect/Notifications/Notifications";
+import HomePageController from "./pages/HomePageController";
 
 config.console(config.MODE);
 
 const App = () => {
-  React.useEffect(() => {
-    AOS.init({
-      duration: 600,
+    React.useEffect(() => {
+        AOS.init({
+            duration: 600,
+        });
     });
-  });
-  return (
-      <div className="App">
-        <HashRouter>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Signin />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/notifications" element={<Notifications />} />
-          </Routes>
-        </HashRouter>
-      </div>
-  );
+    return (
+        <div className="App">
+            <HashRouter>
+                <Routes>
+                    <Route path="/" element={<HomePageController />} />
+                    <Route path="/login" element={<Signin />} />
+                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/notifications" element={<Notifications />} />
+                </Routes>
+            </HashRouter>
+        </div>
+    );
 };
 
 export default App;

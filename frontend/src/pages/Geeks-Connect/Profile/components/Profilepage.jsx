@@ -19,6 +19,7 @@ import location from "./img/profile-location.png";
 import { Button } from "antd";
 import axios from "axios";
 import { useDispatch } from "react-redux";
+import { useQuery, gql } from "@apollo/client";
 
 import post1 from "./img/photo1.png";
 import post2 from "./img/photo2.png";
@@ -29,8 +30,38 @@ import post6 from "./img/photo6.png";
 
 import "./porfilepage.scss";
 
+const USER_DATA = gql`
+    query user($id: String!) {
+        user(id: $id) {
+            id
+            username
+            email
+            profilePic
+            backgroundPic
+            role
+            rollNumber
+            college
+            location
+            hometown
+            bio
+            birthDate
+            secondarySchool
+            primarySchool
+        }
+    }
+`;
+
 export const Profilepage = () => {
     const dispatch = useDispatch();
+    const {
+        loading: userDataLoading,
+        data: userData,
+        error: userDataError,
+    } = useQuery(USER_DATA, {
+        variables: {
+            id: JSON.parse(localStorage.getItem("user")).id,
+        },
+    });
     const [tab, setTab] = React.useState(0);
 
     const [edit, setedit] = React.useState(false);
@@ -71,28 +102,43 @@ export const Profilepage = () => {
         }
     };
 
-    return (
+    React.useEffect(() => {
+        if (!userDataLoading) {
+            console.log(userData);
+        }
+    }, [userDataLoading, userData]);
+
+    return userDataLoading ? (
+        <div>loading...</div>
+    ) : (
         <div className="ProfilepageComponent">
             <div className="profile-container">
-                <img src={coverimg} alt="coverimg" className="cover-img" />
+                <img
+                    src={userData.user.backgroundPic}
+                    alt="coverimg"
+                    className="cover-img"
+                />
                 <div className="profile-details mt-1">
                     <div className="pd-left mr-auto my-2">
                         <div className="pd-row">
                             <img
-                                src={profileimg}
+                                src={userData.user.profilePic}
                                 alt="profileimg"
                                 className="pd-img"
                             />
                             <div>
-                                <h3>Kranthi Kumar</h3>
-                                <p>Student connection</p>
+                                <h3>{userData.user.username}</h3>
+                                <p>{userData.user.role}</p>
                                 <img src={star} alt="star" />
                                 <Button
                                     type="button"
                                     className="my-2 mx-2"
                                     onClick={() => {
                                         setedit(!edit);
-                                        dispatch({type:"SET_EDIT_PROFILE",payload:true})
+                                        dispatch({
+                                            type: "SET_EDIT_PROFILE",
+                                            payload: true,
+                                        });
                                     }}
                                 >
                                     Edit profile
@@ -121,27 +167,32 @@ export const Profilepage = () => {
                         <div className="info-col">
                             <div className="profile-intro">
                                 <h3>Intro</h3>
-                                <p className="intro-text">some comment</p>
+                                <p className="intro-text">
+                                    {userData.user.bio}
+                                </p>
                                 <hr />
                                 <ul>
                                     <li>
-                                        <img src={job} alt="" /> student
+                                        <img src={job} alt="" />{" "}
+                                        {userData.user.role}
                                     </li>
                                     <li>
                                         <img src={study} alt="" />
-                                        studied in cmr clg
+                                        {userData.user.role} in{" "}
+                                        {userData.user.college}
                                     </li>
                                     <li>
                                         <img src={study} alt="" />
-                                        wnt to naryana king school
+                                        Secondary School:
+                                        {userData.user.secondarySchool}
                                     </li>
                                     <li>
                                         <img src={home} alt="" />
-                                        lives in hyder , indua
+                                        Lives in {userData.user.hometown}
                                     </li>
                                     <li>
                                         <img src={location} alt="" />
-                                        from africa
+                                        From {userData.user.location}
                                     </li>
                                 </ul>
                             </div>

@@ -1,19 +1,16 @@
 const graphql = require("graphql");
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
-<<<<<<< HEAD
-const { userResolver, userCreateResolver } = require("./userResolver");
-=======
 const {
     userResolver,
     userCreateResolver,
     editUserResolver,
     editUserBioResolver,
     editUserLocationResolver,
+    userAuthCheck,
 } = require("./userResolver");
 
 const { profilePicUploadResolver } = require("./fileuploadResolver");
->>>>>>> c70c6c41bc9efc0c23b24978ef6d15878d51f5fd
 
 const {
     GraphQLObjectType,
@@ -23,10 +20,6 @@ const {
     GraphQLInt,
     GraphQLList,
     GraphQLNonNull,
-<<<<<<< HEAD
-=======
-    GraphQLUpload,
->>>>>>> c70c6c41bc9efc0c23b24978ef6d15878d51f5fd
 } = graphql;
 
 const UserType = new GraphQLObjectType({
@@ -44,10 +37,15 @@ const UserType = new GraphQLObjectType({
         },
         role: { type: GraphQLString },
         rollNumber: { type: GraphQLString },
-<<<<<<< HEAD
-=======
         college: { type: GraphQLString },
->>>>>>> c70c6c41bc9efc0c23b24978ef6d15878d51f5fd
+        location: { type: GraphQLString },
+        hometown: { type: GraphQLString },
+        bio: { type: GraphQLString },
+        profilePic: { type: GraphQLString },
+        backgroundPic: { type: GraphQLString },
+        birthDate: { type: GraphQLString },
+        secondarySchool: { type: GraphQLString },
+        primarySchool: { type: GraphQLString },
     }),
 });
 
@@ -55,9 +53,16 @@ const AuthType = new GraphQLObjectType({
     name: "Auth",
     fields: () => ({
         token: { type: GraphQLString },
-<<<<<<< HEAD
-=======
         result: { type: GraphQLString },
+    }),
+});
+
+const authCheckType = new GraphQLObjectType({
+    name: "AuthCheck",
+    fields: () => ({
+        result: { type: GraphQLString },
+        id: { type: GraphQLString },
+        username: { type: GraphQLString },
     }),
 });
 
@@ -67,7 +72,6 @@ const FileType = new GraphQLObjectType({
         filename: { type: GraphQLString },
         mimetype: { type: GraphQLString },
         encoding: { type: GraphQLString },
->>>>>>> c70c6c41bc9efc0c23b24978ef6d15878d51f5fd
     }),
 });
 
@@ -76,32 +80,30 @@ const RootQuery = new graphql.GraphQLObjectType({
     fields: {
         user: {
             type: UserType,
-            args: { id: { type: graphql.GraphQLID } },
+            args: { id: { type: graphql.GraphQLString } },
             resolve(parent, args) {
                 return User.findById(args.id);
             },
         },
-<<<<<<< HEAD
-        AuthCheck: {
-            type: AuthType,
-            resolve(parent, args) {
-                return { token: "asdasdasd" };
-            },
-        },
-=======
->>>>>>> c70c6c41bc9efc0c23b24978ef6d15878d51f5fd
         auth: {
             type: AuthType,
             args: {
                 username: { type: GraphQLString },
                 password: { type: GraphQLString },
-<<<<<<< HEAD
-=======
                 college: { type: GraphQLString },
->>>>>>> c70c6c41bc9efc0c23b24978ef6d15878d51f5fd
             },
             resolve(parent, args) {
                 return userResolver(args);
+            },
+        },
+        authCheck: {
+            type: authCheckType,
+            args: {
+                token: { type: GraphQLString },
+            },
+            resolve(parent, args) {
+                console.log("Hellp");
+                return userAuthCheck(args);
             },
         },
     },
@@ -128,19 +130,14 @@ const Mutation = new graphql.GraphQLObjectType({
                 rollNumber: {
                     type: new graphql.GraphQLNonNull(graphql.GraphQLString),
                 },
-<<<<<<< HEAD
-=======
                 college: {
                     type: new graphql.GraphQLNonNull(graphql.GraphQLString),
                 },
->>>>>>> c70c6c41bc9efc0c23b24978ef6d15878d51f5fd
             },
             resolve(parent, args) {
                 return userCreateResolver(args);
             },
         },
-<<<<<<< HEAD
-=======
         editUser: {
             type: AuthType,
             args: {
@@ -176,7 +173,6 @@ const Mutation = new graphql.GraphQLObjectType({
                 return editUserLocationResolver(args);
             },
         },
->>>>>>> c70c6c41bc9efc0c23b24978ef6d15878d51f5fd
     },
 });
 
