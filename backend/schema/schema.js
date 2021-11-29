@@ -7,7 +7,7 @@ const {
     editUserResolver,
     editUserBioResolver,
     editUserLocationResolver,
-    userAuthCheck
+    userAuthCheck,
 } = require("./userResolver");
 
 const { profilePicUploadResolver } = require("./fileuploadResolver");
@@ -20,7 +20,6 @@ const {
     GraphQLInt,
     GraphQLList,
     GraphQLNonNull,
-    GraphQLUpload,
 } = graphql;
 
 const UserType = new GraphQLObjectType({
@@ -39,6 +38,14 @@ const UserType = new GraphQLObjectType({
         role: { type: GraphQLString },
         rollNumber: { type: GraphQLString },
         college: { type: GraphQLString },
+        location: { type: GraphQLString },
+        hometown: { type: GraphQLString },
+        bio: { type: GraphQLString },
+        profilePic: { type: GraphQLString },
+        backgroundPic: { type: GraphQLString },
+        birthDate: { type: GraphQLString },
+        secondarySchool: { type: GraphQLString },
+        primarySchool: { type: GraphQLString },
     }),
 });
 
@@ -73,7 +80,7 @@ const RootQuery = new graphql.GraphQLObjectType({
     fields: {
         user: {
             type: UserType,
-            args: { id: { type: graphql.GraphQLID } },
+            args: { id: { type: graphql.GraphQLString } },
             resolve(parent, args) {
                 return User.findById(args.id);
             },
