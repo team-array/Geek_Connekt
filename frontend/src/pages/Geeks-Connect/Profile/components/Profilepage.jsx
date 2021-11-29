@@ -18,6 +18,7 @@ import home from "./img/profile-home.png";
 import location from "./img/profile-location.png";
 import { Button } from "antd";
 import axios from "axios";
+import userPostHook from "../../../../hooks/userPostHook";
 import { useDispatch } from "react-redux";
 import { useQuery, gql } from "@apollo/client";
 
@@ -68,6 +69,11 @@ export const Profilepage = () => {
 
     const [profilePic, setprofilePic] = React.useState({});
 
+    const { loading, error, posts, hasMore } = userPostHook(
+        JSON.parse(localStorage.getItem("user")).id,
+        1
+    );
+
     const editPictureHandler = (event) => {
         if (event.target.name === "profilePic") {
             setprofilePic({
@@ -107,6 +113,17 @@ export const Profilepage = () => {
             console.log(userData);
         }
     }, [userDataLoading, userData]);
+
+    React.useEffect(() => {
+        if (error) {
+            console.log(error);
+        }
+    }, [error]);
+
+    React.useEffect(() => {
+        if (loading) return;
+        console.log(posts);
+    }, [loading, hasMore, posts]);
 
     return userDataLoading ? (
         <div>loading...</div>
@@ -183,8 +200,12 @@ export const Profilepage = () => {
                                     </li>
                                     <li>
                                         <img src={study} alt="" />
-                                        Secondary School:
+                                        Secondary School:{" "}
                                         {userData.user.secondarySchool}
+                                    </li>
+                                    <li>
+                                        <img src={study} alt="" />
+                                        School: {userData.user.primarySchool}
                                     </li>
                                     <li>
                                         <img src={home} alt="" />
@@ -251,46 +272,61 @@ export const Profilepage = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="post-container">
-                                <div className="post-row">
-                                    <div className="user-profile">
-                                        <img src={pp} alt="" />
-                                        <div>
-                                            <p>Kranthi</p>
-                                            <span>June 24 2021, 13:40pm</span>
+                            {posts.length === 0 && posts === undefined ? (
+                                <h1>Write you first post now!</h1>
+                            ) : (
+                                posts.map((post) => (
+                                    <div className="post-container">
+                                        <div className="post-row">
+                                            <div className="user-profile">
+                                                <img
+                                                    src={
+                                                        userData.user.profilePic
+                                                    }
+                                                    alt=""
+                                                />
+                                                <div>
+                                                    <p>
+                                                        {userData.user.username}
+                                                    </p>
+                                                    <span>
+                                                        {post.createdAt}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            {/* <a href="#"></a> */}
                                         </div>
-                                    </div>
-                                    {/* <a href="#"></a> */}
-                                </div>
 
-                                <p className="post-text">
-                                    Lorem ipsum dolor, sit amet consectetur
-                                    adipisicing elit. Consequatur suscipit
-                                    dolorum a cupiditate illo reprehenderit non
-                                    numquam velit nisi alias possimus sint
-                                    natus, fugit soluta totam .
-                                </p>
-                                <img src={feed} alt="" className="post-img" />
-                                <div className="post-row">
-                                    <div className="activity-icons">
-                                        <div>
-                                            <img src={like} alt="" />
-                                            120
-                                        </div>
-                                        <div>
-                                            <img src={comment} alt="" />
-                                            120
-                                        </div>
-                                        <div>
-                                            <img src={share} alt="" />
-                                            120
+                                        <p className="post-text">
+                                            {post.caption}
+                                        </p>
+                                        <img
+                                            src={post.imageUrl}
+                                            alt=""
+                                            className="post-img"
+                                        />
+                                        <div className="post-row">
+                                            <div className="activity-icons">
+                                                <div>
+                                                    <img src={like} alt="" />
+                                                    {post.likes.length}
+                                                </div>
+                                                <div>
+                                                    <img src={comment} alt="" />
+                                                    {post.comments.length}
+                                                </div>
+                                                <div>
+                                                    <img src={share} alt="" />
+                                                    120
+                                                </div>
+                                            </div>
+                                            <div className="post-profile-icon">
+                                                <img src={pp} alt="" />
+                                            </div>
                                         </div>
                                     </div>
-                                    <div className="post-profile-icon">
-                                        <img src={pp} alt="" />
-                                    </div>
-                                </div>
-                            </div>
+                                ))
+                            )}
                         </div>
                     </div>
                 </div>
