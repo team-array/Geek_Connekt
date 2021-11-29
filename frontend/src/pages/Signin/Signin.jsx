@@ -18,8 +18,28 @@ const LOGIN_USER = gql`
     }
 `;
 
+const AUTH_CHECK = gql`
+    query authCheck($token: String!) {
+        authCheck(token: $token) {
+            id
+            username
+            result
+        }
+    }
+`;
+
 const Signin = () => {
     const [loginUser, { data, loading, error }] = useLazyQuery(LOGIN_USER);
+
+    const {
+        data: authCheckData,
+        loading: authCheckLoading,
+        error: authCheckError,
+    } = useQuery(AUTH_CHECK, {
+        variables: {
+            token: localStorage.getItem("jwt"),
+        },
+    });
 
     const navigation = useNavigate();
     const [errorMsg, setErrorMsg] = useState("");
@@ -41,6 +61,22 @@ const Signin = () => {
     }, [data, loading]);
 
     useEffect(() => {
+        console.log(authCheckData);
+        if (!authCheckLoading && !authCheckError && authCheckData) {
+            if (authCheckData.authCheck.result === "Success") {
+                console.log("success");
+                localStorage.setItem(
+                    "user",
+                    JSON.stringify(authCheckData.authCheck)
+                );
+                navigation("/");
+            } else {
+                localStorage.removeItem("jwt");
+            }
+        }
+    }, [authCheckData, authCheckLoading]);
+
+    useEffect(() => {
         if (error) {
             console.log(error);
         }
@@ -56,7 +92,9 @@ const Signin = () => {
             },
         });
     };
-    return (
+    return authCheckLoading ? (
+        <div>Loading...</div>
+    ) : (
         <div className="Signin">
             <ImgBlock>
                 <BgCover />

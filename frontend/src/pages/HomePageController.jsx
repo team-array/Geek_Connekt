@@ -16,7 +16,7 @@ const AUTH_CHECK = gql`
 
 const HomePageController = () => {
     const navigation = useNavigate();
-    const [userAuthChecked, setuserAuthChecked] = useState(false);
+    const [userAuthChecked, setuserAuthChecked] = useState(true);
     const [authLoading, setAuthLoading] = useState(true);
     const { loading, error, data } = useQuery(AUTH_CHECK, {
         variables: {
@@ -24,16 +24,22 @@ const HomePageController = () => {
         },
     });
     useEffect(() => {
+        setAuthLoading(false);
+    }, [userAuthChecked]);
+    useEffect(() => {
         console.log(data);
         if (!loading && !error && data) {
             if (data.authCheck.result === "Success") {
                 console.log("success");
                 localStorage.setItem("user", JSON.stringify(data.authCheck));
                 setuserAuthChecked(true);
+                // setAuthLoading(false);
+                console.log("done");
             } else {
                 localStorage.removeItem("jwt");
+                setuserAuthChecked(false);
+                // setAuthLoading(false);
             }
-            setAuthLoading(false);
         }
     }, [loading, error, data]);
 
@@ -41,7 +47,7 @@ const HomePageController = () => {
         console.log(error);
     }, [error]);
 
-    return loading && authLoading ? (
+    return authLoading ? (
         <p>Loading...</p>
     ) : !userAuthChecked ? (
         <Home />

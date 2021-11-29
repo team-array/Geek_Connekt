@@ -29,6 +29,8 @@ import post6 from "./img/photo6.png";
 
 import "./porfilepage.scss";
 
+
+
 export const Profilepage = () => {
     const dispatch = useDispatch();
     const [tab, setTab] = React.useState(0);
