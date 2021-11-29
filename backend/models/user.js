@@ -76,11 +76,11 @@ const UserSchema = new Schema({
     },
     secondarySchool: {
         type: String,
-        default: "",
+        default: "NaN",
     },
     primarySchool: {
         type: String,
-        default: "",
+        default: "NaN",
     },
     posts: [
         {
