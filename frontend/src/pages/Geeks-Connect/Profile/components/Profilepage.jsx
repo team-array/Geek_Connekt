@@ -189,7 +189,10 @@ export const Profilepage = () => {
                                             <img src={live} alt="" />
                                             Live Video
                                         </a>
-                                        <a href="/">
+                                        <a href="/" onClick={(e)=>{
+                                            e.preventDefault();
+                                            dispatch({ type: "SET_ACHIEVEMENTS_FORM", payload: true });
+                                        }}>
                                             <img src={photo} alt="" />
                                             Photo/Video
                                         </a>

@@ -72,3 +72,15 @@ export const showNotifications = (
     }
 };
 
+export const showAchievementsForm = (
+    state = false,
+    action
+) => {
+    switch (action.type) {
+        case "SET_ACHIEVEMENTS_FORM":
+            return action.payload;
+        default:
+            return state;
+    }
+};
+
