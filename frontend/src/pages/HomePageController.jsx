@@ -20,7 +20,7 @@ const HomePageController = () => {
     const [authLoading, setAuthLoading] = useState(true);
     const { loading, error, data } = useQuery(AUTH_CHECK, {
         variables: {
-            token: localStorage.getItem("jwt"),
+            token: localStorage.getItem("jwt") || "",
         },
     });
     useEffect(() => {

@@ -30,27 +30,15 @@ app.use(
 
 app.use(routes);
 
-mongoose
-    .connect(
-        `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.rqk4t.mongodb.net/geekConnekt?retryWrites=true&w=majority`,
-        {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        }
-    )
-    .then((result) => {
-        console.log(chalk.green("Connected to MongoDB"));
-        const port = process.env.PORT || 8000;
-        app.listen(port, (e) => {
-            if (e) {
-                console.log(e);
-            } else {
-                console.log(
-                    chalk.green(
-                        `CONNECTION TO EXPRESS ESTABLISHED at port: ${port}`
-                    )
-                );
-            }
-        });
-    })
-    .catch((err) => console.log(err));
+require("./database/connect");
+
+const port = process.env.PORT || 8000;
+app.listen(port, (e) => {
+    if (e) {
+        console.log(e);
+    } else {
+        console.log(
+            chalk.green(`CONNECTION TO EXPRESS ESTABLISHED at port: ${port}`)
+        );
+    }
+});
