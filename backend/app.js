@@ -27,10 +27,15 @@ app.use(
 
 app.use(routes);
 
-const PORT = 8000 || process.env.PORT;
-
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
-
 require("./database/connect");
+
+const port = process.env.PORT || 8000;
+app.listen(port, (e) => {
+    if (e) {
+        console.log(e);
+    } else {
+        console.log(
+            `CONNECTION TO EXPRESS ESTABLISHED at port: ${port}`
+        );
+    }
+});

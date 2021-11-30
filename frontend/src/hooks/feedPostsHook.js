@@ -24,9 +24,12 @@ export default function UserPostHook(
         setError(false);
         axios({
             method: "get",
-            url: "http://localhost:8000/getUserImage",
+            url: "http://localhost:8000/getAllPosts",
             params: {
-                userId: userId,
+                id:
+                    localStorage.getItem("user") !== null
+                        ? JSON.parse(localStorage.getItem("user")).id
+                        : "",
                 pageNumber: pageNumber,
             },
             cancelToken: new axios.CancelToken((c) => (cancel = c)),

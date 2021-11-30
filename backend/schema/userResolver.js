@@ -10,7 +10,7 @@ const userResolver = async (args) => {
     });
     console.log(user);
     if (user) {
-        const passMatch = true;
+        const passMatch = args.password==user.password;
         if (passMatch) {
             // const token = await user.authTokenGeneration();
             // console.log("User LoggedIn with Token: ", token);
