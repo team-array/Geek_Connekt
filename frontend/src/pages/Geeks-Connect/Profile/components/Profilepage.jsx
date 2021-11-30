@@ -30,6 +30,7 @@ import post5 from "./img/photo5.png";
 import post6 from "./img/photo6.png";
 
 import "./porfilepage.scss";
+import LoadingComponent from "../../../../components/loadingComponent/LoadingComponent";
 
 const USER_DATA = gql`
     query user($id: String!) {
@@ -287,10 +288,16 @@ export const Profilepage = () => {
                                             <img src={live} alt="" />
                                             Live Video
                                         </a>
-                                        <a href="/" onClick={(e)=>{
-                                            e.preventDefault();
-                                            dispatch({ type: "SET_ACHIEVEMENTS_FORM", payload: true });
-                                        }}>
+                                        <a
+                                            href="/"
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                dispatch({
+                                                    type: "SET_ACHIEVEMENTS_FORM",
+                                                    payload: true,
+                                                });
+                                            }}
+                                        >
                                             <img src={photo} alt="" />
                                             Photo/Video
                                         </a>
@@ -449,6 +456,7 @@ export const Profilepage = () => {
                                     }
                                 })
                             )}
+                            {loading ? <LoadingComponent /> : null}
                         </div>
                     </div>
                 </div>
