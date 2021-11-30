@@ -6,7 +6,8 @@ import {
   EditProfile,
   AddUtility,
   Comment_Box,
-  showNotifications
+  showNotifications,
+  showAchievementsForm
 } from "./reducers";
 
 const reducers = combineReducers({
@@ -15,7 +16,8 @@ const reducers = combineReducers({
   EditProfile,
   AddUtility,
   Comment_Box,
-  showNotifications
+  showNotifications,
+  showAchievementsForm
 });
 
 const Store = createStore(reducers);

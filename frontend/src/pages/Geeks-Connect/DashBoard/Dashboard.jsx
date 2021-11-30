@@ -12,6 +12,7 @@ import AddPost from "../AddPost/AddPost";
 import ProfessionalTools from "../ProfessionalTools/ProfessionalTools";
 import Notifications from "../Notifications/Notifications";
 import StarOfTheMonth from '../StarOfTheMonth/StarOfTheMonth';
+import AcheivementsForm from "../AcheivementsForm/AcheivementsForm";
 
 const Dashboard = () => {
     const currentPage = useSelector(state => state.currentPage);
@@ -32,6 +33,7 @@ const Dashboard = () => {
     }
     return (
         <div className="dashboard">
+            <AcheivementsForm/>
             <Navbar name={AppName} logout={logout} myprofile={myprofile} others_profile={others_profile}
                 notifications={notifications} />
                 {
