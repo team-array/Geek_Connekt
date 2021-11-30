@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useRef } from "react";
 import coverimg from "./img/cover.png";
 import profileimg from "./img/profile.png";
 import star from "./img/star.jfif";
@@ -65,13 +65,15 @@ export const Profilepage = () => {
     });
     const [tab, setTab] = React.useState(0);
 
+    const [pageNumber, setpageNumber] = React.useState(1);
+
     const [edit, setedit] = React.useState(false);
 
     const [profilePic, setprofilePic] = React.useState({});
 
     const { loading, error, posts, hasMore } = userPostHook(
         JSON.parse(localStorage.getItem("user")).id,
-        1
+        pageNumber
     );
 
     const editPictureHandler = (event) => {
@@ -122,8 +124,32 @@ export const Profilepage = () => {
 
     React.useEffect(() => {
         if (loading) return;
-        console.log(posts);
+        // console.log(posts);
     }, [loading, hasMore, posts]);
+
+    const lastPostReference = useRef();
+
+    const lastPostRefChanger = useCallback(
+        (post) => {
+            if (loading) return;
+            // console.log("Last post:", post);
+            if (lastPostReference.current) {
+                // console.log("Disconnected");
+                lastPostReference.current.disconnect();
+            }
+            lastPostReference.current = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting && hasMore > 0) {
+                    // console.log("Visible");
+                    setpageNumber((pageNumber) => (pageNumber += 1));
+                }
+            });
+            if (post) {
+                lastPostReference.current.observe(post);
+                // console.log(post);
+            }
+        },
+        [loading, hasMore]
+    );
 
     return userDataLoading ? (
         <div>loading...</div>
@@ -275,57 +301,150 @@ export const Profilepage = () => {
                             {posts.length === 0 && posts === undefined ? (
                                 <h1>Write you first post now!</h1>
                             ) : (
-                                posts.map((post) => (
-                                    <div className="post-container">
-                                        <div className="post-row">
-                                            <div className="user-profile">
-                                                <img
-                                                    src={
-                                                        userData.user.profilePic
-                                                    }
-                                                    alt=""
-                                                />
-                                                <div>
-                                                    <p>
-                                                        {userData.user.username}
-                                                    </p>
-                                                    <span>
-                                                        {post.createdAt}
-                                                    </span>
+                                posts.map((post, idx) => {
+                                    if (posts.length === idx + 1) {
+                                        return (
+                                            <div
+                                                className="post-container"
+                                                ref={lastPostRefChanger}
+                                            >
+                                                <div className="post-row">
+                                                    <div className="user-profile">
+                                                        <img
+                                                            src={
+                                                                userData.user
+                                                                    .profilePic
+                                                            }
+                                                            alt=""
+                                                        />
+                                                        <div>
+                                                            <p>
+                                                                {
+                                                                    userData
+                                                                        .user
+                                                                        .username
+                                                                }
+                                                            </p>
+                                                            <span>
+                                                                {post.createdAt}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    {/* <a href="#"></a> */}
                                                 </div>
-                                            </div>
-                                            {/* <a href="#"></a> */}
-                                        </div>
 
-                                        <p className="post-text">
-                                            {post.caption}
-                                        </p>
-                                        <img
-                                            src={post.imageUrl}
-                                            alt=""
-                                            className="post-img"
-                                        />
-                                        <div className="post-row">
-                                            <div className="activity-icons">
-                                                <div>
-                                                    <img src={like} alt="" />
-                                                    {post.likes.length}
-                                                </div>
-                                                <div>
-                                                    <img src={comment} alt="" />
-                                                    {post.comments.length}
-                                                </div>
-                                                <div>
-                                                    <img src={share} alt="" />
-                                                    120
+                                                <p className="post-text">
+                                                    {post.caption}
+                                                </p>
+                                                <img
+                                                    src={post.imageUrl}
+                                                    alt=""
+                                                    className="post-img"
+                                                />
+                                                <div className="post-row">
+                                                    <div className="activity-icons">
+                                                        <div>
+                                                            <img
+                                                                src={like}
+                                                                alt=""
+                                                            />
+                                                            {post.likes.length}
+                                                        </div>
+                                                        <div>
+                                                            <img
+                                                                src={comment}
+                                                                alt=""
+                                                            />
+                                                            {
+                                                                post.comments
+                                                                    .length
+                                                            }
+                                                        </div>
+                                                        <div>
+                                                            <img
+                                                                src={share}
+                                                                alt=""
+                                                            />
+                                                            120
+                                                        </div>
+                                                    </div>
+                                                    <div className="post-profile-icon">
+                                                        <img src={pp} alt="" />
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div className="post-profile-icon">
-                                                <img src={pp} alt="" />
+                                        );
+                                    } else {
+                                        return (
+                                            <div className="post-container">
+                                                <div className="post-row">
+                                                    <div className="user-profile">
+                                                        <img
+                                                            src={
+                                                                userData.user
+                                                                    .profilePic
+                                                            }
+                                                            alt=""
+                                                        />
+                                                        <div>
+                                                            <p>
+                                                                {
+                                                                    userData
+                                                                        .user
+                                                                        .username
+                                                                }
+                                                            </p>
+                                                            <span>
+                                                                {post.createdAt}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    {/* <a href="#"></a> */}
+                                                </div>
+
+                                                <p className="post-text">
+                                                    {post.caption}
+                                                </p>
+                                                <img
+                                                    src={post.imageUrl}
+                                                    alt=""
+                                                    className="post-img"
+                                                />
+                                                <div className="post-row">
+                                                    <div className="activity-icons">
+                                                        <div>
+                                                            <img
+                                                                src={like}
+                                                                alt=""
+                                                            />
+                                                            {post.likes.length}
+                                                        </div>
+                                                        <div>
+                                                            <img
+                                                                src={comment}
+                                                                alt=""
+                                                            />
+                                                            {
+                                                                post.comments
+                                                                    .length
+                                                            }
+                                                        </div>
+                                                        <div>
+                                                            <img
+                                                                src={share}
+                                                                alt=""
+                                                            />
+                                                            120
+                                                        </div>
+                                                    </div>
+                                                    <div className="post-profile-icon">
+                                                        <img src={pp} alt="" />
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                ))
+                                        );
+                                    }
+                                })
                             )}
                         </div>
                     </div>

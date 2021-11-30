@@ -18,6 +18,7 @@ export default function UserPostHook(
     }, [userId, deletePosts]);
 
     useEffect(() => {
+        // console.log(pageNumber);
         let cancel;
         setLoading(true);
         setError(false);
@@ -26,12 +27,12 @@ export default function UserPostHook(
             url: "http://localhost:8000/getUserImage",
             params: {
                 userId: userId,
-                pageNumber: pagenumber,
+                pageNumber: pageNumber,
             },
             cancelToken: new axios.CancelToken((c) => (cancel = c)),
         })
             .then((res) => {
-                console.log("Hook: ", res.data.posts);
+                // console.log("Hook: ", res.data.posts);
                 setPosts((posts) => {
                     return [...posts].concat(res.data.posts);
                 });
@@ -45,6 +46,6 @@ export default function UserPostHook(
                 setError(true);
             });
         return () => cancel();
-    }, [userId, pagenumber, deletePosts]);
+    }, [userId, pageNumber, deletePosts]);
     return { loading, error, posts, hasMore };
 }
