@@ -102,7 +102,6 @@ const RootQuery = new graphql.GraphQLObjectType({
                 token: { type: GraphQLString },
             },
             resolve(parent, args) {
-                console.log("Hellp");
                 return userAuthCheck(args);
             },
         },

@@ -92,13 +92,13 @@ const UserSchema = new Schema({
 
 UserSchema.methods.generateAuthToken = async function () {
     try {
-        // console.log("Generating token for: ", this);
+        console.log("Generating token for: ", this);
         const userToken = jwt.sign(
             {
                 username: this.username.toString(),
                 email: this.email.toString(),
                 role: this.role.toString(),
-                rollNumber: this.rollNumber.toString(),
+                // rollNumber: this.rollNumber.toString(),
             },
             process.env.JWT_SECRET
         );

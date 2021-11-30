@@ -73,9 +73,9 @@ exports.uploadPost = async (req, res, next) => {
                 upload_preset: "khq1jtjg",
             }
         );
-        console.log(uploadCloudinary);
+        // console.log(uploadCloudinary);
         const { caption, token } = req.body;
-        console.log(process.env.JWT_SECRET);
+        // console.log(process.env.JWT_SECRET);
         const { username } = jwt.verify(token, process.env.JWT_SECRET);
         const user = await User.findOne({ username: username });
         if (user) {
@@ -83,9 +83,10 @@ exports.uploadPost = async (req, res, next) => {
                 user: user._id,
                 caption: caption,
                 imageUrl: uploadCloudinary.secure_url,
+                college: user.college,
             });
             await post.save();
-            user.posts.push(post._id);
+            user.posts.splice(0, 0, post._id);
             await user.save();
             res.status(200).json({
                 message: "Post uploaded successfully",
