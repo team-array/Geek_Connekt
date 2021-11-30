@@ -13,14 +13,31 @@ import ProfessionalTools from "../ProfessionalTools/ProfessionalTools";
 import Notifications from "../Notifications/Notifications";
 import StarOfTheMonth from '../StarOfTheMonth/StarOfTheMonth';
 import AcheivementsForm from "../AcheivementsForm/AcheivementsForm";
+import axios from "axios";
+import {BaseUrl} from "../../../constants";
 
 const Dashboard = () => {
     const currentPage = useSelector(state => state.currentPage);
     const showNotifications = useSelector(state => state.showNotifications);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const logout = () => {
-        navigate("/");
+    const logout = async () => {
+        try{
+            const response = await axios({
+                url:`${BaseUrl}/logout`,
+                method:"POST",
+                headers:{
+                    "Content-Type":"application/json",
+                },
+                data:{
+                    token:localStorage.getItem("jwt")
+                }
+            });
+            localStorage.removeItem("jwt");
+            navigate("/");
+        }catch(err){
+            console.log(err);
+        }
     }
     const myprofile = () => {
 

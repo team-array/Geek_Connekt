@@ -16,11 +16,12 @@ const AUTH_CHECK = gql`
 
 const HomePageController = () => {
     const navigation = useNavigate();
-    const [userAuthChecked, setuserAuthChecked] = useState(true);
+    const [userAuthChecked, setuserAuthChecked] = useState(false);
     const [authLoading, setAuthLoading] = useState(true);
+    
     const { loading, error, data } = useQuery(AUTH_CHECK, {
         variables: {
-            token: localStorage.getItem("jwt"),
+            token: localStorage.getItem("jwt") || "",
         },
     });
     useEffect(() => {
