@@ -17,14 +17,50 @@ import AddBoxIcon from '@mui/icons-material/AddBox';
 import AddEvents from "./AddEvents/AddEvents";
 import {useDispatch} from 'react-redux';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
-
+import axios from "axios";
+import { BaseUrl } from "../../../constants";
 
 const Events = () => {
   const [value, setValue] = React.useState(new Date());
+  const [events, setEvents] = React.useState([]);
   const dispatch = useDispatch();
   const eventform = () => {
     dispatch({ type: "SET_ADD_EVENTS", payload: true });
   }
+  const getDate = (date) => {
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    return `${year}-${month}-${day}`;
+  }
+  React.useEffect(() => {
+    const getEvents = async () => {
+      let end = "T00:00:00.000Z";
+      let start = getDate(value);
+
+      try{
+        const response = await axios({
+          method: "post",
+          url: `${BaseUrl}/getEvents`,
+          data: {
+            EventDate: start+end,
+            token: localStorage.getItem("jwt")
+          },
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if(response.data.success){
+          console.log(response.data.events);
+          setEvents(response.data.events);
+        }
+      }catch(err){
+        console.log(err);
+      }
+    }
+    getEvents();
+  },[value]);
+
   return (
     <>
         <AddEvents/>
@@ -36,8 +72,8 @@ const Events = () => {
             orientation="landscape"
             openTo="day"
             value={value}
-            shouldDisableDate={isWeekend}
             onChange={(newValue) => {
+
               setValue(newValue);
             }}
             renderInput={(params) => <TextField {...params} />}
@@ -53,78 +89,46 @@ const Events = () => {
           <p className="text-center text-muted font-italic mb-3" style={{zIndex:"9999",fontSize:"0.8rem"}}>on {`${
             value.getDate()}-${value.getMonth() + 1}-${value.getFullYear()}`}
           </p>
-          <IconButton style={{display:"block",borderRadius:"0",padding:0,width:"100%"}}>
+          {
+            events.map((event,index) => {
+              return (
+                <>
+                <IconButton style={{display:"block",borderRadius:"0",padding:0,width:"100%"}}
+                  onClick={() => {
+                    window.location.href=event.EventLink;
+                  }}
+                >
 
-            <ListItem alignItems="flex-start" className="ml-3">
-              {/* <ListItemAvatar>
-              </ListItemAvatar> */}
-              
-              <ListItemText
-                primary="Brunch this weekend?"
-                secondary={
-                  <React.Fragment>
-                    <Typography
-                      sx={{ display: "inline" }}
-                      component="span"
-                      variant="body2"
-                      color="text.primary"
-                    >
-                      Ali Connors
-                    </Typography>
-                    {" — I'll be in your neighborhood doing errands this…"}
-                  </React.Fragment>
-                }
-              />
-            </ListItem>
-          </IconButton>
-            <Divider  component="li" />
-            <IconButton style={{display:"block",borderRadius:"0",padding:0,width:"100%"}}>
-
-            <ListItem alignItems="flex-start">
-              {/* <ListItemAvatar>
-              </ListItemAvatar> */}
-              <ListItemText
-                primary="Summer BBQ"
-                secondary={
-                  <React.Fragment>
-                    <Typography
-                      sx={{ display: "inline" }}
-                      component="span"
-                      variant="body2"
-                      color="text.primary"
-                    >
-                      to Scott, Alex, Jennifer
-                    </Typography>
-                    {" — Wish I could come, but I'm out of town this…"}
-                  </React.Fragment>
-                }
-              />
-            </ListItem>
-          </IconButton>
-            <Divider component="li" />
-            <IconButton style={{display:"block",borderRadius:"0",padding:0,width:"100%"}}>
-
-            <ListItem alignItems="flex-start">
-              {/* <ListItemAvatar>
-              </ListItemAvatar> */}
-              <ListItemText
-                primary="Oui Oui"
-                secondary={
-                  <React.Fragment>
-                    <Typography
-                      sx={{ display: "inline" }}
-                      component="span"
-                      variant="body2"
-                      color="text.primary"
-                    >
-                      Sandra Adams
-                    </Typography>
-                    {" — Do you have Paris recommendations? Have you ever…"}
-                  </React.Fragment>
-                }
-              />
-            </ListItem>
-          </IconButton>
+                <ListItem alignItems="flex-start" className="ml-3">
+                  {/* <ListItemAvatar>
+                  </ListItemAvatar> */}
+                  
+                  <ListItemText
+                    primary={event.EventName}
+                    secondary={
+                      <React.Fragment>
+                        <Typography
+                          sx={{ display: "inline" }}
+                          component="span"
+                          variant="body2"
+                          color="text.primary"
+                        >
+                          {event.EventSubtitle}
+                        </Typography>
+                        {` — ${event.EventDescription}`}
+                      </React.Fragment>
+                    }
+                  />
+                </ListItem>
+              </IconButton>
+              {
+                (index !== events.length-1)?
+                      <Divider  component="li" />:""
+              }
+              </>
+              )
+            })
+          }
           </List>
         </div>
       </div>

@@ -66,6 +66,7 @@ const userAuthCheck = async (args) => {
                 id: user.id,
                 username: user.username,
                 result: "Success",
+                role: user.role,
             };
         }
         return {

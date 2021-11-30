@@ -14,15 +14,20 @@ router.get("/", (req, res, next) => {
 });
 
 router.post("/addEvents",(res,req)=>{
-    require("./controllers/eventController").addEvents(req,res);
+    require("./controllers/eventsController").addEvents(res,req);
 });
 
 router.post("/getEvents",(res,req)=>{
-    require("./controllers/eventController").getEvents(req,res);
+    require("./controllers/eventsController").getEvents(res,req);
+});
+
+router.post("/getAllEvents",(res,req)=>{
+    require("./controllers/eventsController").getAllEvents(res,req);
 });
 
 router.post("/logout",(res,req)=>{
     require("./controllers/userController").logout(res,req);
-})
+});
+
 
 module.exports = router;

@@ -10,6 +10,7 @@ const AUTH_CHECK = gql`
             id
             username
             result
+            role
         }
     }
 `;
