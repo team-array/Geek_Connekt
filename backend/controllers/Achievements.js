@@ -82,9 +82,20 @@ const deleteAchievement = async ({res}, {req}) => {
                     message: "User not found"
                 });
             }
+            let public_id;
+            try{
+                public_id=user_achievement.achievements[req.body.achievement_index].split("/")[7].split(".")[0];
+            }
+            catch(err){
+                return res.status(200).json({
+                    success: false,
+                    message: "achievement not found"
+                });
+            }
             user_achievement.achievements = user_achievement.achievements.filter((ele,index)=>{
                 return req.body.achievement_index !== index;
             });
+            let result = await cloudinary.uploader.destroy(public_id);
             user_achievement.save((err, result)=>{
                 if (err) {
                     return res.status(200).json({

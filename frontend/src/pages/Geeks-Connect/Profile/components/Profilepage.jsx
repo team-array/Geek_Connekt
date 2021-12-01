@@ -194,6 +194,10 @@ export const Profilepage = () => {
   }, []);
   const deleteAchievement = async  (achievement_index) => {
       try{
+          dispatch({
+            type:"SET_LOADING",
+            payload:true
+          });
           const response = await axios({
                 method: "post",
                 url: `${BaseUrl}/deleteAchievement`,
@@ -205,7 +209,10 @@ export const Profilepage = () => {
                     achievement_index
                 }
           })
-          console.log(response);
+          dispatch({
+            type:"SET_LOADING",
+            payload:false
+          });
           if (response.data.success) {
             dispatch({
               type: "SET_ACHIEVEMENTS",
@@ -218,6 +225,10 @@ export const Profilepage = () => {
           }
       }catch(err){
             console.log(err);
+            dispatch({
+              type:"SET_LOADING",
+              payload:false
+            });
       }
   }
   return userDataLoading ? (
@@ -309,8 +320,9 @@ export const Profilepage = () => {
               </div>
               <div className="profile-intro">
                 <div className="title-box">
-                  <h3 style={{ marginLeft: "9px" }}>info & posts</h3>
+                  <h4 style={{ marginLeft: "9px" }}>info & posts</h4>
                   <a
+                    className="mb-2"
                     href="/"
                     onClick={(e) => {
                       e.preventDefault();
@@ -335,7 +347,7 @@ export const Profilepage = () => {
                   </a>
                 </div>
 
-                <div className="postsbox">
+                <div className="postsbox mt-3">
                   {achievements
                     .slice(0, ImagesGridLength)
                     .map((achievement, index) => {
@@ -345,9 +357,9 @@ export const Profilepage = () => {
                             key={index}
                             src={achievement}
                             alt=""
-                            className="post-img"
+                            className="post-img mx-3"
                           />
-                          <Button className="mb-3" onClick={()=>deleteAchievement(index)}>delete</Button>
+                          <Button className="mb-3 mx-3" style={{width:"150px"}} onClick={()=>deleteAchievement(index)}>delete</Button>
                         </div>
                       );
                     })}
