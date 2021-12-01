@@ -12,8 +12,9 @@ import {BaseUrl} from "../../../../constants";
 const UtilityCard = (props) => {
   const [myrating, setMyRating] = React.useState(props.myrating);
   const [avgrating, setAvgRating] = React.useState(props.rating);
+  console.log(myrating);
   const GiveRating = async (rating) => {
-    console.log(rating);
+    console.log(rating,props);
     if(myrating === -1){
       try{
         const response = await axios.post(
