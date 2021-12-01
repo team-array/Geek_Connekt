@@ -13,19 +13,6 @@ import "emoji-mart/css/emoji-mart.css";
 import "../AddPost/AddPost.scss";
 import { useSelector } from "react-redux";
 
-const dataURLtoFile = (dataurl, filename) => {
-    const arr = dataurl.split(",");
-    const mime = arr[0].match(/:(.*?);/)[1];
-    const bstr = atob(arr[1]);
-    let n = bstr.length;
-    const u8arr = new Uint8Array(n);
-    while (n) {
-        u8arr[n - 1] = bstr.charCodeAt(n - 1);
-        n -= 1; // to make eslint happy
-    }
-    return new File([u8arr], filename, { type: mime });
-};
-
 const AcheivementsForm = () => {
     const open = useSelector((state) => state.showAchievementsForm);
     const [src, setsrc] = React.useState("");
@@ -47,20 +34,16 @@ const AcheivementsForm = () => {
         console.log("posting ...");
         console.log(`resulatnt image ${result}`);
         try {
-            const formData = new FormData();
-            const file = dataURLtoFile(result);
-            formData.append("image", file, file.name);
-            formData.append(
-                "token",
-                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkRlZXBlc2ggRHJhZ29uZWVsIiwiZW1haWwiOiJkZWVwZXNoYXNoNDQ0QGdtYWlsLmNvbSIsInJvbGUiOiJTdHVkZW50Iiwicm9sbE51bWJlciI6IjE5SDUxQTA1RzIiLCJpYXQiOjE2Mzc4MTYzNzF9.yrId7SkljS7Tl7b-iCx2LtT4wQakOWd9won9HzrNAms"
-            );
             const response = await axios({
                 method: "POST",
-                url: "http://localhost:8000/uploadPost",
+                url: "http://localhost:8000/addachievement",
                 headers: {
-                    "content-type": "multipart/form-data",
+                    "content-type": "application/json",
                 },
-                data: formData,
+                data: {
+                    achievement_image: result,
+                    token: localStorage.getItem("jwt"),
+                },
             });
             console.log(response);
         } catch (error) {

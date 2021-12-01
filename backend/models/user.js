@@ -88,6 +88,11 @@ const UserSchema = new Schema({
             ref: "Post",
         },
     ],
+    achievements: [
+        {
+            type:String,
+        }
+    ],
 });
 
 UserSchema.methods.generateAuthToken = async function () {

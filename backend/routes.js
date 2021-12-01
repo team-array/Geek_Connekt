@@ -43,4 +43,8 @@ router.post("/updateRating",(res,req)=>{
     require("./controllers/utilityController").updateRating(res,req);
 });
 
+router.post("/addachievement",(res,req)=>{
+    require("./controllers/Achievements").addachievement(res,req);
+});
+
 module.exports = router;

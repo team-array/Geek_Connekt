@@ -108,12 +108,9 @@ const UtilityCard = (props) => {
                   my rating
                 </h6>
                 <Rating
-                  name="simple-controlled"
+                  name="read-only"
                   value={myrating}
-                  onChange={(event, newValue) => {
-                    // GiveRating(newValue);
-                    // setMyRating(newValue);
-                  }}
+                  readOnly
                 />
               </>
             )}
