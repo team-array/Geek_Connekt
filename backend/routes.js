@@ -39,4 +39,8 @@ router.post("/getutilities",(res,req)=>{
     require("./controllers/utilityController").getutilities(res,req);
 });
 
+router.post("/updateRating",(res,req)=>{
+    require("./controllers/utilityController").updateRating(res,req);
+});
+
 module.exports = router;

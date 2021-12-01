@@ -5,12 +5,44 @@ import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
-import Rating from '@mui/material/Rating';
+import Rating from "@mui/material/Rating";
+import axios from "axios";
+import {BaseUrl} from "../../../../constants";
 
 const UtilityCard = (props) => {
+  const [myrating, setMyRating] = React.useState(props.myrating);
+  const [avgrating, setAvgRating] = React.useState(props.rating);
+  const GiveRating = async (rating) => {
+    console.log(rating);
+    if(myrating === -1){
+      try{
+        const response = await axios.post(
+          BaseUrl + "/updateRating",
+          {
+            rating: rating,
+            token: localStorage.getItem("jwt"),
+            title:props.title
+          }
+        );
+        console.log(response);
+        if(response.data.success){
+          setMyRating(rating);
+          setAvgRating(response.data.rating);
+        }
+      }catch(err){
+        console.log(err);
+      }
+    }
+    else{
+      alert("You have already given rating");
+    }
+  };
   return (
     <div className="UtilityCard my-4">
-      <Box className="shadow p-3" sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
+      <Box
+        className="shadow p-3"
+        sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+      >
         <Box sx={{ my: 3, mx: 2 }}>
           <Grid container alignItems="center">
             <Grid item xs>
@@ -20,14 +52,12 @@ const UtilityCard = (props) => {
             </Grid>
             <Grid item>
               <Typography gutterBottom variant="h6" component="div">
-                {
-                  (props.rating===-1) ? "No Rating" : `Rating ${props.rating}`
-                }
+                {avgrating === -1 ? "No Rating" : `Rating ${avgrating}`}
               </Typography>
             </Grid>
           </Grid>
           <Typography color="text.secondary" variant="body2">
-              {props.description}
+            {props.description}
           </Typography>
         </Box>
         <Divider variant="middle" />
@@ -35,31 +65,71 @@ const UtilityCard = (props) => {
           <Typography gutterBottom variant="body1">
             features and usage
           </Typography>
-          <Box  style={{display: 'flex', flexDirection:"row",flexWrap: 'wrap',justifyContent: 'space-between'}} direction="row">
+          <Box
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              flexWrap: "wrap",
+              justifyContent: "space-between",
+            }}
+            direction="row"
+          >
             {props.features.map((feature) => (
-                <Chip className="mt-2" label={feature} />
+              <Chip className="mt-2" label={feature} />
             ))}
           </Box>
         </Box>
-        <Box sx={{ mt: 3, ml: 1, mb: 1 }} style={{display: 'flex', flexWrap: 'wrap',justifyContent: 'space-between'}}>
-          <div style={{width:"max-content",marginLeft:"0.5rem"}}>
-            {
-                props.myrating===-1 ?(
-                    <>
-                        <h6  style={{display:"block",width:"max-contant"}}>No rating given</h6>
-                        <Rating name="no-value" value={null} />
-                    </>
-                ):(
-                    <>
-                        <h6  style={{display:"block",width:"max-contant"}}>my rating</h6>
-                        <Rating name="read-only" value={props.myrating} readOnly />
-                    </>
-                )
-            }
+        <Box
+          sx={{ mt: 3, ml: 1, mb: 1 }}
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "space-between",
+          }}
+        >
+          <div style={{ width: "max-content", marginLeft: "0.5rem" }}>
+            {myrating === -1 ? (
+              <>
+                <h6 style={{ display: "block", width: "max-contant" }}>
+                  No rating given
+                </h6>
+                <Rating
+                  name="simple-controlled"
+                  value={0}
+                  onChange={(event, newValue) => {
+                    GiveRating(newValue);
+                  }}
+                />
+
+              </>
+            ) : (
+              <>
+                <h6 style={{ display: "block", width: "max-contant" }}>
+                  my rating
+                </h6>
+                <Rating
+                  name="simple-controlled"
+                  value={myrating}
+                  onChange={(event, newValue) => {
+                    // GiveRating(newValue);
+                    // setMyRating(newValue);
+                  }}
+                />
+              </>
+            )}
           </div>
-          <Button style={{display:"block",width:"max-content",marginRight:"10px"}} onClick={()=>{
-            window.location.href=props.websitelink;
-          }}>visit website</Button>
+          <Button
+            style={{
+              display: "block",
+              width: "max-content",
+              marginRight: "10px",
+            }}
+            onClick={() => {
+              window.location.href = props.websitelink;
+            }}
+          >
+            visit website
+          </Button>
         </Box>
       </Box>
     </div>

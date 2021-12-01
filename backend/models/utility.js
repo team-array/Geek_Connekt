@@ -24,6 +24,7 @@ const UtilitySchema = new mongoose.Schema({
       username: {
         type: String,
         required: true,
+        unique: true
       },
       rating: {
         type: Number,
@@ -37,4 +38,4 @@ const UtilitySchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("Utilities", UtilitySchema);
+module.exports = mongoose.model("utility", UtilitySchema);
