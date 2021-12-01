@@ -1,7 +1,4 @@
-export const currentPage = (
-    state = 0,
-    action
-) => {
+export const currentPage = (state = 0, action) => {
     switch (action.type) {
         case "SET_CURRENT_PAGE":
             return action.payload;
@@ -10,11 +7,7 @@ export const currentPage = (
     }
 };
 
-
-export const AddEvents = (
-    state = false,
-    action
-) => {
+export const AddEvents = (state = false, action) => {
     switch (action.type) {
         case "SET_ADD_EVENTS":
             return action.payload;
@@ -23,10 +16,7 @@ export const AddEvents = (
     }
 };
 
-export const EditProfile = (
-    state = false,
-    action
-) => {
+export const EditProfile = (state = false, action) => {
     switch (action.type) {
         case "SET_EDIT_PROFILE":
             return action.payload;
@@ -35,10 +25,7 @@ export const EditProfile = (
     }
 };
 
-export const AddUtility = (
-    state = false,
-    action
-) => {
+export const AddUtility = (state = false, action) => {
     switch (action.type) {
         case "SET_ADD_UTILITY":
             return action.payload;
@@ -48,7 +35,10 @@ export const AddUtility = (
 };
 
 export const Comment_Box = (
-    state = false,
+    state = {
+        postId: "",
+        commentBox: false,
+    },
     action
 ) => {
     switch (action.type) {
@@ -59,11 +49,7 @@ export const Comment_Box = (
     }
 };
 
-
-export const showNotifications = (
-    state = false,
-    action
-) => {
+export const showNotifications = (state = false, action) => {
     switch (action.type) {
         case "SET_NOTIFICATIONS":
             return action.payload;
@@ -72,10 +58,7 @@ export const showNotifications = (
     }
 };
 
-export const showAchievementsForm = (
-    state = false,
-    action
-) => {
+export const showAchievementsForm = (state = false, action) => {
     switch (action.type) {
         case "SET_ACHIEVEMENTS_FORM":
             return action.payload;
