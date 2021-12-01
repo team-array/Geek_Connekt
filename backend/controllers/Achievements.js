@@ -4,7 +4,6 @@ const {cloudinary} = require("../utils/cloudinary");
 
 const addachievement = async ({res}, {req}) => {
     try {
-        console.log(req.body);
         verify(req.body.token).then(async (username)=>{
             const user_achievement = await user.findOne({username: username.username});
             if (!user_achievement) {
@@ -20,12 +19,11 @@ const addachievement = async ({res}, {req}) => {
                         message: "Error uploading image"
                     });
                 }
-                console.log(typeof result);
                 const new_achievement = {
-                    achievement_image: result.url
+                    achievement_image: result.secure_url
                 };
-                console.log(new_achievement);
-                const new_user_achievement = await user.findOneAndUpdate({username: username.username}, {$push: {...new_achievement}});
+                const new_user_achievement = await user.findOneAndUpdate({username: username.username}, {$push: {achievements:new_achievement.achievement_image}});
+                console.log(new_user_achievement);
                 if (!new_user_achievement) {
                     return res.status(200).json({
                         success: false,
@@ -34,7 +32,8 @@ const addachievement = async ({res}, {req}) => {
                 }
                 return res.status(200).json({
                     success: true,
-                    message: "Achievement added successfully"
+                    message: "Achievement added successfully",
+                    achievement:result.secure_url
                 });
             });
         }).catch(err=>{
@@ -51,6 +50,71 @@ const addachievement = async ({res}, {req}) => {
     }
 }
 
+const getachievements = async ({res}, {req}) => {
+    try {
+        verify(req.body.token).then(async (username)=>{
+            const user_achievement = await user.findOne({username: username.username});
+            if (!user_achievement) {
+                return res.status(200).json({
+                    success: false,
+                    message: "User not found"
+                });
+            }
+            return res.status(200).json({
+                success: true,
+                achievements: user_achievement.achievements
+            });
+        });
+    }catch(err){
+        res.status(500).json({
+            message: "Internal server error"
+        });
+    }
+}
+
+const deleteAchievement = async ({res}, {req}) => {
+    try {
+        verify(req.body.token).then(async (username)=>{
+            const user_achievement = await user.findOne({username: username.username});
+            if (!user_achievement) {
+                return res.status(200).json({
+                    success: false,
+                    message: "User not found"
+                });
+            }
+            user_achievement.achievements = user_achievement.achievements.filter((ele,index)=>{
+                return req.body.achievement_index !== index;
+            });
+            user_achievement.save((err, result)=>{
+                if (err) {
+                    return res.status(200).json({
+                        success: false,
+                        message: "Error deleting achievement"
+                    });
+                }
+                return res.status(200).json({
+                    success: true,
+                    message: "Achievement deleted successfully",
+                    achievements:result.achievements
+                });
+            });
+        }).catch(err=>{
+            console.log(err);
+            return res.status(200).json({
+                success: false,
+                message: "Error verifying user"
+            });
+        }
+        );
+    }catch(err){
+        res.status(500).json({
+            message: "Internal server error"
+        });
+    }
+}
+
 module.exports = {
-    addachievement
+    addachievement,
+    getachievements,
+    deleteAchievement
 }

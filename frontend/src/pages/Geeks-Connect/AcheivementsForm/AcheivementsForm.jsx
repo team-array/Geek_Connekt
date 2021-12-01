@@ -12,6 +12,15 @@ import axios from "axios";
 import "emoji-mart/css/emoji-mart.css";
 import "../AddPost/AddPost.scss";
 import { useSelector } from "react-redux";
+import { notification, Space } from 'antd';
+import {BaseUrl} from "../../../constants";
+const openNotificationWithIcon = info => {
+  notification[info.type]({
+    message: info.message,
+    description:
+      info.description,
+  });
+};
 
 const AcheivementsForm = () => {
     const open = useSelector((state) => state.showAchievementsForm);
@@ -20,6 +29,7 @@ const AcheivementsForm = () => {
     const [curr, setcurr] = React.useState(0);
     const [result, setResult] = useState(null);
     const [image, setImage] = useState(null);
+    const imagesGridLength = useSelector((state) => state.ImagesGridLength);
     const [crop, setCrop] = useState({
         unit: "%",
         width: 30,
@@ -31,12 +41,10 @@ const AcheivementsForm = () => {
     };
     const { Dragger } = Upload;
     const post = async () => {
-        console.log("posting ...");
-        console.log(`resulatnt image ${result}`);
         try {
             const response = await axios({
                 method: "POST",
-                url: "http://localhost:8000/addachievement",
+                url: BaseUrl+"/addachievement",
                 headers: {
                     "content-type": "application/json",
                 },
@@ -45,7 +53,25 @@ const AcheivementsForm = () => {
                     token: localStorage.getItem("jwt"),
                 },
             });
-            console.log(response);
+            if (response.data.success) {
+                message.success("Achievement added successfully");
+                dispatch({ type: "SET_ACHIEVEMENTS_FORM", payload: false });
+                openNotificationWithIcon({
+                    type: "success",
+                    message: "Achievement added successfully",
+                    description: "You can now add more achievements.Please refresh the page to see the changes",
+                });
+                dispatch({type:"SET_GRID_LENGTH", payload:Math.min(imagesGridLength+1,4)});
+                dispatch({ type: "ADD_ACHIEVEMENTS", payload: [response.data.achievement] });
+            }
+            else{
+                openNotificationWithIcon({
+                    type: "error",
+                    message: "Error",
+                    description: "Something went wrong",
+                });
+                dispatch({ type: "SET_ACHIEVEMENTS_FORM", payload: false });
+            }
         } catch (error) {
             console.log(error);
         }
@@ -53,15 +79,8 @@ const AcheivementsForm = () => {
     const props = {
         name: "file",
         multiple: false,
-        // action: "",
-
-        // customRequest	: (file) => {
-        //   const formData = new FormData();
-        //   formData.append("file", file.file);
-        // },
-        // data:{
-
-        // },
+        maxCount: 1,
+        showUploadList: false,
         onChange: async (info) => {
             console.log(info);
             try {
@@ -75,7 +94,7 @@ const AcheivementsForm = () => {
                 setsrc(src);
                 setstatus(true);
             } catch (error) {
-                message.error(`file upload failed.`);
+                // message.error(`file upload failed.`);
                 setstatus(false);
             }
         },
@@ -107,6 +126,7 @@ const AcheivementsForm = () => {
             console.log("crop the image");
         }
     };
+
     return (
         <div className="AddPost">
             <Backdrop
@@ -159,6 +179,7 @@ const AcheivementsForm = () => {
                         {curr === 0 ? "NEXT" : "POST"}
                     </Button>
                     {curr === 0 ? (
+                        <>
                         <Dragger {...props}>
                             <p className="ant-upload-drag-icon">
                                 <InboxOutlined />
@@ -168,6 +189,11 @@ const AcheivementsForm = () => {
                                 drag or click to upload photos and videos here
                             </p>
                         </Dragger>
+                        {
+                            (status)?
+                                <p className="mt-2" style={{color:"black"}}>click next to crop the image</p> : ""
+                        }
+                        </>
                     ) : (
                         <div
                             className="onCropContainer"
@@ -197,7 +223,11 @@ const AcheivementsForm = () => {
                                         crop={crop}
                                         onImageLoaded={setImage}
                                         onChange={(newCrop) => {
-                                            setCrop(newCrop);
+                                            setCrop({
+                                                ...newCrop,
+                                                width:160,
+                                                height:160,
+                                            });
                                         }}
                                     />
                                 </>
@@ -218,7 +248,7 @@ const AcheivementsForm = () => {
                                         <img
                                             src={result}
                                             alt="cropped img"
-                                            style={{ width: "100%" }}
+                                            // style={{ width: "100%" }}
                                         />
                                     </div>
                                 )

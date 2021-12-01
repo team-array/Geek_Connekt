@@ -83,3 +83,29 @@ export const showAchievementsForm = (
             return state;
     }
 };
+
+export const achievements = (
+    state = [],
+    action
+) => {
+    switch (action.type) {
+        case "SET_ACHIEVEMENTS":
+            return action.payload
+        case "ADD_ACHIEVEMENTS":
+            return [...state,...action.payload];
+        default:
+            return state;
+    }
+};
+
+export const ImagesGridLength = (
+    state = 0,
+    action
+) => {
+    switch (action.type) {
+        case "SET_GRID_LENGTH":
+            return action.payload;
+        default:
+            return state;
+    }
+};
