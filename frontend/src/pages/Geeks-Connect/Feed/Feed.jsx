@@ -13,8 +13,14 @@ import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ForumOutlinedIcon from "@mui/icons-material/ForumOutlined";
 const Feed = () => {
     const dispatch = useDispatch();
-    const show_comments = () => {
-        dispatch({ type: "SET_COMMENT_BOX", payload: true });
+    const show_comments = (id) => {
+        dispatch({
+            type: "SET_COMMENT_BOX",
+            payload: {
+                postId: id,
+                commentBox: true,
+            },
+        });
     };
 
     const [pageNumber, setpageNumber] = useState(1);
@@ -35,10 +41,12 @@ const Feed = () => {
         setpostData(new Array(posts.length).fill(0));
         posts.map((post, idx) => {
             setpostLikesCount((prev) => [...prev, post.likes.length]);
-            post.likes.filter((l) =>
-                (l._id === (localStorage.getItem("user") !== null
-                    ? JSON.parse(localStorage.getItem("user")).id
-                    : ""))
+            post.likes.filter(
+                (l) =>
+                    l._id ===
+                    (localStorage.getItem("user") !== null
+                        ? JSON.parse(localStorage.getItem("user")).id
+                        : "")
             ).length > 0
                 ? setpostData((postData) => {
                       postData[idx] = 1;
@@ -170,7 +178,9 @@ const Feed = () => {
                                               {postLikesCount[idx]}
                                           </div>
                                           <div
-                                              onClick={show_comments}
+                                              onClick={() => {
+                                                  show_comments(post._id);
+                                              }}
                                               style={{ cursor: "pointer" }}
                                           >
                                               {/* <img src={comment} alt="" /> */}

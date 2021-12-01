@@ -30,13 +30,21 @@ const PostSchema = new Schema({
                 type: Schema.Types.ObjectId,
                 ref: "User",
             },
-            text: {
+            comment: {
                 type: String,
                 required: true,
             },
             name: {
                 type: String,
                 required: true,
+            },
+            profilePic: {
+                type: String,
+                required: true,
+            },
+            createdAt: {
+                type: Date,
+                default: Date.now,
             },
         },
     ],

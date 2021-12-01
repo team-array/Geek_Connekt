@@ -13,6 +13,10 @@ router.get("/getAllPosts", postController.getAllPosts);
 
 router.post("/likePost", postController.likePost);
 
+router.get("/getComments", postController.getComments);
+
+router.post("/commentPost", postController.commentPost);
+
 router.get("/", (req, res, next) => {
     res.send("<h1>Welcome to Geek ConnecKt API!</h1>");
 });

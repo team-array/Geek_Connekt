@@ -113,3 +113,60 @@ exports.likePost = async (req, res, next) => {
         });
     }
 };
+
+exports.getComments = async (req, res, next) => {
+    try {
+        // console.log(req.query);
+        const postId = req.query.postId;
+        const post = await Post.findById(postId)
+            .populate("comments.user", "username")
+            .populate("comments.user", "profilePic");
+        if (post) {
+            res.status(200).json({
+                message: "Comments fetched successfully",
+                post: post,
+            });
+        } else {
+            res.status(404).json({
+                message: "Post not found",
+            });
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            message: "Error occured while fetching comments",
+        });
+    }
+};
+
+exports.commentPost = async (req, res, next) => {
+    try {
+        const postId = req.body.postId;
+        const userId = req.body.userId;
+        const comment = req.body.comment;
+        const post = await Post.findById(postId);
+        const user = await User.findById(userId);
+        console.log(post, user);
+        if (post && user) {
+            post.comments.push({
+                user: userId,
+                comment: comment,
+                name: user.username,
+                profilePic: user.profilePic,
+            });
+            post.save();
+            res.status(200).json({
+                message: "Comment posted successfully",
+            });
+        } else {
+            res.status(404).json({
+                message: "Post or user not found",
+            });
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            message: "Error occured while commenting post",
+        });
+    }
+};
