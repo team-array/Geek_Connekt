@@ -65,7 +65,7 @@ const UtilityForm = () => {
         openNotificationWithIcon({ 
           type:'success',
           title:'Utility Added',
-          message:response.data.message
+          message:response.data.message +". Please refresh the page to see the changes."
         });
       }else{
         openNotificationWithIcon({

@@ -20,7 +20,9 @@ const UtilityCard = (props) => {
             </Grid>
             <Grid item>
               <Typography gutterBottom variant="h6" component="div">
-                Rating 4.5
+                {
+                  (props.rating===-1) ? "No Rating" : `Rating ${props.rating}`
+                }
               </Typography>
             </Grid>
           </Grid>
@@ -42,7 +44,7 @@ const UtilityCard = (props) => {
         <Box sx={{ mt: 3, ml: 1, mb: 1 }} style={{display: 'flex', flexWrap: 'wrap',justifyContent: 'space-between'}}>
           <div style={{width:"max-content",marginLeft:"0.5rem"}}>
             {
-                props.myrating===null || props.myrating===undefined ?(
+                props.myrating===-1 ?(
                     <>
                         <h6  style={{display:"block",width:"max-contant"}}>No rating given</h6>
                         <Rating name="no-value" value={null} />
@@ -55,7 +57,9 @@ const UtilityCard = (props) => {
                 )
             }
           </div>
-          <Button style={{display:"block",width:"max-content",marginRight:"10px"}}>visit website</Button>
+          <Button style={{display:"block",width:"max-content",marginRight:"10px"}} onClick={()=>{
+            window.location.href=props.websitelink;
+          }}>visit website</Button>
         </Box>
       </Box>
     </div>

@@ -35,4 +35,8 @@ router.post("/addutility",(res,req)=>{
     require("./controllers/utilityController").addutility(res,req);
 });
 
+router.post("/getutilities",(res,req)=>{
+    require("./controllers/utilityController").getutilities(res,req);
+});
+
 module.exports = router;
