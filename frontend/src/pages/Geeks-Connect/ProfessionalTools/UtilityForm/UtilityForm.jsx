@@ -7,6 +7,9 @@ import { UtilityFormContainer } from "./UtilityForm.style";
 import { Form, Input, Button } from "antd";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import "./UtilityForm.scss";
+import axios from "axios";
+import {BaseUrl} from "../../../../constants";
+import { notification, Space } from 'antd';
 
 const layout = {
   labelCol: { span: 8 },
@@ -43,11 +46,39 @@ const formItemLayoutWithOutLabel = {
   },
 };
 
+
+const openNotificationWithIcon = noti => {
+  notification[noti.type]({
+    message: noti.title,
+    description:
+    noti.message,
+  });
+};
+
 const UtilityForm = () => {
-  const onFinish = (values: any) => {
-    console.log(values);
-  };
   const dispatch = useDispatch();
+  const onFinish = async (values) => {
+    console.log(values);
+    try{
+      const response = await axios.post(BaseUrl+"/addutility", {...values,token:localStorage.getItem("jwt")});
+      if(response.data.success){
+        openNotificationWithIcon({ 
+          type:'success',
+          title:'Utility Added',
+          message:response.data.message
+        });
+      }else{
+        openNotificationWithIcon({
+          type:'error',
+          title:'Utility Not Added',
+          message:response.data.message
+        });
+      }
+      dispatch({type:"SET_ADD_UTILITY",payload:false});
+    }catch(err){
+      console.log(err)
+    }
+  };
   const AddUtility = useSelector((state) => state.AddUtility);
   const handleClose = () => {
     dispatch({
@@ -120,7 +151,7 @@ const UtilityForm = () => {
               <Input.TextArea placeholder="Description"/>
             </Form.Item>
             <Form.List
-              name="names"
+              name="features"
                 style={{
                     width: "100%",
                 }}

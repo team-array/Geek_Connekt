@@ -59,12 +59,18 @@ const Events = () => {
     }
     getEvents();
   },[value]);
-
+  console.log(JSON.parse(localStorage.getItem("user")).role)
   return (
     <>
+    {
+      (JSON.parse(localStorage.getItem("user")).role === "Student") ?"":
         <AddEvents/>
+    }
     <EventsContainer  data-aos="fade-down" className="Events">
+      {
+        (JSON.parse(localStorage.getItem("user")).role === "Student") ? <div className="Events-title mb-5"></div>:
         <Button className="mb-4" onClick={eventform}><AddBoxIcon style={{marginBottom:"0.2rem"}}/> &nbsp; Add Events</Button>
+      }
       <div className="shadow-sm card" style={{display: 'flex', flexDirection: 'row',justifyContent: 'space-between',flexWrap:"wrap"}}>
         <LocalizationProvider className="mx-auto" style={{fontSize:"2rem",width:"600px"}} dateAdapter={AdapterDateFns}>
           <StaticDatePicker

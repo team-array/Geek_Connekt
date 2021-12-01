@@ -62,7 +62,9 @@ const ProfessionalTools = () => {
           features={["easy to use", "effective", "time saving", "usefull"]}
           description="Porfolyo is a tool that helps you to manage your professional life. It helps you to manage your time, manage your projects, and manage your tasks. It is a tool that helps you to manage your professional life. "
         />
-        <UtilityAddCard className="shadow my-4">
+        {
+          (JSON.parse(localStorage.getItem("user")).role === "Student") ? "":
+          <UtilityAddCard className="shadow my-4">
           <h4
             className="text-center text-uppercase"
             style={{
@@ -90,6 +92,7 @@ const ProfessionalTools = () => {
             <AddIcon />
           </Fab>
         </UtilityAddCard>
+        }
       </Utility>
     </>
   );

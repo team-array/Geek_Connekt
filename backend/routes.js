@@ -31,5 +31,8 @@ router.post("/logout",(res,req)=>{
     require("./controllers/userController").logout(res,req);
 });
 
+router.post("/addutility",(res,req)=>{
+    require("./controllers/utilityController").addutility(res,req);
+});
 
 module.exports = router;
