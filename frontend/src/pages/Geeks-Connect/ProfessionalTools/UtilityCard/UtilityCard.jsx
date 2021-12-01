@@ -14,7 +14,6 @@ const UtilityCard = (props) => {
   const [avgrating, setAvgRating] = React.useState(props.rating);
   console.log(myrating);
   const GiveRating = async (rating) => {
-    console.log(rating,props);
     if(myrating === -1){
       try{
         const response = await axios.post(
@@ -39,10 +38,10 @@ const UtilityCard = (props) => {
     }
   };
   return (
-    <div className="UtilityCard my-4">
+    <div className="UtilityCard mt-4 mx-4">
       <Box
         className="shadow p-3"
-        sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+        sx={{ bgcolor: "background.paper",height: "100%"      }}
       >
         <Box sx={{ my: 3, mx: 2 }}>
           <Grid container alignItems="center">

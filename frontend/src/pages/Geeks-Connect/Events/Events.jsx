@@ -96,7 +96,7 @@ const Events = () => {
             renderInput={(params) => <TextField {...params} />}
           />
         </LocalizationProvider>
-        <div className="mx-auto EventBox" style={{overflowY:"scroll",width: "100%",maxWidth:"400px" }}>
+        <div className="mx-auto EventBox" style={{overflowY:(events.length !== 0)?"scroll":"auto",width: "100%",maxWidth:"400px",borderLeft:(events.length !== 0)?"1px solid #bbb":"none" }}>
           
           <List
             sx={{ width: "100%", bgcolor: "background.paper", }}
@@ -107,6 +107,9 @@ const Events = () => {
             value.getDate()}-${value.getMonth() + 1}-${value.getFullYear()}`}
           </p>
           {
+            (events.length === 0) ?(
+              <div className="text-center text-muted font-italic mb-3" style={{zIndex:"9999",fontSize:"1.2rem"}}>No Events</div>
+            ):(
             events.map((event,index) => {
               return (
                 <>
@@ -144,7 +147,7 @@ const Events = () => {
               }
               </>
               )
-            })
+          }))
           }
           </List>
         </div>

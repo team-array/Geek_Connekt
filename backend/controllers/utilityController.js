@@ -154,7 +154,6 @@ const updateRating = ({res}, {req}) => {
                                         message: err.message
                                     });
                                 }else{
-                                    console.log(result);
                                     let rating = req.body.rating;
                                     let myrating = -1;
                                     let numberOfRating = result.rating.length+1;

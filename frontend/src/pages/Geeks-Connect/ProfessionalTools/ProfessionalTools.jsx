@@ -57,7 +57,7 @@ const ProfessionalTools = () => {
       >
         Utilities
       </h3>
-      <Utility>
+      <Utility >
         {
           utilities.map((utility)=>
             <UtilityCard
@@ -72,7 +72,7 @@ const ProfessionalTools = () => {
         }
         {
           (JSON.parse(localStorage.getItem("user")).role === "Student") ? "":
-          <UtilityAddCard className="shadow my-4">
+          <UtilityAddCard className="shadow my-4 mx-4">
           <h4
             className="text-center text-uppercase"
             style={{
