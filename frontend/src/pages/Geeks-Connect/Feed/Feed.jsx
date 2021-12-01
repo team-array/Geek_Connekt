@@ -36,9 +36,9 @@ const Feed = () => {
         posts.map((post, idx) => {
             setpostLikesCount((prev) => [...prev, post.likes.length]);
             post.likes.filter((l) =>
-                (l.userId === localStorage.getItem("user")) !== null
+                (l._id === (localStorage.getItem("user") !== null
                     ? JSON.parse(localStorage.getItem("user")).id
-                    : ""
+                    : ""))
             ).length > 0
                 ? setpostData((postData) => {
                       postData[idx] = 1;
