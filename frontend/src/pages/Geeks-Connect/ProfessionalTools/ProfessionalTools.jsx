@@ -17,19 +17,25 @@ const ProfessionalTools = () => {
   };
   React.useEffect(()=>{
     const getutility = async () => {
-      const response = await axios.post(
-        `${BaseUrl}/getutilities`,
-          {
-            token:localStorage.getItem("jwt")
-          }
-      );
-      if(response.data.success){
-        console.log(response);
-        setUtilities(response.data.utilities);
+      try{
+        dispatch({ type: "SET_LOADING", payload: true });
+        const response = await axios.post(
+          `${BaseUrl}/getutilities`,
+            {
+              token:localStorage.getItem("jwt")
+            }
+        );
+        dispatch({ type: "SET_LOADING", payload: false });
+        if(response.data.success){
+          console.log(response);
+          setUtilities(response.data.utilities);
+        }
+      }catch(err){
+        dispatch({ type: "SET_LOADING", payload: false });
       }
     }
     getutility();
-  },[]);
+  },[reloadUtilities]);
   return (
     <>
       <UtilityForm />

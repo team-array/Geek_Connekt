@@ -60,6 +60,7 @@ const AddEvents = () => {
   
   const onFinish = async (values) => {
     console.log("Success:", values);
+    dispatch({ type: "SET_LOADING", payload: true });
     try{
       const response = await axios({
         method: "post",
@@ -72,12 +73,14 @@ const AddEvents = () => {
           "Content-Type": "application/json",
         },
       });
+      dispatch({ type: "SET_LOADING", payload: false });
       console.log(response);
       if (response.data.success) {
         dispatch({ type: "SET_ADD_EVENTS", payload: false });
         openNotification();
       }
     }catch(err){
+      dispatch({ type: "SET_LOADING", payload: false });
       console.log(err);
     }
   };

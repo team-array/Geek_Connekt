@@ -60,7 +60,10 @@ const UtilityForm = () => {
   const onFinish = async (values) => {
     console.log(values);
     try{
+      dispatch({ type: "SET_LOADING", payload: true });
+      dispatch({type:"SET_ADD_UTILITY",payload:false});
       const response = await axios.post(BaseUrl+"/addutility", {...values,token:localStorage.getItem("jwt")});
+      dispatch({ type: "SET_LOADING", payload: false });
       if(response.data.success){
         openNotificationWithIcon({ 
           type:'success',
@@ -74,9 +77,9 @@ const UtilityForm = () => {
           message:response.data.message
         });
       }
-      dispatch({type:"SET_ADD_UTILITY",payload:false});
     }catch(err){
-      console.log(err)
+      console.log(err);
+      dispatch({ type: "SET_LOADING", payload: false });
     }
   };
   const AddUtility = useSelector((state) => state.AddUtility);

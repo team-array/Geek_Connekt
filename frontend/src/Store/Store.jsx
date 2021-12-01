@@ -9,7 +9,9 @@ import {
   showNotifications,
   showAchievementsForm,
   achievements,
-  ImagesGridLength
+  ImagesGridLength,
+  loading,
+  reloadUtilities
 } from "./reducers";
 
 const reducers = combineReducers({
@@ -21,7 +23,8 @@ const reducers = combineReducers({
   showNotifications,
   showAchievementsForm,
   achievements,
-  ImagesGridLength
+  ImagesGridLength,
+  loading
 });
 
 const Store = createStore(reducers);

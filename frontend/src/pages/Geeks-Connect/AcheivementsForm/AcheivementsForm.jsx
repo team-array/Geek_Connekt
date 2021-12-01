@@ -42,6 +42,8 @@ const AcheivementsForm = () => {
     const { Dragger } = Upload;
     const post = async () => {
         try {
+            dispatch({ type: "SET_LOADING", payload: true });
+            dispatch({ type: "SET_ACHIEVEMENTS_FORM", payload: false });
             const response = await axios({
                 method: "POST",
                 url: BaseUrl+"/addachievement",
@@ -53,9 +55,9 @@ const AcheivementsForm = () => {
                     token: localStorage.getItem("jwt"),
                 },
             });
+            dispatch({ type: "SET_LOADING", payload: false });
             if (response.data.success) {
                 message.success("Achievement added successfully");
-                dispatch({ type: "SET_ACHIEVEMENTS_FORM", payload: false });
                 openNotificationWithIcon({
                     type: "success",
                     message: "Achievement added successfully",
@@ -70,10 +72,11 @@ const AcheivementsForm = () => {
                     message: "Error",
                     description: "Something went wrong",
                 });
-                dispatch({ type: "SET_ACHIEVEMENTS_FORM", payload: false });
+                dispatch({ type: "SET_LOADING", payload: false });
             }
         } catch (error) {
             console.log(error);
+            dispatch({ type: "SET_LOADING", payload: false });
         }
     };
     const props = {

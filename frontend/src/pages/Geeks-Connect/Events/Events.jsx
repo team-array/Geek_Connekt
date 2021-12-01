@@ -34,9 +34,9 @@ const Events = () => {
   }
   React.useEffect(() => {
     const getEvents = async () => {
+      dispatch({ type: "SET_LOADING", payload: true });
       let end = "T00:00:00.000Z";
       let start = getDate(value);
-
       try{
         const response = await axios({
           method: "post",
@@ -49,11 +49,13 @@ const Events = () => {
             "Content-Type": "application/json",
           },
         });
+        dispatch({ type: "SET_LOADING", payload: false });
         if(response.data.success){
           console.log(response.data.events);
           setEvents(response.data.events);
         }
       }catch(err){
+        dispatch({ type: "SET_LOADING", payload: false });
         console.log(err);
       }
     }
