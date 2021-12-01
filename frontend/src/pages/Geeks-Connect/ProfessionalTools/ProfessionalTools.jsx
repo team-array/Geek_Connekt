@@ -5,14 +5,31 @@ import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import { useDispatch } from "react-redux";
 import UtilityForm from "./UtilityForm/UtilityForm";
-
+import axios from "axios";
+import {BaseUrl} from "../../../constants";
 
 const ProfessionalTools = () => {
 
   const dispatch = useDispatch();
+  const [utilities,setUtilities] = React.useState([]);
   const setUtility = () => {
     dispatch({ type: "SET_ADD_UTILITY", payload: true });
   };
+  React.useEffect(()=>{
+    const getutility = async () => {
+      const response = await axios.post(
+        `${BaseUrl}/getutilities`,
+          {
+            token:localStorage.getItem("jwt")
+          }
+      );
+      if(response.data.success){
+        console.log(response);
+        setUtilities(response.data.utilities);
+      }
+    }
+    getutility();
+  },[]);
   return (
     <>
       <UtilityForm />
@@ -34,35 +51,21 @@ const ProfessionalTools = () => {
         Utilities
       </h3>
       <Utility>
-        <UtilityCard
-          title="Porfolyo"
-          myrating={4.5}
-          rating={4.5}
-          features={["easy to use", "effective", "time saving", "usefull"]}
-          description="Porfolyo is a tool that helps you to manage your professional life. It helps you to manage your time, manage your projects, and manage your tasks. It is a tool that helps you to manage your professional life. "
-        />
-        <UtilityCard
-          title="Porfolyo"
-          myrating={null}
-          rating={4.5}
-          features={["easy to use", "effective", "time saving", "usefull"]}
-          description="Porfolyo is a tool that helps you to manage your professional life. It helps you to manage your time, manage your projects, and manage your tasks. It is a tool that helps you to manage your professional life. "
-        />
-        <UtilityCard
-          title="Porfolyo"
-          myrating={4.5}
-          rating={4.5}
-          features={["easy to use", "effective", "time saving", "usefull"]}
-          description="Porfolyo is a tool that helps you to manage your professional life. It helps you to manage your time, manage your projects, and manage your tasks. It is a tool that helps you to manage your professional life. "
-        />
-        <UtilityCard
-          title="Porfolyo"
-          myrating={4.5}
-          rating={4.5}
-          features={["easy to use", "effective", "time saving", "usefull"]}
-          description="Porfolyo is a tool that helps you to manage your professional life. It helps you to manage your time, manage your projects, and manage your tasks. It is a tool that helps you to manage your professional life. "
-        />
-        <UtilityAddCard className="shadow my-4">
+        {
+          utilities.map((utility)=>
+            <UtilityCard
+              title={utility.data.title}
+              myrating={utility.data.myrating}
+              rating={utility.data.rating}
+              features={utility.data.features}
+              description={utility.data.description}
+              websitelink={utility.data.websitelink}
+            />
+          )
+        }
+        {
+          (JSON.parse(localStorage.getItem("user")).role === "Student") ? "":
+          <UtilityAddCard className="shadow my-4">
           <h4
             className="text-center text-uppercase"
             style={{
@@ -90,6 +93,7 @@ const ProfessionalTools = () => {
             <AddIcon />
           </Fab>
         </UtilityAddCard>
+        }
       </Utility>
     </>
   );

@@ -93,6 +93,7 @@ const Feed = () => {
                                           <div>
                                               <ThumbUpIcon
                                                   style={{
+                                                      cursor: "pointer",
                                                       color:
                                                           postData[idx] === 1
                                                               ? "blue"

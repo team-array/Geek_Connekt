@@ -21,4 +21,32 @@ router.get("/", (req, res, next) => {
     res.send("<h1>Welcome to Geek ConnecKt API!</h1>");
 });
 
+router.post("/addEvents",(res,req)=>{
+    require("./controllers/eventsController").addEvents(res,req);
+});
+
+router.post("/getEvents",(res,req)=>{
+    require("./controllers/eventsController").getEvents(res,req);
+});
+
+router.post("/getAllEvents",(res,req)=>{
+    require("./controllers/eventsController").getAllEvents(res,req);
+});
+
+router.post("/logout",(res,req)=>{
+    require("./controllers/userController").logout(res,req);
+});
+
+router.post("/addutility",(res,req)=>{
+    require("./controllers/utilityController").addutility(res,req);
+});
+
+router.post("/getutilities",(res,req)=>{
+    require("./controllers/utilityController").getutilities(res,req);
+});
+
+router.post("/updateRating",(res,req)=>{
+    require("./controllers/utilityController").updateRating(res,req);
+});
+
 module.exports = router;

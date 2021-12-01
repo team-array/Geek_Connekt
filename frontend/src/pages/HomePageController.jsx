@@ -10,14 +10,16 @@ const AUTH_CHECK = gql`
             id
             username
             result
+            role
         }
     }
 `;
 
 const HomePageController = () => {
     const navigation = useNavigate();
-    const [userAuthChecked, setuserAuthChecked] = useState(true);
+    const [userAuthChecked, setuserAuthChecked] = useState(false);
     const [authLoading, setAuthLoading] = useState(true);
+    
     const { loading, error, data } = useQuery(AUTH_CHECK, {
         variables: {
             token: localStorage.getItem("jwt") || "",

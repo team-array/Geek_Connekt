@@ -1,16 +1,16 @@
 const User = require("../models/user");
-const bcrypt = require("bcrypt");
+// const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const userResolver = async (args) => {
     const user = await User.findOne({
         username: args.username,
         college: args.college,
+        password:args.password,
     });
     console.log(user);
     if (user) {
-        const passMatch = args.password === user.password;
-        console.log(passMatch);
+        const passMatch = args.password==user.password;
         if (passMatch) {
             // const token = await user.authTokenGeneration();
             // console.log("User LoggedIn with Token: ", token);
@@ -47,7 +47,7 @@ const userCreateResolver = async (args) => {
             rollNumber: args.rollNumber,
             college: args.college,
         });
-        user.password = bcrypt.hashSync(user.password, 10);
+        // user.password = bcrypt.hashSync(user.password, 10);
         const token = await user.generateAuthToken();
         // console.log("Token: ", token);
         return { token: token, result: "Success" };
@@ -66,6 +66,7 @@ const userAuthCheck = async (args) => {
                 id: user.id,
                 username: user.username,
                 result: "Success",
+                role: user.role,
             };
         }
         return {

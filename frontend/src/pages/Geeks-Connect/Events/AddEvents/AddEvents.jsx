@@ -4,8 +4,11 @@ import Backdrop from "@mui/material/Backdrop";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { AddPostContainer } from "../../AddPost/AddPost.styles";
-import { Form, Input, Button, DatePicker } from "antd";
+import { Form, Input, Button } from "antd";
 import "./EventsForm.scss";
+import axios from "axios";
+import { BaseUrl } from "../../../../constants";
+import { notification } from 'antd';
 
 const layout = {
   labelCol: {
@@ -28,15 +31,15 @@ const validateMessages = {
   },
 };
 
-const config = {
-  rules: [
-    {
-      type: "object",
-      required: true,
-      message: "Please select time!",
-    },
-  ],
-};
+// const config = {
+//   rules: [
+//     {
+//       type: "object",
+//       required: true,
+//       message: "Please select time!",
+//     },
+//   ],
+// };
 
 const AddEvents = () => {
   const AddEvents = useSelector((state) => state.AddEvents);
@@ -44,8 +47,39 @@ const AddEvents = () => {
   const handleClose = () => {
     dispatch({ type: "SET_ADD_EVENTS", payload: false });
   };
-  const onFinish = (values) => {
-    console.log(values);
+  const openNotification = () => {
+    notification.open({
+      message: 'Event Added Successfully',
+      description:
+        'You can view the event in the events page.If not updated please refresh the page.',
+      onClick: () => {
+        console.log('Notification Clicked!');
+      },
+    });
+  };
+  
+  const onFinish = async (values) => {
+    console.log("Success:", values);
+    try{
+      const response = await axios({
+        method: "post",
+        url: `${BaseUrl}/addEvents`,
+        data: {
+          ...values,
+          token: localStorage.getItem("jwt")
+        },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      console.log(response);
+      if (response.data.success) {
+        dispatch({ type: "SET_ADD_EVENTS", payload: false });
+        openNotification();
+      }
+    }catch(err){
+      console.log(err);
+    }
   };
   return AddEvents ? (
     <div>
@@ -81,7 +115,7 @@ const AddEvents = () => {
             validateMessages={validateMessages}
           >
             <Form.Item
-              name={["name"]}
+              name={["EventName"]}
               label="event title"
               rules={[
                 {
@@ -91,14 +125,14 @@ const AddEvents = () => {
             >
               <Input />
             </Form.Item>
-            <Form.Item name={["subTitle"]} label="event sub title">
+            <Form.Item name={["EventSubtitle"]} label="event sub title">
               <Input />
             </Form.Item>
-            <Form.Item label="Event date" name={["date"]} >
+            <Form.Item label="Event date" name={["EventDate"]} >
               <input type="date" className="ant-input" />             
             </Form.Item>
             <Form.Item
-              name={["website"]}
+              name={["EventLink"]}
               rules={[
                 {
                   type: "url",
@@ -114,7 +148,7 @@ const AddEvents = () => {
               <Input />
             </Form.Item>
             <Form.Item
-              name={["Description"]}
+              name={["EventDescription"]}
               label="Description"
               rules={[
                 {

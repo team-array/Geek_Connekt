@@ -1,21 +1,28 @@
-const mongoose = require("mongoose");
-const chalk = require("chalk");
-const mongoUrl = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.rqk4t.mongodb.net/geekConnekt?retryWrites=true&w=majority`;
-mongoose.connect(mongoUrl, {
+const mongoose = require('mongoose');
+
+const mongo_url = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.rqk4t.mongodb.net/geekConnekt?retryWrites=true&w=majority`;
+
+mongoose.connect(mongo_url, {
     useNewUrlParser: true,
-    useUnifiedTopology: true,
+    useUnifiedTopology: true
 });
 
 const db = mongoose.connection;
 
-db.on("error", console.error.bind(console, "connection error:"));
-db.once("open", function () {
-    console.log(chalk.green("Connected to MongoDB"));
+db.on('error',(error)=>console.log('connection error:',error));
+
+db.once('open', function () {
+    console.log('Connected to MongoDB');
 });
-db.on("reconnect", function () {
-    console.log("Reconnected to MongoDB");
+
+db.on('reconnected', function () {
+    console.log('MongoDB reconnected!');
 });
-db.on("disconnect", function () {
-    console.log("Disconnected to MongoDB");
-    mongoose.connect(mongoUrl);
+
+db.on('disconnected', function () {
+    console.log('MongoDB disconnected!');
+    mongoose.connect(mongo_url,{
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    });
 });
