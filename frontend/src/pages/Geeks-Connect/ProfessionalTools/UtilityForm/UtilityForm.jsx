@@ -57,14 +57,17 @@ const openNotificationWithIcon = noti => {
 
 const UtilityForm = () => {
   const dispatch = useDispatch();
+  const reloadUtilities = useSelector((state) => state.reloadUtilities);
   const onFinish = async (values) => {
     console.log(values);
     try{
+
       dispatch({ type: "SET_LOADING", payload: true });
       dispatch({type:"SET_ADD_UTILITY",payload:false});
       const response = await axios.post(BaseUrl+"/addutility", {...values,token:localStorage.getItem("jwt")});
       dispatch({ type: "SET_LOADING", payload: false });
       if(response.data.success){
+        dispatch({type:"SET_RELOAD_UTILITIES",payload:!reloadUtilities});
         openNotificationWithIcon({ 
           type:'success',
           title:'Utility Added',

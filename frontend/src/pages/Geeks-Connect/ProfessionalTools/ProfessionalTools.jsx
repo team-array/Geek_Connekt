@@ -3,7 +3,7 @@ import UtilityCard from "./UtilityCard/UtilityCard";
 import { Utility, UtilityAddCard } from "./ProfessionalTools.styles";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import UtilityForm from "./UtilityForm/UtilityForm";
 import axios from "axios";
 import {BaseUrl} from "../../../constants";
@@ -12,6 +12,7 @@ const ProfessionalTools = () => {
 
   const dispatch = useDispatch();
   const [utilities,setUtilities] = React.useState([]);
+  const reloadUtilities = useSelector((state) => state.reloadUtilities);
   const setUtility = () => {
     dispatch({ type: "SET_ADD_UTILITY", payload: true });
   };

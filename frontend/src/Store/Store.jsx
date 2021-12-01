@@ -24,7 +24,8 @@ const reducers = combineReducers({
   showAchievementsForm,
   achievements,
   ImagesGridLength,
-  loading
+  loading,
+  reloadUtilities
 });
 
 const Store = createStore(reducers);

@@ -27,7 +27,7 @@ const addutility = ({res},{req}) => {
                     }else{
                         res.status(200).json({
                             success:true,
-                            message: "Utility added successfully"
+                            message: "Utility added successfully",  
                         });
                     }
                 });

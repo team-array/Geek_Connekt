@@ -121,3 +121,15 @@ export const loading = (
             return state;
     }
 };
+
+export const reloadUtilities = (
+    state = false,
+    action
+) => {
+    switch (action.type) {
+        case "SET_RELOAD_UTILITIES":
+            return action.payload;
+        default:
+            return state;
+    }
+};
