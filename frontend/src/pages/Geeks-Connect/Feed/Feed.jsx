@@ -5,9 +5,12 @@ import comment from "../Profile/components/img/comments.png";
 import share from "../Profile/components/img/share.png";
 import feed from "../Profile/components/img/feed-image-1.png";
 import "./Feed.scss";
+import axios from "axios";
 import Comment from "../CommentBox/Comment";
 import { useDispatch } from "react-redux";
 import feedPostsHook from "../../../hooks/feedPostsHook";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import ForumOutlinedIcon from "@mui/icons-material/ForumOutlined";
 const Feed = () => {
     const dispatch = useDispatch();
     const show_comments = () => {
@@ -58,14 +61,53 @@ const Feed = () => {
                             <div className="post-row">
                                 <div className="activity-icons">
                                     <div>
-                                        <img src={like} alt="" />
+                                        <ThumbUpIcon
+                                            style={{ color: "blue" }}
+                                            onClick={async () => {
+                                                console.log("like");
+                                                try {
+                                                    const result = await axios({
+                                                        method: "post",
+                                                        url: `http://localhost:8000/likePost`,
+                                                        data: {
+                                                            postId: post._id,
+                                                            userId:
+                                                                localStorage.getItem(
+                                                                    "user"
+                                                                ) !== null
+                                                                    ? JSON.parse(
+                                                                          localStorage.getItem(
+                                                                              "user"
+                                                                          )
+                                                                      ).id
+                                                                    : "",
+                                                        },
+                                                    });
+                                                    console.log(result);
+                                                } catch (err) {
+                                                    console.log(err);
+                                                }
+                                            }}
+                                        />
                                         {post.likes.length}
+                                        {post.likes.filter(
+                                            (l) =>
+                                                l.userId ===
+                                                localStorage.getItem("user").id
+                                        ).length > 0 ? (
+                                            <ThumbUpIcon
+                                                style={{ color: "blue" }}
+                                            />
+                                        ) : (
+                                            <ThumbUpIcon />
+                                        )}
                                     </div>
                                     <div
                                         onClick={show_comments}
                                         style={{ cursor: "pointer" }}
                                     >
-                                        <img src={comment} alt="" />
+                                        {/* <img src={comment} alt="" /> */}
+                                        <ForumOutlinedIcon />
                                         {post.comments.length}
                                     </div>
                                     <div>

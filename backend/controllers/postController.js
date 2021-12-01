@@ -6,7 +6,7 @@ exports.getUserPosts = async (req, res, next) => {
         console.log(req.query);
         const userId = req.query.userId;
         const user = await User.findById(userId).populate("posts");
-        console.log(user);
+        // console.log(user);
         if (user) {
             res.status(200).json({
                 message: "User posts fetched successfully",
@@ -70,6 +70,46 @@ exports.getAllPosts = async (req, res, next) => {
         console.log(err);
         res.status(500).json({
             message: "Error occured while fetching posts",
+        });
+    }
+};
+
+exports.likePost = async (req, res, next) => {
+    try {
+        // console.log(req.body);
+        const postId = req.body.postId;
+        const userId = req.body.userId;
+        // console.log(postId, userId);
+        const post = await Post.findById(postId);
+        const user = await User.findById(userId);
+        if (post && user) {
+            const userLiked = post.likes.find((like) => like._id == userId);
+            // console.log("Userliked: ", userLiked);
+            if (userLiked) {
+                const likes = post.likes.filter((l) => l._id != userId);
+                // console.log("Likes: ", likes);
+                post.likes = likes;
+                post.save();
+                res.status(200).json({
+                    message: "Post unliked successfully",
+                });
+            } else {
+                post.likes.push(userId);
+                post.save();
+                res.status(200).json({
+                    message: "Post liked successfully",
+                });
+            }
+            // console.log(post.likes);
+        } else {
+            res.status(404).json({
+                message: "Post not found",
+            });
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            message: "Error occured while liking post",
         });
     }
 };

@@ -11,6 +11,8 @@ router.get("/getUserImage", postController.getUserPosts);
 
 router.get("/getAllPosts", postController.getAllPosts);
 
+router.post("/likePost", postController.likePost);
+
 router.get("/", (req, res, next) => {
     res.send("<h1>Welcome to Geek ConnecKt API!</h1>");
 });
