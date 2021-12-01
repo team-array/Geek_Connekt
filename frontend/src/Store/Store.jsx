@@ -11,7 +11,8 @@ import {
   achievements,
   ImagesGridLength,
   loading,
-  reloadUtilities
+  reloadUtilities,
+  reloadEvents
 } from "./reducers";
 
 const reducers = combineReducers({
@@ -25,7 +26,8 @@ const reducers = combineReducers({
   achievements,
   ImagesGridLength,
   loading,
-  reloadUtilities
+  reloadUtilities,
+  reloadEvents
 });
 
 const Store = createStore(reducers);

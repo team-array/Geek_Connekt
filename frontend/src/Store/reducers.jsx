@@ -133,3 +133,15 @@ export const reloadUtilities = (
             return state;
     }
 };
+
+export const reloadEvents = (
+    state = false,
+    action
+) => {
+    switch (action.type) {
+        case "SET_RELOAD_EVENTS":
+            return action.payload;
+        default:
+            return state;
+    }
+};

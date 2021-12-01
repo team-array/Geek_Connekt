@@ -14,7 +14,7 @@ import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import AddEvents from "./AddEvents/AddEvents";
-import {useDispatch} from 'react-redux';
+import {useDispatch,useSelector} from 'react-redux';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import axios from "axios";
 import { BaseUrl } from "../../../constants";
@@ -22,6 +22,7 @@ import { BaseUrl } from "../../../constants";
 const Events = () => {
   const [value, setValue] = React.useState(new Date());
   const [events, setEvents] = React.useState([]);
+  const reloadEvents = useSelector(state => state.reloadEvents);
   const dispatch = useDispatch();
   const eventform = () => {
     dispatch({ type: "SET_ADD_EVENTS", payload: true });
@@ -32,17 +33,26 @@ const Events = () => {
     const year = date.getFullYear();
     return `${year}-${month}-${day}`;
   }
+  Date.prototype.addDays = function(days) {
+    var date = new Date(this.valueOf());
+    date.setDate(date.getDate() + days);
+    return date;
+  }
+
   React.useEffect(() => {
     const getEvents = async () => {
       dispatch({ type: "SET_LOADING", payload: true });
-      let end = "T00:00:00.000Z";
-      let start = getDate(value);
+      let start=getDate(value);
+      let end=getDate(value.addDays(1));
       try{
         const response = await axios({
           method: "post",
           url: `${BaseUrl}/getEvents`,
           data: {
-            EventDate: start+end,
+            EventDate: {
+              start,
+              end
+            },
             token: localStorage.getItem("jwt")
           },
           headers: {
@@ -60,7 +70,7 @@ const Events = () => {
       }
     }
     getEvents();
-  },[value]);
+  },[value,reloadEvents]);
   console.log(JSON.parse(localStorage.getItem("user")).role)
   return (
     <>

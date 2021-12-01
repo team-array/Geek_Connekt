@@ -44,6 +44,7 @@ const validateMessages = {
 const AddEvents = () => {
   const AddEvents = useSelector((state) => state.AddEvents);
   const dispatch = useDispatch();
+  const reloadEvents = useSelector((state) => state.reloadEvents);
   const handleClose = () => {
     dispatch({ type: "SET_ADD_EVENTS", payload: false });
   };
@@ -74,8 +75,8 @@ const AddEvents = () => {
         },
       });
       dispatch({ type: "SET_LOADING", payload: false });
-      console.log(response);
       if (response.data.success) {
+        dispatch({ type: "SET_RELOAD_EVENTS", payload: !reloadEvents });
         dispatch({ type: "SET_ADD_EVENTS", payload: false });
         openNotification();
       }
