@@ -10,6 +10,7 @@ import NewsForm from "./NewsForm/NewsForm";
 import axios from "axios";
 import { BaseUrl } from "../../../constants";
 import { useDispatch, useSelector } from "react-redux";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const { Meta } = Card;
 
@@ -17,9 +18,12 @@ const News = () => {
   const [visible, setVisible] = React.useState(false);
   const [currnews, setNews] = React.useState([]);
   const [getNews, setGetNews] = React.useState(false);
+  const [totalresults, settotalresults] = React.useState(0);
+  const [page, setPage] = React.useState(1);
   const dispatch = useDispatch();
   const afterpost = (newNews) => {
     setVisible(false);
+    setPage(1);
     setGetNews((pre) => {
       return !pre;
     });
@@ -36,7 +40,7 @@ const News = () => {
         });
         const response = await axios.post(BaseUrl + "/getNews", {
           token: localStorage.getItem("jwt"),
-          page: 1,
+          page,
         });
         dispatch({
           type: "SET_LOADING",
@@ -45,6 +49,7 @@ const News = () => {
         // console.log(response);
         if (response.data.success) {
           setNews(response.data.news);
+          setPage(page + 1);
         }
       } catch (err) {
         console.log(err);
@@ -56,6 +61,35 @@ const News = () => {
     };
     newsget();
   }, [getNews]);
+  const fetchMoreData = async () => {
+    try {
+      dispatch({
+        type: "SET_LOADING",
+        payload: true,
+      });
+      const response = await axios.post(BaseUrl + "/getNews", {
+        token: localStorage.getItem("jwt"),
+        page,
+      });
+      dispatch({
+        type: "SET_LOADING",
+        payload: false,
+      });
+      if (response.data.success) {
+        setPage(page + 1);
+        settotalresults(currnews.length);
+        setNews((prev) => {
+          return [...prev, ...response.data.news];
+        });
+      }
+    } catch (err) {
+      console.log(err);
+      dispatch({
+        type: "SET_LOADING",
+        payload: false,
+      });
+    }
+  };
   return (
     <div className="News">
       {visible ? <NewsForm afterpost={afterpost} onclose={onclose} /> : null}
@@ -85,54 +119,59 @@ const News = () => {
             </h3>
             <p></p>
           </div>
-          <CardGrid className="NewsContainer">
-            <Card
-              hoverable
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Fab
-                color="primary"
+          <InfiniteScroll
+            dataLength={currnews.length}
+            next={fetchMoreData}
+            hasMore={totalresults !== currnews.length}
+          >
+            <CardGrid className="NewsContainer">
+              <Card
+                hoverable
                 style={{
-                  position: "relative",
-                  left: "50%",
-                  transform: "translate(-50%,-25%)",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
-                onClick={() => setVisible(true)}
-                className="my-3"
-                aria-label="add"
               >
-                <AddIcon />
-              </Fab>
-            </Card>
-            {currnews.map((ele, index) => {
-              return (
-                <Card hoverable>
-                  <Meta title={ele.title} />
-                  <p className="mb-0 mt-2">posted on {ele.postedOn.split("T")[0]} {ele.postedOn.split("T")[1].split(".")[0]}</p>
-                  <hr />
-                  <p className="mb-2">
-                    {
-                      ele.description
-                    }
-                  </p>
-                  <br />
-                  <figure
-                    className="text-end mt-2 mb-0"
-                    style={{ marginBottom: "-2rem" }}
-                  >
-                    <figcaption class="blockquote-footer">
-                      posted by {" "}
-                      <cite title="Source Title">{ele.postedBy}</cite>
-                    </figcaption>
-                  </figure>
-                </Card>
-              );
-            })}
-          </CardGrid>
+                <Fab
+                  color="primary"
+                  style={{
+                    position: "relative",
+                    left: "50%",
+                    transform: "translate(-50%,-25%)",
+                  }}
+                  onClick={() => setVisible(true)}
+                  className="my-3"
+                  aria-label="add"
+                >
+                  <AddIcon />
+                </Fab>
+              </Card>
+              {currnews.map((ele, index) => {
+                return (
+                  <Card hoverable>
+                    <Meta title={ele.title} />
+                    <p className="mb-0 mt-2">
+                      posted on {ele.postedOn.split("T")[0]}{" "}
+                      {ele.postedOn.split("T")[1].split(".")[0]}
+                    </p>
+                    <hr />
+                    <p className="mb-2">{ele.description}</p>
+                    <br />
+                    <figure
+                      className="text-end mt-2 mb-0"
+                      style={{ marginBottom: "-2rem" }}
+                    >
+                      <figcaption class="blockquote-footer">
+                        posted by{" "}
+                        <cite title="Source Title">{ele.postedBy}</cite>
+                      </figcaption>
+                    </figure>
+                  </Card>
+                );
+              })}
+            </CardGrid>
+          </InfiniteScroll>
         </div>
       </div>
     </div>

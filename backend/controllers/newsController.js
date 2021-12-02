@@ -45,7 +45,7 @@ const getNews = ({ res}, {req }) => {
     verify(req.body.token)
       .then(async (user) => {
         const page = parseInt(req.body.page);
-        const limit = 50;
+        const limit = 25;
         const skip = page > 0 ? (page - 1) * limit : 0;
         const response = await news.find({})
                 .sort({ $natural : -1 })
