@@ -19,7 +19,7 @@ const HomePageController = () => {
     const navigation = useNavigate();
     const [userAuthChecked, setuserAuthChecked] = useState(false);
     const [authLoading, setAuthLoading] = useState(true);
-    
+
     const { loading, error, data } = useQuery(AUTH_CHECK, {
         variables: {
             token: localStorage.getItem("jwt") || "",
@@ -37,8 +37,10 @@ const HomePageController = () => {
                 setuserAuthChecked(true);
                 // setAuthLoading(false);
                 console.log("done");
+            } else if (data.authCheck.result === "Error") {
             } else {
                 localStorage.removeItem("jwt");
+                localStorage.removeItem("user");
                 setuserAuthChecked(false);
                 // setAuthLoading(false);
             }

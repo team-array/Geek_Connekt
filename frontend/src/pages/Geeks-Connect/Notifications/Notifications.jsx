@@ -1,93 +1,42 @@
-import React from 'react'
-import './Notifications.scss'
+import React from "react";
+import "./Notifications.scss";
+import { useSelector } from "react-redux";
+
 export default function Notifications() {
+    const newNotification = useSelector((state) => state.newNotification);
     return (
         <div class="notification_dd">
             <ul class="notification_ul">
-                <li class="starbucks success">
-                    <div class="notify_icon">
-                        <span class="icon"></span>  
-                    </div>
-                    <div class="notify_data">
-                        <div class="title">
-                            Lorem, ipsum dolor.  
-                        </div>
-                        <div class="sub_title">
-                          Lorem ipsum dolor sit amet consectetur.
-                      </div>
-                    </div>
-                    <div class="notify_status">
-                        <p>Like</p>  
-                    </div>
-                </li>  
-                <li class="baskin_robbins failed">
-                    <div class="notify_icon">
-                        <span class="icon"></span>  
-                    </div>
-                    <div class="notify_data">
-                        <div class="title">
-                            Lorem, ipsum dolor.  
-                        </div>
-                        <div class="sub_title">
-                          Lorem ipsum dolor sit amet consectetur.
-                      </div>
-                    </div>
-                    <div class="notify_status">
-                        <p>News</p>  
-                    </div>
-                </li> 
-                <li class="mcd success">
-                    <div class="notify_icon">
-                        <span class="icon"></span>  
-                    </div>
-                    <div class="notify_data">
-                        <div class="title">
-                            Lorem, ipsum dolor.  
-                        </div>
-                        <div class="sub_title">
-                          Lorem ipsum dolor sit amet consectetur.
-                      </div>
-                    </div>
-                    <div class="notify_status">
-                        <p>Like</p>  
-                    </div>
-                </li>  
-                <li class="pizzahut failed">
-                    <div class="notify_icon">
-                        <span class="icon"></span>  
-                    </div>
-                    <div class="notify_data">
-                        <div class="title">
-                            Lorem, ipsum dolor.  
-                        </div>
-                        <div class="sub_title">
-                          Lorem ipsum dolor sit amet consectetur.
-                      </div>
-                    </div>
-                    <div class="notify_status">
-                        <p>News</p>  
-                    </div>
-                </li> 
-                <li class="kfc success">
-                    <div class="notify_icon">
-                        <span class="icon"></span>  
-                    </div>
-                    <div class="notify_data">
-                        <div class="title">
-                            Lorem, ipsum dolor.  
-                        </div>
-                        <div class="sub_title">
-                          Lorem ipsum dolor sit amet consectetur.
-                      </div>
-                    </div>
-                    <div class="notify_status">
-                        <p>Like</p>  
-                    </div>
-                </li> 
+                {newNotification !== undefined || newNotification !== null
+                    ? newNotification.map((notification) => (
+                          <li class="success">
+                              <div
+                                  class="notify_icon"
+                                  style={{
+                                      background: `url(${notification.image}) no-repeat`,
+                                      backgroundSize: "cover",
+                                  }}
+                              >
+                                  <span class="icon"></span>
+                              </div>
+                              <div class="notify_data">
+                                  <div class="title">
+                                      <span>{notification.title}</span>
+                                  </div>
+                                  <div class="sub_title">
+                                      {notification.message}
+                                  </div>
+                              </div>
+                              <div class="notify_status">
+                                  <p>{notification.type}</p>
+                              </div>
+                          </li>
+                      ))
+                    : null}
                 <li class="show_all">
                     <p class="link">Show All Activities</p>
-                </li> 
+                </li>
             </ul>
         </div>
-    )
+    );
 }

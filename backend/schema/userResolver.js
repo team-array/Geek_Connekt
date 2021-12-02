@@ -8,7 +8,7 @@ const userResolver = async (args) => {
         college: args.college,
         password:args.password,
     });
-    console.log(user);
+    // console.log(user);
     if (user) {
         const passMatch = args.password==user.password;
         if (passMatch) {
