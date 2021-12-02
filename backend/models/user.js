@@ -97,7 +97,7 @@ const UserSchema = new Schema({
 
 UserSchema.methods.generateAuthToken = async function () {
     try {
-        console.log("Generating token for: ", this);
+        // console.log("Generating token for: ", this);
         const userToken = jwt.sign(
             {
                 username: this.username.toString(),

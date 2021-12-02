@@ -58,6 +58,25 @@ export const showNotifications = (state = false, action) => {
     }
 };
 
+export const newNotification = (
+    state = [
+        // {
+        //     image: "https://res.cloudinary.com/geek-connekt/image/upload/v1637765287/profilePic_llsevw.png",
+        //     title: "Deepesh",
+        //     message: "liked your post!",
+        //     type: "like",
+        // },
+    ],
+    action
+) => {
+    switch (action.type) {
+        case "SET_NEW_NOTIFICATION":
+            return [...state, action.payload];
+        default:
+            return state;
+    }
+};
+
 export const showAchievementsForm = (state = false, action) => {
     switch (action.type) {
         case "SET_ACHIEVEMENTS_FORM":
