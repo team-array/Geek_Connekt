@@ -116,11 +116,13 @@ exports.likePost = async (req, res, next) => {
             return onlineuser.userId == postUser._id;
         });
         console.log("touser:", toUser);
-        io.to(toUser.socketId).emit("like", {
-            profilePic: user.profilePic,
-            lickedBy: user.username,
-            postId: postId,
-        });
+        if (toUser) {
+            io.to(toUser.socketId).emit("like", {
+                profilePic: user.profilePic,
+                lickedBy: user.username,
+                postId: postId,
+            });
+        }
     } catch (err) {
         console.log(err);
         res.status(500).json({
