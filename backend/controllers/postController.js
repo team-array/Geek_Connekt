@@ -51,14 +51,14 @@ exports.getAllPosts = async (req, res, next) => {
         if (user) {
             const posts = await Post.find({ college: user.college })
                 .populate("user")
-                .skip((req.query.pageNumber - 1) * 10)
+                .skip((req.query.pageNumber - 1) * 3)
                 .sort({ createdAt: -1 })
-                .limit(10);
+                .limit(3);
             Post.count().then((count) => {
                 res.status(200).json({
                     message: "Posts fetched successfully",
                     posts: posts,
-                    remPosts: count - req.query.pageNumber * 10,
+                    remPosts: count - req.query.pageNumber * 3,
                 });
             });
         } else {
@@ -103,18 +103,20 @@ exports.likePost = async (req, res, next) => {
                 var onlineUser = req.app.get("onlineUser");
                 var io = req.app.get("socketio");
                 console.log(postUser.username, user.username);
-                console.log("onlineUsers: ", onlineUser);
-                const toUser = onlineUser.find((onlineuser) => {
-                    // console.log("onelineUser: ", onlineuser);
-                    return onlineuser.userId == postUser._id;
-                });
-                console.log("touser:", toUser);
-                if (toUser) {
-                    io.to(toUser.socketId).emit("like", {
-                        profilePic: user.profilePic,
-                        lickedBy: user.username,
-                        postId: postId,
+                if (postUser.username != user.username) {
+                    console.log("onlineUsers: ", onlineUser);
+                    const toUser = onlineUser.find((onlineuser) => {
+                        // console.log("onelineUser: ", onlineuser);
+                        return onlineuser.userId == postUser._id;
                     });
+                    console.log("touser:", toUser);
+                    if (toUser) {
+                        io.to(toUser.socketId).emit("like", {
+                            profilePic: user.profilePic,
+                            lickedBy: user.username,
+                            postId: postId,
+                        });
+                    }
                 }
             }
             // console.log(post.likes);
@@ -179,18 +181,20 @@ exports.commentPost = async (req, res, next) => {
             var onlineUser = req.app.get("onlineUser");
             var io = req.app.get("socketio");
             console.log(postUser.username, user.username);
-            console.log("onlineUsers: ", onlineUser);
-            const toUser = onlineUser.find((onlineuser) => {
-                // console.log("onelineUser: ", onlineuser);
-                return onlineuser.userId == postUser._id;
-            });
-            console.log("touser:", toUser);
-            if (toUser) {
-                io.to(toUser.socketId).emit("comment", {
-                    profilePic: user.profilePic,
-                    lickedBy: user.username,
-                    postId: postId,
+            if (postUser.username != user.username) {
+                console.log("onlineUsers: ", onlineUser);
+                const toUser = onlineUser.find((onlineuser) => {
+                    // console.log("onelineUser: ", onlineuser);
+                    return onlineuser.userId == postUser._id;
                 });
+                console.log("touser:", toUser);
+                if (toUser) {
+                    io.to(toUser.socketId).emit("comment", {
+                        profilePic: user.profilePic,
+                        lickedBy: user.username,
+                        postId: postId,
+                    });
+                }
             }
         } else {
             res.status(404).json({
