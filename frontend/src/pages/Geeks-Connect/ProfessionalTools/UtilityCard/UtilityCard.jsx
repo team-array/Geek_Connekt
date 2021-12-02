@@ -41,7 +41,7 @@ const UtilityCard = (props) => {
     <div className="UtilityCard mt-4 mx-4">
       <Box
         className="shadow p-3"
-        sx={{ bgcolor: "background.paper",height: "100%"      }}
+        sx={{ bgcolor: "background.paper",height: "100%"     }}
       >
         <Box sx={{ my: 3, mx: 2 }}>
           <Grid container alignItems="center">

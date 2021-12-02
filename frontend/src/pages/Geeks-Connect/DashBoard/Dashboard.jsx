@@ -15,6 +15,7 @@ import StarOfTheMonth from '../StarOfTheMonth/StarOfTheMonth';
 import AcheivementsForm from "../AcheivementsForm/AcheivementsForm";
 import axios from "axios";
 import {BaseUrl} from "../../../constants";
+import News from '../News/News';
 
 const Dashboard = () => {
     const currentPage = useSelector(state => state.currentPage);
@@ -65,7 +66,8 @@ const Dashboard = () => {
                             currentPage === 3 ? <Events/> :
                                 currentPage === 4 ? <ProfilePage/> :
                                     currentPage === 5 ? <ProfessionalTools/> : 
-                                        currentPage === 6 ? <StarOfTheMonth/> : ""
+                                        currentPage === 6 ? <StarOfTheMonth/> : 
+                                            currentPage === 7 ? <News/> : ""
             }
             <Footer/>
 
