@@ -48,23 +48,23 @@ const addEvents = ({res},{req}) => {
     }
 }
 
-// add 1 day to current datetime
 
-const addDay = (date) => {
-    console.log(date)
-    date.setDate(date.getDate() + 1);
-    return date;
-}
+// const addDay = (date) => {
+//     console.log("date",date)
+//     date.setDate(date.getDate() + 1);
+//     return date.removeTime();
+// }
 
 const getEvents = ({res},{req}) => {
     try{
         console.log(req.body)
         if (req.body.token) {
+            console.log(Date(req.body.EventDate),req.body.EventDate.end)
             verify(req.body.token).then((decoded) => {
                 event.find({
                     EventDate:{
-                        "$gte": new Date(req.body.EventDate),
-                        "$lt": addDay(new Date(req.body.EventDate))
+                        "$gte": new Date(req.body.EventDate.start),
+                        "$lt": new Date(req.body.EventDate.end)
                     }
                 },(err,events)=>{
                     if(err){

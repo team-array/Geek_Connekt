@@ -49,4 +49,16 @@ router.post("/updateRating",(res,req)=>{
     require("./controllers/utilityController").updateRating(res,req);
 });
 
+router.post("/addachievement",(res,req)=>{
+    require("./controllers/Achievements").addachievement(res,req);
+});
+
+router.post("/getachievements",(res,req)=>{
+    require("./controllers/Achievements").getachievements(res,req);
+});
+
+router.post("/deleteAchievement",(res,req)=>{
+    require("./controllers/Achievements").deleteAchievement(res,req);
+});
+
 module.exports = router;

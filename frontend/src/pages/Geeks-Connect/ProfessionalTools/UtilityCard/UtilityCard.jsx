@@ -12,8 +12,8 @@ import {BaseUrl} from "../../../../constants";
 const UtilityCard = (props) => {
   const [myrating, setMyRating] = React.useState(props.myrating);
   const [avgrating, setAvgRating] = React.useState(props.rating);
+  console.log(myrating);
   const GiveRating = async (rating) => {
-    console.log(rating);
     if(myrating === -1){
       try{
         const response = await axios.post(
@@ -38,10 +38,10 @@ const UtilityCard = (props) => {
     }
   };
   return (
-    <div className="UtilityCard my-4">
+    <div className="UtilityCard mt-4 mx-4">
       <Box
         className="shadow p-3"
-        sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+        sx={{ bgcolor: "background.paper",height: "100%"      }}
       >
         <Box sx={{ my: 3, mx: 2 }}>
           <Grid container alignItems="center">
@@ -108,12 +108,9 @@ const UtilityCard = (props) => {
                   my rating
                 </h6>
                 <Rating
-                  name="simple-controlled"
+                  name="read-only"
                   value={myrating}
-                  onChange={(event, newValue) => {
-                    // GiveRating(newValue);
-                    // setMyRating(newValue);
-                  }}
+                  readOnly
                 />
               </>
             )}

@@ -83,44 +83,44 @@ exports.likePost = async (req, res, next) => {
         const post = await Post.findById(postId);
         const user = await User.findById(userId);
         const postUser = await User.findById(post.user);
-        // if (post && user) {
-        //     const userLiked = post.likes.find((like) => like._id == userId);
-        //     // console.log("Userliked: ", userLiked);
-        //     if (userLiked) {
-        //         const likes = post.likes.filter((l) => l._id != userId);
-        //         // console.log("Likes: ", likes);
-        //         post.likes = likes;
-        //         post.save();
-        //         res.status(200).json({
-        //             message: "Post unliked successfully",
-        //         });
-        //     } else {
-        //         post.likes.push(userId);
-        //         post.save();
-        //         res.status(200).json({
-        //             message: "Post liked successfully",
-        //         });
-        //     }
-        //     // console.log(post.likes);
-        // } else {
-        //     res.status(404).json({
-        //         message: "Post not found",
-        //     });
-        // }
-        var onlineUser = req.app.get("onlineUser");
-        var io = req.app.get("socketio");
-        console.log(postUser.username, user.username);
-        console.log("onlineUsers: ", onlineUser);
-        const toUser = onlineUser.find((onlineuser) => {
-            // console.log("onelineUser: ", onlineuser);
-            return onlineuser.userId == postUser._id;
-        });
-        console.log("touser:", toUser);
-        if (toUser) {
-            io.to(toUser.socketId).emit("like", {
-                profilePic: user.profilePic,
-                lickedBy: user.username,
-                postId: postId,
+        if (post && user) {
+            const userLiked = post.likes.find((like) => like._id == userId);
+            // console.log("Userliked: ", userLiked);
+            if (userLiked) {
+                const likes = post.likes.filter((l) => l._id != userId);
+                // console.log("Likes: ", likes);
+                post.likes = likes;
+                post.save();
+                res.status(200).json({
+                    message: "Post unliked successfully",
+                });
+            } else {
+                post.likes.push(userId);
+                post.save();
+                res.status(200).json({
+                    message: "Post liked successfully",
+                });
+                var onlineUser = req.app.get("onlineUser");
+                var io = req.app.get("socketio");
+                console.log(postUser.username, user.username);
+                console.log("onlineUsers: ", onlineUser);
+                const toUser = onlineUser.find((onlineuser) => {
+                    // console.log("onelineUser: ", onlineuser);
+                    return onlineuser.userId == postUser._id;
+                });
+                console.log("touser:", toUser);
+                if (toUser) {
+                    io.to(toUser.socketId).emit("like", {
+                        profilePic: user.profilePic,
+                        lickedBy: user.username,
+                        postId: postId,
+                    });
+                }
+            }
+            // console.log(post.likes);
+        } else {
+            res.status(404).json({
+                message: "Post not found",
             });
         }
     } catch (err) {
@@ -163,6 +163,7 @@ exports.commentPost = async (req, res, next) => {
         const comment = req.body.comment;
         const post = await Post.findById(postId);
         const user = await User.findById(userId);
+        const postUser = await User.findById(post.user);
         console.log(post, user);
         if (post && user) {
             post.comments.push({
@@ -175,6 +176,22 @@ exports.commentPost = async (req, res, next) => {
             res.status(200).json({
                 message: "Comment posted successfully",
             });
+            var onlineUser = req.app.get("onlineUser");
+            var io = req.app.get("socketio");
+            console.log(postUser.username, user.username);
+            console.log("onlineUsers: ", onlineUser);
+            const toUser = onlineUser.find((onlineuser) => {
+                // console.log("onelineUser: ", onlineuser);
+                return onlineuser.userId == postUser._id;
+            });
+            console.log("touser:", toUser);
+            if (toUser) {
+                io.to(toUser.socketId).emit("comment", {
+                    profilePic: user.profilePic,
+                    lickedBy: user.username,
+                    postId: postId,
+                });
+            }
         } else {
             res.status(404).json({
                 message: "Post or user not found",

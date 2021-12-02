@@ -45,6 +45,19 @@ const Dashboard = () => {
                     },
                 });
             });
+            socket.on("comment", (data) => {
+                console.log(data);
+                dispatch({
+                    type: "SET_NEW_NOTIFICATION",
+                    payload: {
+                        type: "Comment",
+                        title: data.lickedBy,
+                        postId: data.postId,
+                        image: data.profilePic,
+                        message: "Commented on your post",
+                    },
+                });
+            });
         }
     }, [socket]);
 

@@ -44,6 +44,7 @@ const validateMessages = {
 const AddEvents = () => {
   const AddEvents = useSelector((state) => state.AddEvents);
   const dispatch = useDispatch();
+  const reloadEvents = useSelector((state) => state.reloadEvents);
   const handleClose = () => {
     dispatch({ type: "SET_ADD_EVENTS", payload: false });
   };
@@ -60,6 +61,7 @@ const AddEvents = () => {
   
   const onFinish = async (values) => {
     console.log("Success:", values);
+    dispatch({ type: "SET_LOADING", payload: true });
     try{
       const response = await axios({
         method: "post",
@@ -72,12 +74,14 @@ const AddEvents = () => {
           "Content-Type": "application/json",
         },
       });
-      console.log(response);
+      dispatch({ type: "SET_LOADING", payload: false });
       if (response.data.success) {
+        dispatch({ type: "SET_RELOAD_EVENTS", payload: !reloadEvents });
         dispatch({ type: "SET_ADD_EVENTS", payload: false });
         openNotification();
       }
     }catch(err){
+      dispatch({ type: "SET_LOADING", payload: false });
       console.log(err);
     }
   };

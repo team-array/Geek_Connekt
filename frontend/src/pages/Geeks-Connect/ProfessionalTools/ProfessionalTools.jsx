@@ -3,7 +3,7 @@ import UtilityCard from "./UtilityCard/UtilityCard";
 import { Utility, UtilityAddCard } from "./ProfessionalTools.styles";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import UtilityForm from "./UtilityForm/UtilityForm";
 import axios from "axios";
 import {BaseUrl} from "../../../constants";
@@ -12,24 +12,31 @@ const ProfessionalTools = () => {
 
   const dispatch = useDispatch();
   const [utilities,setUtilities] = React.useState([]);
+  const reloadUtilities = useSelector((state) => state.reloadUtilities);
   const setUtility = () => {
     dispatch({ type: "SET_ADD_UTILITY", payload: true });
   };
   React.useEffect(()=>{
     const getutility = async () => {
-      const response = await axios.post(
-        `${BaseUrl}/getutilities`,
-          {
-            token:localStorage.getItem("jwt")
-          }
-      );
-      if(response.data.success){
-        console.log(response);
-        setUtilities(response.data.utilities);
+      try{
+        dispatch({ type: "SET_LOADING", payload: true });
+        const response = await axios.post(
+          `${BaseUrl}/getutilities`,
+            {
+              token:localStorage.getItem("jwt")
+            }
+        );
+        dispatch({ type: "SET_LOADING", payload: false });
+        if(response.data.success){
+          console.log(response);
+          setUtilities(response.data.utilities);
+        }
+      }catch(err){
+        dispatch({ type: "SET_LOADING", payload: false });
       }
     }
     getutility();
-  },[]);
+  },[reloadUtilities]);
   return (
     <>
       <UtilityForm />
@@ -50,7 +57,7 @@ const ProfessionalTools = () => {
       >
         Utilities
       </h3>
-      <Utility>
+      <Utility >
         {
           utilities.map((utility)=>
             <UtilityCard
@@ -65,7 +72,7 @@ const ProfessionalTools = () => {
         }
         {
           (JSON.parse(localStorage.getItem("user")).role === "Student") ? "":
-          <UtilityAddCard className="shadow my-4">
+          <UtilityAddCard className="shadow my-4 mx-4">
           <h4
             className="text-center text-uppercase"
             style={{

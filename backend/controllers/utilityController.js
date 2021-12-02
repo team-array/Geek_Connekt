@@ -27,7 +27,7 @@ const addutility = ({res},{req}) => {
                     }else{
                         res.status(200).json({
                             success:true,
-                            message: "Utility added successfully"
+                            message: "Utility added successfully",  
                         });
                     }
                 });
@@ -154,18 +154,16 @@ const updateRating = ({res}, {req}) => {
                                         message: err.message
                                     });
                                 }else{
-                                    console.log(result);
-                                    let rating = 0;
+                                    let rating = req.body.rating;
                                     let myrating = -1;
-                                    let numberOfRating = result.rating.length;
-                                    let totalRating = result.rating.map((userrating)=>{
+                                    let numberOfRating = result.rating.length+1;
+                                    result.rating.map((userrating)=>{
                                         if(userrating.username==user.username){
                                             myrating = userrating.rating;
                                         }
                                         rating = rating + userrating.rating;
-                                        return rating;
                                     });
-                                    rating = round(totalRating/numberOfRating*1.0,0.5);
+                                    rating = round(rating/numberOfRating*1.0,0.5);
                                     return res.status(200).json({
                                         success:true,
                                         message: "Rating updated successfully",

@@ -9,6 +9,8 @@ import AOS from "aos";
 import "react-image-crop/dist/ReactCrop.css";
 import Notifications from "./pages/Geeks-Connect/Notifications/Notifications";
 import HomePageController from "./pages/HomePageController";
+import Spinner from "./components/Spinner/Spinner";
+
 
 config.console(config.MODE);
 
@@ -20,6 +22,7 @@ const App = () => {
     });
     return (
         <div className="App">
+            <Spinner/>
             <HashRouter>
                 <Routes>
                     <Route path="/" element={<HomePageController />} />

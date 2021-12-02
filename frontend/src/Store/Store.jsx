@@ -8,7 +8,12 @@ import {
   Comment_Box,
   showNotifications,
   showAchievementsForm,
-  newNotification
+  newNotification,
+  achievements,
+  ImagesGridLength,
+  loading,
+  reloadUtilities,
+  reloadEvents
 } from "./reducers";
 
 const reducers = combineReducers({
@@ -19,7 +24,12 @@ const reducers = combineReducers({
   Comment_Box,
   showNotifications,
   showAchievementsForm,
-  newNotification
+  newNotification,
+  achievements,
+  ImagesGridLength,
+  loading,
+  reloadUtilities,
+  reloadEvents
 });
 
 const Store = createStore(reducers);

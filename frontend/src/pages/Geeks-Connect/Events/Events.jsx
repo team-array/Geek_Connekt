@@ -14,7 +14,7 @@ import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import AddEvents from "./AddEvents/AddEvents";
-import {useDispatch} from 'react-redux';
+import {useDispatch,useSelector} from 'react-redux';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import axios from "axios";
 import { BaseUrl } from "../../../constants";
@@ -22,6 +22,7 @@ import { BaseUrl } from "../../../constants";
 const Events = () => {
   const [value, setValue] = React.useState(new Date());
   const [events, setEvents] = React.useState([]);
+  const reloadEvents = useSelector(state => state.reloadEvents);
   const dispatch = useDispatch();
   const eventform = () => {
     dispatch({ type: "SET_ADD_EVENTS", payload: true });
@@ -32,33 +33,44 @@ const Events = () => {
     const year = date.getFullYear();
     return `${year}-${month}-${day}`;
   }
+  Date.prototype.addDays = function(days) {
+    var date = new Date(this.valueOf());
+    date.setDate(date.getDate() + days);
+    return date;
+  }
+
   React.useEffect(() => {
     const getEvents = async () => {
-      let end = "T00:00:00.000Z";
-      let start = getDate(value);
-
+      dispatch({ type: "SET_LOADING", payload: true });
+      let start=getDate(value);
+      let end=getDate(value.addDays(1));
       try{
         const response = await axios({
           method: "post",
           url: `${BaseUrl}/getEvents`,
           data: {
-            EventDate: start+end,
+            EventDate: {
+              start,
+              end
+            },
             token: localStorage.getItem("jwt")
           },
           headers: {
             "Content-Type": "application/json",
           },
         });
+        dispatch({ type: "SET_LOADING", payload: false });
         if(response.data.success){
           console.log(response.data.events);
           setEvents(response.data.events);
         }
       }catch(err){
+        dispatch({ type: "SET_LOADING", payload: false });
         console.log(err);
       }
     }
     getEvents();
-  },[value]);
+  },[value,reloadEvents]);
   console.log(JSON.parse(localStorage.getItem("user")).role)
   return (
     <>
@@ -84,7 +96,7 @@ const Events = () => {
             renderInput={(params) => <TextField {...params} />}
           />
         </LocalizationProvider>
-        <div className="mx-auto EventBox" style={{overflowY:"scroll",width: "100%",maxWidth:"400px" }}>
+        <div className="mx-auto EventBox" style={{overflowY:(events.length !== 0)?"scroll":"auto",width: "100%",maxWidth:"400px",borderLeft:(events.length !== 0)?"1px solid #bbb":"none" }}>
           
           <List
             sx={{ width: "100%", bgcolor: "background.paper", }}
@@ -95,6 +107,9 @@ const Events = () => {
             value.getDate()}-${value.getMonth() + 1}-${value.getFullYear()}`}
           </p>
           {
+            (events.length === 0) ?(
+              <div className="text-center text-muted font-italic mb-3" style={{zIndex:"9999",fontSize:"1.2rem"}}>No Events</div>
+            ):(
             events.map((event,index) => {
               return (
                 <>
@@ -132,7 +147,7 @@ const Events = () => {
               }
               </>
               )
-            })
+          }))
           }
           </List>
         </div>

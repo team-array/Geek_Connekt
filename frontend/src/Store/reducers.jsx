@@ -85,3 +85,65 @@ export const showAchievementsForm = (state = false, action) => {
             return state;
     }
 };
+
+export const achievements = (
+    state = [],
+    action
+) => {
+    switch (action.type) {
+        case "SET_ACHIEVEMENTS":
+            return action.payload
+        case "ADD_ACHIEVEMENTS":
+            return [...state,...action.payload];
+        default:
+            return state;
+    }
+};
+
+export const ImagesGridLength = (
+    state = 0,
+    action
+) => {
+    switch (action.type) {
+        case "SET_GRID_LENGTH":
+            return action.payload;
+        default:
+            return state;
+    }
+};
+
+export const loading = (
+    state = false,
+    action
+) => {
+    switch (action.type) {
+        case "SET_LOADING":
+            return action.payload;
+        default:
+            return state;
+    }
+};
+
+export const reloadUtilities = (
+    state = false,
+    action
+) => {
+    switch (action.type) {
+        case "SET_RELOAD_UTILITIES":
+            return action.payload;
+        default:
+            return state;
+    }
+};
+
+export const reloadEvents = (
+    state = false,
+    action
+) => {
+    switch (action.type) {
+        case "SET_RELOAD_EVENTS":
+            return action.payload;
+        default:
+            return state;
+    }
+};
