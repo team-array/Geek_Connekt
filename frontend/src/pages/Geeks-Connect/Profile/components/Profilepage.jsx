@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from "react";
+import React, { useCallback, useRef, useState, useEffect } from "react";
 import coverimg from "./img/cover.png";
 import profileimg from "./img/profile.png";
 import star from "./img/star.jfif";
@@ -35,170 +35,200 @@ import DeleteIcon from "@mui/icons-material/Delete";
 
 import "./porfilepage.scss";
 import LoadingComponent from "../../../../components/loadingComponent/LoadingComponent";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 
 const USER_DATA = gql`
-  query user($id: String!) {
-    user(id: $id) {
-      id
-      username
-      email
-      profilePic
-      backgroundPic
-      role
-      rollNumber
-      college
-      location
-      hometown
-      bio
-      birthDate
-      secondarySchool
-      primarySchool
+    query user($id: String!) {
+        user(id: $id) {
+            id
+            username
+            email
+            profilePic
+            backgroundPic
+            role
+            rollNumber
+            college
+            location
+            hometown
+            bio
+            birthDate
+            secondarySchool
+            primarySchool
+        }
     }
-  }
 `;
 
 export const Profilepage = () => {
-  const dispatch = useDispatch();
-  const {
-    loading: userDataLoading,
-    data: userData,
-    error: userDataError,
-  } = useQuery(USER_DATA, {
-    variables: {
-      id: JSON.parse(localStorage.getItem("user")).id,
-    },
-  });
-
-  const achievements = useSelector((state) => state.achievements);
-
-  const [showAllPhotos, setShowAllPhotos] = React.useState(false);
-
-  const ImagesGridLength = useSelector((state) => state.ImagesGridLength);
-
-  const [tab, setTab] = React.useState(0);
-
-  const [pageNumber, setpageNumber] = React.useState(1);
-
-  const [edit, setedit] = React.useState(false);
-
-  const [profilePic, setprofilePic] = React.useState({});
-
-  const { loading, error, posts, hasMore } = userPostHook(
-    JSON.parse(localStorage.getItem("user")).id,
-    pageNumber
-  );
-
-  const editPictureHandler = (event) => {
-    if (event.target.name === "profilePic") {
-      setprofilePic({
-        ...profilePic,
-        image: event.target.files[0],
-      });
-      setprofilePic(event.target.files[0]);
-      console.log("Yp!");
-    }
-  };
-
-  const handleProfilePicSubmit = async (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    formData.append(
-      "token",
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkRlZXBlc2ggRHJhZ29uZWVsIiwiZW1haWwiOiJkZWVwZXNoYXNoNDQ0QGdtYWlsLmNvbSIsInJvbGUiOiJTdHVkZW50Iiwicm9sbE51bWJlciI6IjE5SDUxQTA1RzIiLCJpYXQiOjE2Mzc4MTYzNzF9.yrId7SkljS7Tl7b-iCx2LtT4wQakOWd9won9HzrNAms"
-    );
-    formData.append("file", e.target.profilePic.files[0]);
-    try {
-      const result = await axios({
-        method: "POST",
-        url: "http://localhost:8000/editProfilePic",
-        data: formData,
-        headers: {
-          "content-type": "multipart/form-data",
+    const dispatch = useDispatch();
+    const {
+        loading: userDataLoading,
+        data: userData,
+        error: userDataError,
+    } = useQuery(USER_DATA, {
+        variables: {
+            id: JSON.parse(localStorage.getItem("user")).id,
         },
-      });
-      console.log(result);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    });
 
-  React.useEffect(() => {
-    if (!userDataLoading) {
-      console.log(userData);
-    }
-  }, [userDataLoading, userData]);
+    const achievements = useSelector((state) => state.achievements);
 
-  React.useEffect(() => {
-    if (error) {
-      console.log(error);
-    }
-  }, [error]);
+    const [showAllPhotos, setShowAllPhotos] = React.useState(false);
 
-  React.useEffect(() => {
-    if (loading) return;
-    // console.log(posts);
-  }, [loading, hasMore, posts]);
+    const ImagesGridLength = useSelector((state) => state.ImagesGridLength);
 
-  const lastPostReference = useRef();
+    const [tab, setTab] = React.useState(0);
 
-  const lastPostRefChanger = useCallback(
-    (post) => {
-      if (loading) return;
-      // console.log("Last post:", post);
-      if (lastPostReference.current) {
-        // console.log("Disconnected");
-        lastPostReference.current.disconnect();
-      }
-      lastPostReference.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && hasMore > 0) {
-          // console.log("Visible");
-          setpageNumber((pageNumber) => (pageNumber += 1));
+    const [pageNumber, setpageNumber] = React.useState(1);
+
+    const [edit, setedit] = React.useState(false);
+
+    const [profilePic, setprofilePic] = React.useState({});
+    const [postData, setpostData] = useState([]);
+    const [postLikesCount, setpostLikesCount] = useState([]);
+
+    const { loading, error, posts, hasMore } = userPostHook(
+        JSON.parse(localStorage.getItem("user")).id,
+        pageNumber
+    );
+
+    const editPictureHandler = (event) => {
+        if (event.target.name === "profilePic") {
+            setprofilePic({
+                ...profilePic,
+                image: event.target.files[0],
+            });
+            setprofilePic(event.target.files[0]);
+            console.log("Yp!");
         }
-      });
-      if (post) {
-        lastPostReference.current.observe(post);
-        // console.log(post);
-      }
-    },
-    [loading, hasMore]
-  );
-  React.useEffect(() => {
-    const getachievements = async () => {
-      try {
-        const response = await axios({
-          method: "post",
-          url: `${BaseUrl}/getachievements`,
-          headers: {
-            "content-type": "application/json",
-          },
-          data: {
-            token: localStorage.getItem("jwt"),
-          },
-        });
-        console.log(response);
-        if (response.data.success) {
-          dispatch({
-            type: "SET_ACHIEVEMENTS",
-            payload: response.data.achievements,
-          });
-          dispatch({
-            type: "SET_GRID_LENGTH",
-            payload: Math.min(response.data.achievements.length, 4),
-          });
-        }
-      } catch (error) {
-        console.log(error);
-      }
     };
-    getachievements();
-  }, []);
-  const deleteAchievement = async  (achievement_index) => {
-      try{
-          dispatch({
-            type:"SET_LOADING",
-            payload:true
-          });
-          const response = await axios({
+
+    const handleProfilePicSubmit = async (e) => {
+        e.preventDefault();
+        const formData = new FormData();
+        formData.append(
+            "token",
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkRlZXBlc2ggRHJhZ29uZWVsIiwiZW1haWwiOiJkZWVwZXNoYXNoNDQ0QGdtYWlsLmNvbSIsInJvbGUiOiJTdHVkZW50Iiwicm9sbE51bWJlciI6IjE5SDUxQTA1RzIiLCJpYXQiOjE2Mzc4MTYzNzF9.yrId7SkljS7Tl7b-iCx2LtT4wQakOWd9won9HzrNAms"
+        );
+        formData.append("file", e.target.profilePic.files[0]);
+        try {
+            const result = await axios({
+                method: "POST",
+                url: "http://localhost:8000/editProfilePic",
+                data: formData,
+                headers: {
+                    "content-type": "multipart/form-data",
+                },
+            });
+            console.log(result);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    React.useEffect(() => {
+        if (!userDataLoading) {
+            console.log(userData);
+        }
+    }, [userDataLoading, userData]);
+
+    React.useEffect(() => {
+        if (error) {
+            console.log(error);
+        }
+    }, [error]);
+
+    React.useEffect(() => {
+        if (loading) return;
+        // console.log("userposts", posts);
+        setpostData(new Array(posts.length).fill(0));
+        posts.map((post, idx) => {
+            setpostLikesCount((prev) => [...prev, post.likes.length]);
+            post.likes.filter((l) => {
+                const userId =
+                    localStorage.getItem("user") !== null
+                        ? JSON.parse(localStorage.getItem("user")).id
+                        : "";
+                // console.log(l._id, userId);
+                return l._id === userId;
+            }).length > 0
+                ? setpostData((postData) => {
+                      postData[idx] = 1;
+                      // console.log("Matched");
+                      return postData;
+                  })
+                : setpostData((postData) => {
+                      postData[idx] = 0;
+                      // console.log("not - Matched");
+                      return postData;
+                  });
+        });
+        // console.log("postData: ", postData);
+    }, [loading, hasMore, posts]);
+
+    useEffect(() => {
+        console.log("postData: ", postData);
+    }, [postData]);
+
+    const lastPostReference = useRef();
+
+    const lastPostRefChanger = useCallback(
+        (post) => {
+            if (loading) return;
+            // console.log("Last post:", post);
+            if (lastPostReference.current) {
+                // console.log("Disconnected");
+                lastPostReference.current.disconnect();
+            }
+            lastPostReference.current = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting && hasMore > 0) {
+                    // console.log("Visible");
+                    setpageNumber((pageNumber) => (pageNumber += 1));
+                }
+            });
+            if (post) {
+                lastPostReference.current.observe(post);
+                // console.log(post);
+            }
+        },
+        [loading, hasMore]
+    );
+    React.useEffect(() => {
+        const getachievements = async () => {
+            try {
+                const response = await axios({
+                    method: "post",
+                    url: `${BaseUrl}/getachievements`,
+                    headers: {
+                        "content-type": "application/json",
+                    },
+                    data: {
+                        token: localStorage.getItem("jwt"),
+                    },
+                });
+                console.log(response);
+                if (response.data.success) {
+                    dispatch({
+                        type: "SET_ACHIEVEMENTS",
+                        payload: response.data.achievements,
+                    });
+                    dispatch({
+                        type: "SET_GRID_LENGTH",
+                        payload: Math.min(response.data.achievements.length, 4),
+                    });
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        getachievements();
+    }, []);
+    const deleteAchievement = async (achievement_index) => {
+        try {
+            dispatch({
+                type: "SET_LOADING",
+                payload: true,
+            });
+            const response = await axios({
                 method: "post",
                 url: `${BaseUrl}/deleteAchievement`,
                 headers: {
@@ -206,293 +236,634 @@ export const Profilepage = () => {
                 },
                 data: {
                     token: localStorage.getItem("jwt"),
-                    achievement_index
-                }
-          })
-          dispatch({
-            type:"SET_LOADING",
-            payload:false
-          });
-          if (response.data.success) {
-            dispatch({
-              type: "SET_ACHIEVEMENTS",
-              payload: response.data.achievements,
+                    achievement_index,
+                },
             });
             dispatch({
-              type: "SET_GRID_LENGTH",
-              payload: Math.min(response.data.achievements.length, 4),
+                type: "SET_LOADING",
+                payload: false,
             });
-          }
-      }catch(err){
+            if (response.data.success) {
+                dispatch({
+                    type: "SET_ACHIEVEMENTS",
+                    payload: response.data.achievements,
+                });
+                dispatch({
+                    type: "SET_GRID_LENGTH",
+                    payload: Math.min(response.data.achievements.length, 4),
+                });
+            }
+        } catch (err) {
             console.log(err);
             dispatch({
-              type:"SET_LOADING",
-              payload:false
+                type: "SET_LOADING",
+                payload: false,
             });
-      }
-  }
-  return userDataLoading ? (
-    <div>loading...</div>
-  ) : (
-    <div className="ProfilepageComponent">
-      <div className="profile-container">
-        <img
-          src={userData.user.backgroundPic}
-          alt="coverimg"
-          className="cover-img"
-        />
-        <div className="profile-details mt-1">
-          <div className="pd-left mr-auto my-2">
-            <div className="pd-row">
-              <img
-                src={userData.user.profilePic}
-                alt="profileimg"
-                className="pd-img"
-              />
-              <div>
-                <h3>{userData.user.username}</h3>
-                <p>{userData.user.role}</p>
-                <img src={star} alt="star" />
-                <Button
-                  type="button"
-                  className="my-2 mx-2"
-                  onClick={() => {
-                    setedit(!edit);
-                    dispatch({
-                      type: "SET_EDIT_PROFILE",
-                      payload: true,
-                    });
-                  }}
-                >
-                  Edit profile
-                </Button>
-              </div>
-            </div>
-          </div>
-          <div
-            className="pd-right my-3 mb-0 ml-auto"
-            style={{ width: "max-content" }}
-          >
-            <Button type="button" className="mb-3">
-              <img src={info} alt="" />
-              Informative
-            </Button>
-            <Button type="button">
-              <img src={micon} alt="" />
-              message &nbsp;{" "}
-            </Button>
-          </div>
-        </div>
-
-        {/* 1 */}
-        <div className="ProfileBlog">
-          <div className="profile-info">
-            <div className="info-col">
-              <div className="profile-intro">
-                <h3>Intro</h3>
-                <p className="intro-text">{userData.user.bio}</p>
-                <hr />
-                <ul>
-                  <li>
-                    <img src={job} alt="" /> {userData.user.role}
-                  </li>
-                  <li>
-                    <img src={study} alt="" />
-                    {userData.user.role} in {userData.user.college}
-                  </li>
-                  <li>
-                    <img src={study} alt="" />
-                    Secondary School: {userData.user.secondarySchool}
-                  </li>
-                  <li>
-                    <img src={study} alt="" />
-                    School: {userData.user.primarySchool}
-                  </li>
-                  <li>
-                    <img src={home} alt="" />
-                    Lives in {userData.user.hometown}
-                  </li>
-                  <li>
-                    <img src={location} alt="" />
-                    From {userData.user.location}
-                  </li>
-                </ul>
-              </div>
-              <div className="profile-intro">
-                <div className="title-box">
-                  <h4 style={{ marginLeft: "9px" }}>info & posts</h4>
-                  <a
-                    className="mb-2"
-                    href="/"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      if (ImagesGridLength > 4) {
-                        dispatch({
-                          type: "SET_GRID_LENGTH",
-                          payload: 4,
-                        });
-                      } else {
-                        dispatch({
-                          type: "SET_GRID_LENGTH",
-                          payload: achievements.length,
-                        });
-                      }
-                      setShowAllPhotos(!showAllPhotos);
-                    }}
-                    style={{ marginRight: "9px" }}
-                  >
-                    {!showAllPhotos
-                      ? "All Achievements"
-                      : "Show Fewer Achievements"}
-                  </a>
-                </div>
-
-                <div className="postsbox mt-3">
-                  {achievements
-                    .slice(0, ImagesGridLength)
-                    .map((achievement, index) => {
-                      return (
-                        <div style={{display: 'flex', flexDirection: 'column'}}>
-                          <img
-                            key={index}
-                            src={achievement}
-                            alt=""
-                            className="post-img mx-3"
-                          />
-                          <Button className="mb-3 mx-3" style={{width:"150px"}} onClick={()=>deleteAchievement(index)}>delete</Button>
+        }
+    };
+    return userDataLoading ? (
+        <div>loading...</div>
+    ) : (
+        <div className="ProfilepageComponent">
+            <div className="profile-container">
+                <img
+                    src={userData.user.backgroundPic}
+                    alt="coverimg"
+                    className="cover-img"
+                />
+                <div className="profile-details mt-1">
+                    <div className="pd-left mr-auto my-2">
+                        <div className="pd-row">
+                            <img
+                                src={userData.user.profilePic}
+                                alt="profileimg"
+                                className="pd-img"
+                            />
+                            <div>
+                                <h3>{userData.user.username}</h3>
+                                <p>{userData.user.role}</p>
+                                <img src={star} alt="star" />
+                                <Button
+                                    type="button"
+                                    className="my-2 mx-2"
+                                    onClick={() => {
+                                        setedit(!edit);
+                                        dispatch({
+                                            type: "SET_EDIT_PROFILE",
+                                            payload: true,
+                                        });
+                                    }}
+                                >
+                                    Edit profile
+                                </Button>
+                            </div>
                         </div>
-                      );
-                    })}
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="profile-info1">
-            <div className="post-col">
-              <div className="write-post-container">
-                <div className="user-profile">
-                  <img src={pp} alt="" />
-                  <div>
-                    <p>Kranthi</p>
-                    <small>
-                      Public
-                      <i class="fas fa-caret-down"></i>
-                    </small>
-                  </div>
-                </div>
-                <div className="post-input-container">
-                  <textarea row="3" placeholder="Write a post..."></textarea>
-                  <div className="add-post-links">
-                    <a href="/">
-                      <img src={live} alt="" />
-                      Live Video
-                    </a>
-                    <a
-                      href="/"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        dispatch({
-                          type: "SET_ACHIEVEMENTS_FORM",
-                          payload: true,
-                        });
-                      }}
+                    </div>
+                    <div
+                        className="pd-right my-3 mb-0 ml-auto"
+                        style={{ width: "max-content" }}
                     >
-                      <img src={photo} alt="" />
-                      Photo/Video
-                    </a>
-                    <a href="/">
-                      <img src={feeling} alt="" />
-                      Feeling
-                    </a>
-                  </div>
+                        <Button type="button" className="mb-3">
+                            <img src={info} alt="" />
+                            Informative
+                        </Button>
+                        <Button type="button">
+                            <img src={micon} alt="" />
+                            message &nbsp;{" "}
+                        </Button>
+                    </div>
                 </div>
-              </div>
-              {posts.length === 0 && posts === undefined ? (
-                <h1>Write you first post now!</h1>
-              ) : (
-                posts.map((post, idx) => {
-                  if (posts.length === idx + 1) {
-                    return (
-                      <div className="post-container" ref={lastPostRefChanger}>
-                        <div className="post-row">
-                          <div className="user-profile">
-                            <img src={userData.user.profilePic} alt="" />
-                            <div>
-                              <p>{userData.user.username}</p>
-                              <span>{post.createdAt}</span>
-                            </div>
-                          </div>
-                          {/* <a href="#"></a> */}
-                        </div>
 
-                        <p className="post-text">{post.caption}</p>
-                        <img src={post.imageUrl} alt="" className="post-img" />
-                        <div className="post-row">
-                          <div className="activity-icons">
-                            <div>
-                              <img src={like} alt="" />
-                              {post.likes.length}
+                {/* 1 */}
+                <div className="ProfileBlog">
+                    <div className="profile-info">
+                        <div className="info-col">
+                            <div className="profile-intro">
+                                <h3>Intro</h3>
+                                <p className="intro-text">
+                                    {userData.user.bio}
+                                </p>
+                                <hr />
+                                <ul>
+                                    <li>
+                                        <img src={job} alt="" />{" "}
+                                        {userData.user.role}
+                                    </li>
+                                    <li>
+                                        <img src={study} alt="" />
+                                        {userData.user.role} in{" "}
+                                        {userData.user.college}
+                                    </li>
+                                    <li>
+                                        <img src={study} alt="" />
+                                        Secondary School:{" "}
+                                        {userData.user.secondarySchool}
+                                    </li>
+                                    <li>
+                                        <img src={study} alt="" />
+                                        School: {userData.user.primarySchool}
+                                    </li>
+                                    <li>
+                                        <img src={home} alt="" />
+                                        Lives in {userData.user.hometown}
+                                    </li>
+                                    <li>
+                                        <img src={location} alt="" />
+                                        From {userData.user.location}
+                                    </li>
+                                </ul>
                             </div>
-                            <div>
-                              <img src={comment} alt="" />
-                              {post.comments.length}
-                            </div>
-                            <div>
-                              <img src={share} alt="" />
-                              120
-                            </div>
-                          </div>
-                          <div className="post-profile-icon">
-                            <img src={pp} alt="" />
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  } else {
-                    return (
-                      <div className="post-container">
-                        <div className="post-row">
-                          <div className="user-profile">
-                            <img src={userData.user.profilePic} alt="" />
-                            <div>
-                              <p>{userData.user.username}</p>
-                              <span>{post.createdAt}</span>
-                            </div>
-                          </div>
-                          {/* <a href="#"></a> */}
-                        </div>
+                            <div className="profile-intro">
+                                <div className="title-box">
+                                    <h4 style={{ marginLeft: "9px" }}>
+                                        info & posts
+                                    </h4>
+                                    <a
+                                        className="mb-2"
+                                        href="/"
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            if (ImagesGridLength > 4) {
+                                                dispatch({
+                                                    type: "SET_GRID_LENGTH",
+                                                    payload: 4,
+                                                });
+                                            } else {
+                                                dispatch({
+                                                    type: "SET_GRID_LENGTH",
+                                                    payload:
+                                                        achievements.length,
+                                                });
+                                            }
+                                            setShowAllPhotos(!showAllPhotos);
+                                        }}
+                                        style={{ marginRight: "9px" }}
+                                    >
+                                        {!showAllPhotos
+                                            ? "All Achievements"
+                                            : "Show Fewer Achievements"}
+                                    </a>
+                                </div>
 
-                        <p className="post-text">{post.caption}</p>
-                        <img src={post.imageUrl} alt="" className="post-img" />
-                        <div className="post-row">
-                          <div className="activity-icons">
-                            <div>
-                              <img src={like} alt="" />
-                              {post.likes.length}
+                                <div className="postsbox mt-3">
+                                    {achievements
+                                        .slice(0, ImagesGridLength)
+                                        .map((achievement, index) => {
+                                            return (
+                                                <div
+                                                    style={{
+                                                        display: "flex",
+                                                        flexDirection: "column",
+                                                    }}
+                                                >
+                                                    <img
+                                                        key={index}
+                                                        src={achievement}
+                                                        alt=""
+                                                        className="post-img mx-3"
+                                                    />
+                                                    <Button
+                                                        className="mb-3 mx-3"
+                                                        style={{
+                                                            width: "150px",
+                                                        }}
+                                                        onClick={() =>
+                                                            deleteAchievement(
+                                                                index
+                                                            )
+                                                        }
+                                                    >
+                                                        delete
+                                                    </Button>
+                                                </div>
+                                            );
+                                        })}
+                                </div>
                             </div>
-                            <div>
-                              <img src={comment} alt="" />
-                              {post.comments.length}
-                            </div>
-                            <div>
-                              <img src={share} alt="" />
-                              120
-                            </div>
-                          </div>
-                          <div className="post-profile-icon">
-                            <img src={pp} alt="" />
-                          </div>
                         </div>
-                      </div>
-                    );
-                  }
-                })
-              )}
-              {loading ? <LoadingComponent /> : null}
+                    </div>
+                    <div className="profile-info1">
+                        <div className="post-col">
+                            <div className="write-post-container">
+                                <div className="user-profile">
+                                    <img src={pp} alt="" />
+                                    <div>
+                                        <p>Kranthi</p>
+                                        <small>
+                                            Public
+                                            <i class="fas fa-caret-down"></i>
+                                        </small>
+                                    </div>
+                                </div>
+                                <div className="post-input-container">
+                                    <textarea
+                                        row="3"
+                                        placeholder="Write a post..."
+                                    ></textarea>
+                                    <div className="add-post-links">
+                                        <a href="/">
+                                            <img src={live} alt="" />
+                                            Live Video
+                                        </a>
+                                        <a
+                                            href="/"
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                dispatch({
+                                                    type: "SET_ACHIEVEMENTS_FORM",
+                                                    payload: true,
+                                                });
+                                            }}
+                                        >
+                                            <img src={photo} alt="" />
+                                            Photo/Video
+                                        </a>
+                                        <a href="/">
+                                            <img src={feeling} alt="" />
+                                            Feeling
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            {posts.length === 0 && posts === undefined ? (
+                                <h1>Write you first post now!</h1>
+                            ) : postData !== undefined &&
+                              postData !== null &&
+                              postData.length > 0 ? (
+                                posts.map((post, idx) => {
+                                    if (posts.length === idx + 1) {
+                                        return (
+                                            <div
+                                                className="post-container"
+                                                ref={lastPostRefChanger}
+                                            >
+                                                <div className="post-row">
+                                                    <div className="user-profile">
+                                                        <img
+                                                            src={
+                                                                userData.user
+                                                                    .profilePic
+                                                            }
+                                                            alt=""
+                                                        />
+                                                        <div>
+                                                            <p>
+                                                                {
+                                                                    userData
+                                                                        .user
+                                                                        .username
+                                                                }
+                                                            </p>
+                                                            <span>
+                                                                {post.createdAt}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    {/* <a href="#"></a> */}
+                                                </div>
+
+                                                <p className="post-text">
+                                                    {post.caption}
+                                                </p>
+                                                <img
+                                                    src={post.imageUrl}
+                                                    alt=""
+                                                    className="post-img"
+                                                />
+                                                <div className="post-row">
+                                                    <div className="activity-icons">
+                                                        <div>
+                                                            <ThumbUpIcon
+                                                                style={{
+                                                                    cursor: "pointer",
+                                                                    color:
+                                                                        postData[
+                                                                            idx
+                                                                        ] === 1
+                                                                            ? "blue"
+                                                                            : "",
+                                                                }}
+                                                                onClick={async () => {
+                                                                    console.log(
+                                                                        "like"
+                                                                    );
+                                                                    try {
+                                                                        const userId =
+                                                                            localStorage.getItem(
+                                                                                "user"
+                                                                            ) !==
+                                                                            null
+                                                                                ? JSON.parse(
+                                                                                      localStorage.getItem(
+                                                                                          "user"
+                                                                                      )
+                                                                                  )
+                                                                                      .id
+                                                                                : "";
+                                                                        const result =
+                                                                            await axios(
+                                                                                {
+                                                                                    method: "post",
+                                                                                    url: `http://localhost:8000/likePost`,
+                                                                                    data: {
+                                                                                        postId: post._id,
+                                                                                        userId: userId,
+                                                                                    },
+                                                                                }
+                                                                            );
+                                                                        console.log(
+                                                                            result
+                                                                        );
+                                                                        if (
+                                                                            result
+                                                                                .data
+                                                                                .message ===
+                                                                            "Post liked successfully"
+                                                                        ) {
+                                                                            postData[
+                                                                                idx
+                                                                            ] = 1;
+                                                                            postLikesCount[
+                                                                                idx
+                                                                            ] =
+                                                                                postLikesCount[
+                                                                                    idx
+                                                                                ] +
+                                                                                1;
+                                                                        } else {
+                                                                            postData[
+                                                                                idx
+                                                                            ] = 0;
+                                                                            postLikesCount[
+                                                                                idx
+                                                                            ] =
+                                                                                postLikesCount[
+                                                                                    idx
+                                                                                ] -
+                                                                                1;
+                                                                        }
+                                                                    } catch (err) {
+                                                                        console.log(
+                                                                            err
+                                                                        );
+                                                                    }
+                                                                    //   if (postData[idx] === 0) {
+                                                                    //       postData[idx] = 1;
+                                                                    //   } else if (
+                                                                    //       postData[idx] === 1
+                                                                    //   ) {
+                                                                    //       console.log("Hello");
+                                                                    //       postData[idx] = 0;
+                                                                    //   }
+                                                                    setpostData(
+                                                                        (
+                                                                            postData
+                                                                        ) => {
+                                                                            //   postData[idx] = 1;
+                                                                            console.log(
+                                                                                postData[
+                                                                                    idx
+                                                                                ]
+                                                                            );
+
+                                                                            return [
+                                                                                ...postData,
+                                                                            ];
+                                                                        }
+                                                                    );
+                                                                    setpostLikesCount(
+                                                                        (
+                                                                            postLikesCount
+                                                                        ) => {
+                                                                            return [
+                                                                                ...postLikesCount,
+                                                                            ];
+                                                                        }
+                                                                    );
+                                                                    //   console.log(postData);
+                                                                }}
+                                                            />
+                                                            {/* <ThumbUpIcon
+                                                                style={{
+                                                                    cursor: "pointer",
+                                                                    color:
+                                                                        postData[
+                                                                            idx
+                                                                        ] === 1
+                                                                            ? "blue"
+                                                                            : "",
+                                                                }}
+                                                                
+                                                            /> */}
+                                                            {
+                                                                postLikesCount[
+                                                                    idx
+                                                                ]
+                                                            }
+                                                        </div>
+                                                        <div>
+                                                            <img
+                                                                src={comment}
+                                                                alt=""
+                                                            />
+                                                            {
+                                                                post.comments
+                                                                    .length
+                                                            }
+                                                        </div>
+                                                        <div>
+                                                            <img
+                                                                src={share}
+                                                                alt=""
+                                                            />
+                                                            120
+                                                        </div>
+                                                    </div>
+                                                    <div className="post-profile-icon">
+                                                        <img src={pp} alt="" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        );
+                                    } else {
+                                        return (
+                                            <div className="post-container">
+                                                <div className="post-row">
+                                                    <div className="user-profile">
+                                                        <img
+                                                            src={
+                                                                userData.user
+                                                                    .profilePic
+                                                            }
+                                                            alt=""
+                                                        />
+                                                        <div>
+                                                            <p>
+                                                                {
+                                                                    userData
+                                                                        .user
+                                                                        .username
+                                                                }
+                                                            </p>
+                                                            <span>
+                                                                {post.createdAt}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    {/* <a href="#"></a> */}
+                                                </div>
+
+                                                <p className="post-text">
+                                                    {post.caption}
+                                                </p>
+                                                <img
+                                                    src={post.imageUrl}
+                                                    alt=""
+                                                    className="post-img"
+                                                />
+                                                <div className="post-row">
+                                                    <div className="activity-icons">
+                                                        <div>
+                                                            <ThumbUpIcon
+                                                                style={{
+                                                                    cursor: "pointer",
+                                                                    color:
+                                                                        postData[
+                                                                            idx
+                                                                        ] === 1
+                                                                            ? "blue"
+                                                                            : "",
+                                                                }}
+                                                                onClick={async () => {
+                                                                    console.log(
+                                                                        "like"
+                                                                    );
+                                                                    try {
+                                                                        const userId =
+                                                                            localStorage.getItem(
+                                                                                "user"
+                                                                            ) !==
+                                                                            null
+                                                                                ? JSON.parse(
+                                                                                      localStorage.getItem(
+                                                                                          "user"
+                                                                                      )
+                                                                                  )
+                                                                                      .id
+                                                                                : "";
+                                                                        const result =
+                                                                            await axios(
+                                                                                {
+                                                                                    method: "post",
+                                                                                    url: `http://localhost:8000/likePost`,
+                                                                                    data: {
+                                                                                        postId: post._id,
+                                                                                        userId: userId,
+                                                                                    },
+                                                                                }
+                                                                            );
+                                                                        console.log(
+                                                                            result
+                                                                        );
+                                                                        if (
+                                                                            result
+                                                                                .data
+                                                                                .message ===
+                                                                            "Post liked successfully"
+                                                                        ) {
+                                                                            postData[
+                                                                                idx
+                                                                            ] = 1;
+                                                                            postLikesCount[
+                                                                                idx
+                                                                            ] =
+                                                                                postLikesCount[
+                                                                                    idx
+                                                                                ] +
+                                                                                1;
+                                                                        } else {
+                                                                            postData[
+                                                                                idx
+                                                                            ] = 0;
+                                                                            postLikesCount[
+                                                                                idx
+                                                                            ] =
+                                                                                postLikesCount[
+                                                                                    idx
+                                                                                ] -
+                                                                                1;
+                                                                        }
+                                                                    } catch (err) {
+                                                                        console.log(
+                                                                            err
+                                                                        );
+                                                                    }
+                                                                    //   if (postData[idx] === 0) {
+                                                                    //       postData[idx] = 1;
+                                                                    //   } else if (
+                                                                    //       postData[idx] === 1
+                                                                    //   ) {
+                                                                    //       console.log("Hello");
+                                                                    //       postData[idx] = 0;
+                                                                    //   }
+                                                                    setpostData(
+                                                                        (
+                                                                            postData
+                                                                        ) => {
+                                                                            //   postData[idx] = 1;
+                                                                            console.log(
+                                                                                postData[
+                                                                                    idx
+                                                                                ]
+                                                                            );
+
+                                                                            return [
+                                                                                ...postData,
+                                                                            ];
+                                                                        }
+                                                                    );
+                                                                    setpostLikesCount(
+                                                                        (
+                                                                            postLikesCount
+                                                                        ) => {
+                                                                            return [
+                                                                                ...postLikesCount,
+                                                                            ];
+                                                                        }
+                                                                    );
+                                                                    //   console.log(postData);
+                                                                }}
+                                                            />
+                                                            {/* <ThumbUpIcon
+                                                                style={{
+                                                                    cursor: "pointer",
+                                                                    color:
+                                                                        postData[
+                                                                            idx
+                                                                        ] === 1
+                                                                            ? "blue"
+                                                                            : "",
+                                                                }}
+                                                                
+                                                            /> */}
+                                                            {
+                                                                postLikesCount[
+                                                                    idx
+                                                                ]
+                                                            }
+                                                        </div>
+                                                        <div>
+                                                            <img
+                                                                src={comment}
+                                                                alt=""
+                                                            />
+                                                            {
+                                                                post.comments
+                                                                    .length
+                                                            }
+                                                        </div>
+                                                        <div>
+                                                            <img
+                                                                src={share}
+                                                                alt=""
+                                                            />
+                                                            120
+                                                        </div>
+                                                    </div>
+                                                    <div className="post-profile-icon">
+                                                        <img src={pp} alt="" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        );
+                                    }
+                                })
+                            ) : null}
+                            {loading ? <LoadingComponent /> : null}
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 };

@@ -27,13 +27,13 @@ const Dashboard = () => {
 
     useEffect(() => {
         socket = io("http://localhost:8000");
-        console.log(socket);
+        // console.log(socket);
     }, []);
 
     useEffect(() => {
         if (socket) {
             socket.on("like", (data) => {
-                console.log(data);
+                // console.log(data);
                 dispatch({
                     type: "SET_NEW_NOTIFICATION",
                     payload: {
@@ -46,7 +46,7 @@ const Dashboard = () => {
                 });
             });
             socket.on("comment", (data) => {
-                console.log(data);
+                // console.log(data);
                 dispatch({
                     type: "SET_NEW_NOTIFICATION",
                     payload: {
@@ -62,7 +62,6 @@ const Dashboard = () => {
     }, [socket]);
 
     useEffect(() => {
-        console.log("HEllo");
         if (socket !== null && socket !== undefined) {
             const userId = localStorage.getItem("user")
                 ? JSON.parse(localStorage.getItem("user")).id
