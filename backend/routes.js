@@ -61,4 +61,12 @@ router.post("/deleteAchievement",(res,req)=>{
     require("./controllers/Achievements").deleteAchievement(res,req);
 });
 
+router.post("/addNews",(res,req)=>{
+    require("./controllers/newsController").addNews(res,req);
+});
+
+router.post("/getNews",(res,req)=>{
+    require("./controllers/newsController").getNews(res,req);
+});
+
 module.exports = router;
