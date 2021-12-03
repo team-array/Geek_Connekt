@@ -1,7 +1,7 @@
 import React from "react";
 
 import "antd/dist/antd.css";
-import { Card, Row, Col,Button } from "antd";
+import { Card, Row, Col,Button,notification } from "antd";
 import "./News.scss";
 import { CardGrid } from "./News.styles";
 import Fab from "@mui/material/Fab";
@@ -31,6 +31,12 @@ const News = () => {
   const onclose = () => {
     setVisible(false);
   };
+  const openNotificationWithIcon = (noti) => {
+    notification[noti.type]({
+      message: noti.title,
+      description: noti.message,
+    });
+  };
   React.useEffect(() => {
     const newsget = async () => {
       try {
@@ -48,8 +54,10 @@ const News = () => {
         });
         // console.log(response);
         if (response.data.success) {
+          settotalresults(0);
           setNews(response.data.news);
           setPage(page + 1);
+
         }
       } catch (err) {
         console.log(err);
@@ -81,17 +89,18 @@ const News = () => {
         setNews((prev) => {
           return [...prev, ...response.data.news];
         });
-      }
+       
+    }
     } catch (err) {
       console.log(err);
       dispatch({
         type: "SET_LOADING",
         payload: false,
       });
+
     }
   };
   const deleteNews = async (id) => {
-    console.log(id);
     try {
       dispatch({
         type: "SET_LOADING",
@@ -110,6 +119,18 @@ const News = () => {
         setGetNews((pre) => {
           return !pre;
         });
+        openNotificationWithIcon({
+          type: "success",
+          title: "Success",
+          message: "News deleted successfully",
+      });
+      }
+      else{
+        openNotificationWithIcon({
+          type: "error",
+          title: "Error",
+          message: response.data.message,
+      });
       }
     } catch (err) {
       console.log(err);
@@ -117,6 +138,11 @@ const News = () => {
         type: "SET_LOADING",
         payload: false,
       });
+      openNotificationWithIcon({
+        type: "error",
+        title: "Error",
+        message: "error in deleting news",
+    });
     }
   };
 
@@ -188,13 +214,17 @@ const News = () => {
                     <hr />
                     <p className="mb-2">{ele.description}</p>
                     <br />
-                    <Button
-                      type="default"
-                      className="mb-2"
-                      onClick={()=>deleteNews(ele._id)}
-                    >
-                      delete
-                    </Button>
+                    {
+                      (JSON.parse(localStorage.getItem("user")).username===ele.postedBy)?(
+                          <Button
+                            type="default"
+                            className="mb-2"
+                            onClick={()=>deleteNews(ele._id)}
+                          >
+                            delete
+                          </Button>
+                      ):""
+                    }
                     <figure
                       className="text-end mt-2 mb-0"
                       style={{ marginBottom: "-2rem" }}

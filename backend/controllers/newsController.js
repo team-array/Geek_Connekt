@@ -87,6 +87,7 @@ const deleteNews = ({ res }, { req }) => {
       .then(async (user) => {
         const response = await news.findOneAndDelete({
           _id: req.body.id,
+          postedBy: user.username,
         });
         if (!response) {
           return res.status(200).json({
@@ -103,7 +104,7 @@ const deleteNews = ({ res }, { req }) => {
       .catch((err) => {
         res.status(200).json({
           success: false,
-          message: "Invalid Token",
+          message: "You are not authorized to delete this news",
           error: err,
         });
       });
