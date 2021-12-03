@@ -15,6 +15,15 @@ import LoadingComponent from "../../../components/loadingComponent/LoadingCompon
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import { BaseUrl } from "../../../constants";
+import { notification } from 'antd';
+
+const openNotificationWithIcon = info => {
+  notification[info.type]({
+    message: info.title,
+    description:
+      info.description
+  });
+};
 
 const Feed = () => {
   const dispatch = useDispatch();
@@ -87,17 +96,49 @@ const Feed = () => {
           });
     });
   }, [loading, hasMore, posts]);
+  const [savedPosts, setSavedPosts] = useState({});
   const SavePost = async (postId) => {
     try {
       const response = await axios.post(BaseUrl + "/SavePost", {
         postId,
         token: localStorage.getItem("jwt"),
       });
+      if (response.data.success) {
+        setSavedPosts((prev) => {
+          return { ...prev, [postId]: prev[postId] ? !prev[postId] : true };
+        });
+        openNotificationWithIcon({
+          type: "success",
+          title: response.data.title,
+          description: response.data.message,
+        });
+      }
       console.log(response);
     } catch (err) {
       console.log(err);
     }
   };
+  React.useEffect(() => {
+    const getSavedPosts = async () => {
+      try {
+        const response = await axios.post(BaseUrl + "/getSavedPosts", {
+          token: localStorage.getItem("jwt"),
+        });
+        if (response.data.success) {
+          let saved = {};
+          response.data.savedPosts.map((postId) => {
+            saved[postId] = true;
+          });
+          setSavedPosts(saved);
+        } else {
+          setSavedPosts({});
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getSavedPosts();
+  }, []);
   return (
     <div className="feed-container">
       <Comment />
@@ -198,7 +239,20 @@ const Feed = () => {
                           {post.comments.length}
                         </div>
                         <div>
-                          <BookmarkIcon onClick={()=>SavePost(post._id)} style={{ cursor: "pointer" }} />
+                        {savedPosts[post._id] === undefined ||
+                          savedPosts[post._id] === false ? (
+                            <BookmarkBorderIcon
+                              onClick={() => SavePost(post._id)}
+                              style={{ cursor: "pointer" }}
+                            />
+                          ) : (
+                            <BookmarkIcon
+                              onClick={() => SavePost(post._id)}
+                              style={{
+                                cursor: "pointer",
+                              }}
+                            />
+                          )}
                         </div>
                       </div>
                       <div className="post-profile-icon">
@@ -297,12 +351,20 @@ const Feed = () => {
                           {post.comments.length}
                         </div>
                         <div>
-                          <BookmarkIcon
-                            onClick={()=>SavePost(post._id)}
-                            style={{
-                              cursor: "pointer",
-                            }}
-                          />
+                          {savedPosts[post._id] === undefined ||
+                          savedPosts[post._id] === false ? (
+                            <BookmarkBorderIcon
+                              onClick={() => SavePost(post._id)}
+                              style={{ cursor: "pointer" }}
+                            />
+                          ) : (
+                            <BookmarkIcon
+                              onClick={() => SavePost(post._id)}
+                              style={{
+                                cursor: "pointer",
+                              }}
+                            />
+                          )}
                         </div>
                       </div>
                       <div className="post-profile-icon">

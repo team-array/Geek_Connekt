@@ -1,6 +1,5 @@
 const verify = require("../middlewares/verifyuser").verifyuser;
 const user = require("../models/user");
-const mongoose = require("mongoose");
 
 const SavePost = ({ res }, { req }) => {
   try {
@@ -28,7 +27,7 @@ const SavePost = ({ res }, { req }) => {
                     }else{
                         return res.status(200).send({
                             success: true,
-                            message: "Post saved successfully",
+                            message: "Post as been saved successfully",
                         });
                     }
                 })
@@ -40,12 +39,14 @@ const SavePost = ({ res }, { req }) => {
                     if (err) {
                         return res.status(200).send({
                             success: false,
+                            title: "Post Saved",
                             message: "Error saving post",
                         });
                     }else{
                         return res.status(200).send({
                             success: true,
-                            message: "unsaved post successfully",
+                            title:"Post Unsaved",
+                            message: "Post as been unsaved post successfully",
                         });
                     }
                 });
@@ -78,7 +79,51 @@ const SavePost = ({ res }, { req }) => {
   }
 };
 
+const getSavedPosts = ({ res }, { req }) => {
+    try {
+        verify(req.body.token)
+            .then(async (result) => {
+                try {
+                    if (result) {
+                        const { username } = result;
+                        const savePost = await user.findOne({ username });
+                        return res.status(200).send({
+                            success: true,
+                            message: "Saved posts",
+                            savedPosts: savePost.savedPosts,
+                        });
+                    } else {
+                        return res.status(200).json({
+                            message: "Unauthorized user",
+                            success: false,
+                        });
+                    }
+                } catch (err) {
+                    console.log(err);
+                    return res.status(500).json({
+                        status: 500,
+                        message: "Internal Server Error",
+                    });
+                }
+            })
+            .catch((err) => {
+                res.status(200).json({
+                    message: "Unauthorized user",
+                    success: false,
+                });
+            });
+    } catch (err) {
+        res.status(500).json({
+            message: "Internal server error",
+            success: false,
+        });
+    }
+};
+
+
+
 
 module.exports = {
     SavePost,
+    getSavedPosts
 };

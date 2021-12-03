@@ -77,4 +77,8 @@ router.post("/SavePost",(res,req)=>{
     require("./controllers/savedPosts").SavePost(res,req);
 });
 
+router.post("/getSavedPosts",(res,req)=>{
+    require("./controllers/savedPosts").getSavedPosts(res,req);
+});
+
 module.exports = router;
