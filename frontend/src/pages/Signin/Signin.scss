@@ -1,0 +1,45 @@
+#components-form-demo-normal-login .login-form {
+    max-width: 300px;
+  }
+  #components-form-demo-normal-login .login-form-forgot {
+    float: right;
+  }
+  #components-form-demo-normal-login .ant-col-rtl .login-form-forgot {
+    float: left;
+  }
+  #components-form-demo-normal-login .login-form-button {
+    width: 100%;
+  }
+
+.Signin{
+  .Main{
+    width:60vw;
+    @media (max-width: 1500px) {
+      width:70vw;
+    }
+    @media (max-width: 1300px) {
+      width:80vw;
+    }
+    @media (max-width: 1079px) {
+      width:90vw;
+    }
+    @media (max-width: 955px) {
+      width:96vw;
+    }
+    .AppName{
+      display: inline-block;
+      font-size: 2rem;
+      font-weight: bold;
+      color: #fff;
+      font-family: Barlow;
+    }
+    .AppDesc{
+      font-size: 1rem;
+      font-weight: 400;
+      color: #ddd;
+      margin-top: -45px;
+      font-family: Barlow;
+      margin-left: 6.4rem;
+    }
+  }
+}

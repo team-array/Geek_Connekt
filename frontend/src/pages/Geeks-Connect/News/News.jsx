@@ -1,7 +1,7 @@
 import React from "react";
 
 import "antd/dist/antd.css";
-import { Card, Row, Col,Button,notification } from "antd";
+import { Card,Button,notification } from "antd";
 import "./News.scss";
 import { CardGrid } from "./News.styles";
 import Fab from "@mui/material/Fab";

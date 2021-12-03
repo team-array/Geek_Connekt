@@ -12,19 +12,16 @@ export const ImgBlock = styled.div`
 `;
 
 export const FormBox = styled.div`
-    position: absolute;
-    top: 40%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     width: 500px;
     padding: 2rem 4rem;
     background-color: #fff;
+    display: block;
     border-radius: 0.23rem;
     box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    margin-left: auto;
+    @media (max-width: 846px) {
+        margin: auto;
+    }
     @media (max-width: 501px) {
         width: 400px;
     }

@@ -37,11 +37,12 @@ const UtilityCard = (props) => {
       alert("You have already given rating");
     }
   };
+  const [hover,setHover] = React.useState(false);
   return (
     <div className="UtilityCard mt-4 mx-4">
       <Box
-        className="shadow p-3"
-        sx={{ bgcolor: "background.paper",height: "100%"     }}
+        className={`shadow p-3`}
+        sx={{ bgcolor: "background.paper",height: "100%" }}
       >
         <Box sx={{ my: 3, mx: 2 }}>
           <Grid container alignItems="center">

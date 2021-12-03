@@ -74,6 +74,7 @@ const Dashboard = () => {
 
     const logout = async () => {
         try {
+            dispatch({ type: "SET_LOADING", payload: true });
             const response = await axios({
                 url: `${BaseUrl}/logout`,
                 method: "POST",
@@ -84,9 +85,11 @@ const Dashboard = () => {
                     token: localStorage.getItem("jwt"),
                 },
             });
+            dispatch({ type: "SET_LOADING", payload: false });
             localStorage.removeItem("jwt");
-            navigate("/");
+            window.location.reload();
         } catch (err) {
+            dispatch({ type: "SET_LOADING", payload: false });
             console.log(err);
         }
     };

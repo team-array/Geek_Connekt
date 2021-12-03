@@ -6,8 +6,10 @@ import { useLazyQuery, useQuery, gql } from "@apollo/client";
 import CircularProgress from "@mui/material/CircularProgress";
 import Alert from "@mui/material/Alert";
 import { useNavigate } from "react-router-dom";
+import logo from "../../assets/logo1.png";
+import { AppName } from "../../constants";
 
-import "./Signin.css";
+import "./Signin.scss";
 
 const LOGIN_USER = gql`
     query auth($username: String!, $password: String!, $college: String!) {
@@ -95,102 +97,136 @@ const Signin = () => {
     return authCheckLoading ? (
         <div>Loading...</div>
     ) : (
-        <div className="Signin">
+        <div className="Signin" style={{
+            fontFamily: "Barlow"
+        }}>
             <ImgBlock>
                 <BgCover />
             </ImgBlock>
-            <FormBox>
-                <h2
+            <div className="Main" style={{
+                display: "flex",
+                flexDirection: "row",
+                flexWrap: "wrap",
+                justifyContent: "space-around",
+                alignItems: "center",
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+            }}
+            >
+                <div style={{
+                    width:"max-content",
+                    marginBottom: "60px"
+                }}>
+                    <img src={logo} alt="logo" style={{
+                        width: "100px",
+                        height: "100px",
+                        objectFit: "cover",
+                        objectPosition: "center",
+                        borderRadius: "100px",    
+                        marginTop: "3px"            
+                    }}/>
+                    <span className="AppName" >{AppName} 
+                    </span>
+                    <div className="AppDesc">
+                        Connects colleagues in college
+                    </div>
+                </div>
+                <FormBox
                     data-aos="fade-right"
-                    style={{ fontWeight: "bold" }}
-                    className="text-center mb-4"
                 >
-                    Sign in
-                </h2>
-                {errorMsg === "" ? null : (
-                    <Alert severity="error" className="m-2">
-                        {errorMsg}
-                    </Alert>
-                )}
-                <Form
-                    data-aos="fade-right"
-                    name="normal_login"
-                    className="login-form"
-                    initialValues={{ remember: true }}
-                    onFinish={login}
-                >
-                    <Form.Item
-                        name="username"
-                        rules={[
-                            {
-                                required: true,
-                                message: "Please input your Username!",
-                            },
-                        ]}
+                    <h2
+                        style={{ fontWeight: "bold" }}
+                        className="text-center mb-4"
                     >
-                        <Input
-                            size="large"
-                            prefix={
-                                <UserOutlined className="site-form-item-icon" />
-                            }
-                            placeholder="Username"
-                        />
-                    </Form.Item>
-                    <Form.Item
-                        name="password"
-                        rules={[
-                            {
-                                required: true,
-                                message: "Please input your Password!",
-                            },
-                        ]}
+                        Sign in
+                    </h2>
+                    {errorMsg === "" ? null : (
+                        <Alert severity="error" className="m-2">
+                            {errorMsg}
+                        </Alert>
+                    )}
+                    <Form
+                        name="normal_login"
+                        className="login-form"
+                        initialValues={{ remember: true }}
+                        onFinish={login}
                     >
-                        <Input.Password
-                            size="large"
-                            prefix={
-                                <LockOutlined className="site-form-item-icon" />
-                            }
-                            type="password"
-                            placeholder="Password"
-                        />
-                    </Form.Item>
-                    <Form.Item>
                         <Form.Item
-                            size="large"
-                            name="remember"
-                            valuePropName="checked"
-                            noStyle
+                            name="username"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Please input your Username!",
+                                },
+                            ]}
                         >
-                            <Checkbox size="large">Remember me</Checkbox>
-                        </Form.Item>
-                    </Form.Item>
-
-                    <Form.Item>
-                        {loading ? (
-                            <div
-                                style={{
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                    width: "100%",
-                                }}
-                            >
-                                <CircularProgress />
-                            </div>
-                        ) : (
-                            <Button
+                            <Input
                                 size="large"
-                                style={{ width: "100%" }}
-                                type="primary"
-                                htmlType="submit"
-                                className="login-form-button"
+                                prefix={
+                                    <UserOutlined className="site-form-item-icon" />
+                                }
+                                placeholder="Username"
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            name="password"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Please input your Password!",
+                                },
+                            ]}
+                        >
+                            <Input.Password
+                                size="large"
+                                prefix={
+                                    <LockOutlined className="site-form-item-icon" />
+                                }
+                                type="password"
+                                placeholder="Password"
+                            />
+                        </Form.Item>
+                        <Form.Item>
+                            <Form.Item
+                                size="large"
+                                name="remember"
+                                valuePropName="checked"
+                                noStyle
                             >
-                                Sign in
-                            </Button>
-                        )}
-                    </Form.Item>
-                </Form>
-            </FormBox>
+                                <Checkbox size="large">Remember me</Checkbox>
+                            </Form.Item>
+                        </Form.Item>
+
+                        <Form.Item>
+                            {loading ? (
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        width: "100%",
+                                    }}
+                                >
+                                    <CircularProgress />
+                                </div>
+                            ) : (
+                                <Button
+                                    size="large"
+                                    style={{ width: "100%" }}
+                                    type="primary"
+                                    htmlType="submit"
+                                    className="login-form-button"
+                                >
+                                    Sign in
+                                </Button>
+                            )}
+                        </Form.Item>
+                    </Form>
+                </FormBox>
+
+            </div>
         </div>
     );
 };

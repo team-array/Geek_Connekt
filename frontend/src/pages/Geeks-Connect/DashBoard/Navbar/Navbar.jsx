@@ -14,8 +14,10 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import StarIcon from '@mui/icons-material/Star';
 import HomeRepairServiceIcon from '@mui/icons-material/HomeRepairService';
 import { Input, AutoComplete } from 'antd';
-import {useDispatch,} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import ArticleIcon from '@mui/icons-material/Article';
+import logo from "../../../../assets/logo1.png";
+
 
 function getRandomInt(max, min = 0) {
     return Math.floor(Math.random() * (max - min + 1)) + min; // eslint-disable-line no-mixed-operators
@@ -214,9 +216,10 @@ export default function PrimarySearchAppBar(props) {
             variant="h6"
             noWrap
             component="div"
-            sx={{ display: { xs: 'none', sm: 'block' },fontWeight: '600',padding:'0rem 2rem',fontSize: '1.4rem' }}
+            sx={{ display: { xs: 'none', sm: 'block' },fontWeight: '600',padding:'0.1rem 1.4rem 0rem 0rem',fontSize: '1.4rem' }}
             >
-              {props.name}
+          <img src={logo} alt="logo" className="logo mb-0" style={{width:"55px",height:"55px"}} />
+              {/* {props.name} */}
           </Typography>
           <AutoComplete
             dropdownMatchSelectWidth={252}
