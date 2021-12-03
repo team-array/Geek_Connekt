@@ -2,13 +2,13 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import FavoriteIcon from '@mui/icons-material/Favorite';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import FeedIcon from '@mui/icons-material/Feed';
 import PersonIcon from '@mui/icons-material/Person';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import "./Footer.scss";
 import {useDispatch,useSelector} from "react-redux";
+import BookmarkIcon from '@mui/icons-material/Bookmark';
 
 
 export default function Footer() {
@@ -29,7 +29,7 @@ export default function Footer() {
         label="Feed" icon={<FeedIcon />} />
          <BottomNavigationAction 
         className="py-md-1"
-        label="Favorites" icon={<FavoriteIcon />} />
+        label="Saved" icon={<BookmarkIcon />} />
         <BottomNavigationAction 
         className="py-md-1"
         label="New Post" icon={<AddAPhotoIcon />} />
