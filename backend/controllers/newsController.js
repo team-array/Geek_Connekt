@@ -81,7 +81,44 @@ const getNews = ({ res}, {req }) => {
   }
 };
 
+const deleteNews = ({ res }, { req }) => {
+  try {
+    verify(req.body.token)
+      .then(async (user) => {
+        const response = await news.findOneAndDelete({
+          _id: req.body.id,
+        });
+        if (!response) {
+          return res.status(200).json({
+            success: false,
+            message: "News not found",
+          });
+        } else {
+          return res.status(200).json({
+            success: true,
+            message: "News Deleted Successfully",
+          });
+        }
+      })
+      .catch((err) => {
+        res.status(200).json({
+          success: false,
+          message: "Invalid Token",
+          error: err,
+        });
+      });
+  } catch (err) {
+    res.status(500).json({
+      message: "Internal Server Error",
+      error: err,
+    });
+  }
+};
+
+
+
 module.exports = {
   addNews,
   getNews,
+  deleteNews
 };

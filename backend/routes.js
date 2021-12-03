@@ -69,4 +69,8 @@ router.post("/getNews",(res,req)=>{
     require("./controllers/newsController").getNews(res,req);
 });
 
+router.post("/deleteNews",(res,req)=>{
+    require("./controllers/newsController").deleteNews(res,req);
+});
+
 module.exports = router;

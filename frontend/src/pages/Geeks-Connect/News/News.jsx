@@ -1,7 +1,7 @@
 import React from "react";
 
 import "antd/dist/antd.css";
-import { Card, Row, Col } from "antd";
+import { Card, Row, Col,Button } from "antd";
 import "./News.scss";
 import { CardGrid } from "./News.styles";
 import Fab from "@mui/material/Fab";
@@ -90,6 +90,36 @@ const News = () => {
       });
     }
   };
+  const deleteNews = async (id) => {
+    console.log(id);
+    try {
+      dispatch({
+        type: "SET_LOADING",
+        payload: true,
+      });
+      const response = await axios.post(BaseUrl + "/deleteNews", {
+        token: localStorage.getItem("jwt"),
+        id,
+      });
+      dispatch({
+        type: "SET_LOADING",
+        payload: false,
+      });
+      if (response.data.success) {
+        setPage(1);
+        setGetNews((pre) => {
+          return !pre;
+        });
+      }
+    } catch (err) {
+      console.log(err);
+      dispatch({
+        type: "SET_LOADING",
+        payload: false,
+      });
+    }
+  };
+
   return (
     <div className="News">
       {visible ? <NewsForm afterpost={afterpost} onclose={onclose} /> : null}
@@ -158,6 +188,13 @@ const News = () => {
                     <hr />
                     <p className="mb-2">{ele.description}</p>
                     <br />
+                    <Button
+                      type="default"
+                      className="mb-2"
+                      onClick={()=>deleteNews(ele._id)}
+                    >
+                      delete
+                    </Button>
                     <figure
                       className="text-end mt-2 mb-0"
                       style={{ marginBottom: "-2rem" }}
