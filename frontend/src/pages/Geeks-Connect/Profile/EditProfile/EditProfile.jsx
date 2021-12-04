@@ -111,7 +111,7 @@ const EditProfile = () => {
     dispatch({ type: "SET_EDIT_PROFILE", payload: false });
   };
   const updatePersonalInfo = (values) => {
-    console.log(values);
+    console.log("UpdatePersnoalInfo: ',values);
   };
   const updateSchoolInfo = (values) => {
     console.log(values);

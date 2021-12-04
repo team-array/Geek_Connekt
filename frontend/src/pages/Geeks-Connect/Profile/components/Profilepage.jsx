@@ -21,6 +21,7 @@ import axios from "axios";
 import userPostHook from "../../../../hooks/userPostHook";
 import { useDispatch, useSelector } from "react-redux";
 import { useQuery, gql } from "@apollo/client";
+import ForumOutlinedIcon from "@mui/icons-material/ForumOutlined";
 
 // import post1 from "./img/photo1.png";
 // import post2 from "./img/photo2.png";
@@ -85,6 +86,15 @@ export const Profilepage = () => {
     const [profilePic, setprofilePic] = React.useState({});
     const [postData, setpostData] = useState([]);
     const [postLikesCount, setpostLikesCount] = useState([]);
+    const show_comments = (id) => {
+        dispatch({
+            type: "SET_COMMENT_BOX",
+            payload: {
+                postId: id,
+                commentBox: true,
+            },
+        });
+    };
 
     const { loading, error, posts, hasMore } = userPostHook(
         JSON.parse(localStorage.getItem("user")).id,
@@ -623,29 +633,24 @@ export const Profilepage = () => {
                                                                     //   console.log(postData);
                                                                 }}
                                                             />
-                                                            {/* <ThumbUpIcon
-                                                                style={{
-                                                                    cursor: "pointer",
-                                                                    color:
-                                                                        postData[
-                                                                            idx
-                                                                        ] === 1
-                                                                            ? "blue"
-                                                                            : "",
-                                                                }}
-                                                                
-                                                            /> */}
                                                             {
                                                                 postLikesCount[
                                                                     idx
                                                                 ]
                                                             }
                                                         </div>
-                                                        <div>
-                                                            <img
-                                                                src={comment}
-                                                                alt=""
-                                                            />
+                                                        <div
+                                                            onClick={() => {
+                                                                show_comments(
+                                                                    post._id
+                                                                );
+                                                            }}
+                                                            style={{
+                                                                cursor: "pointer",
+                                                            }}
+                                                        >
+                                                            {/* <img src={comment} alt="" /> */}
+                                                            <ForumOutlinedIcon />
                                                             {
                                                                 post.comments
                                                                     .length
@@ -832,11 +837,18 @@ export const Profilepage = () => {
                                                                 ]
                                                             }
                                                         </div>
-                                                        <div>
-                                                            <img
-                                                                src={comment}
-                                                                alt=""
-                                                            />
+                                                        <div
+                                                            onClick={() => {
+                                                                show_comments(
+                                                                    post._id
+                                                                );
+                                                            }}
+                                                            style={{
+                                                                cursor: "pointer",
+                                                            }}
+                                                        >
+                                                            {/* <img src={comment} alt="" /> */}
+                                                            <ForumOutlinedIcon />
                                                             {
                                                                 post.comments
                                                                     .length
