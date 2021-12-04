@@ -138,6 +138,12 @@ export const Profilepage = () => {
     React.useEffect(() => {
         if (!userDataLoading) {
             console.log(userData);
+            dispatch({
+                type: "SET_USER_DATA",
+                payload: {
+                    userData: userData.user,
+                },
+            });
         }
     }, [userDataLoading, userData]);
 

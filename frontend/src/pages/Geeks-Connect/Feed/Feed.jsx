@@ -258,82 +258,65 @@ const Feed = () => {
                                                                       ]
                                                                   );
 
-                                                                  return [
-                                                                      ...postData,
-                                                                  ];
-                                                              }
-                                                          );
-                                                          setpostLikesCount(
-                                                              (
-                                                                  postLikesCount
-                                                              ) => {
-                                                                  return [
-                                                                      ...postLikesCount,
-                                                                  ];
-                                                              }
-                                                          );
-                                                          //   console.log(postData);
-                                                      }}
-                                                  />
-                                                  {postLikesCount[idx]}
-                                              </div>
-                                              <div
-                                                  onClick={() => {
-                                                      show_comments(post._id);
-                                                  }}
-                                                  style={{ cursor: "pointer" }}
-                                              >
-                                                  {/* <img src={comment} alt="" /> */}
-                                                  <ForumOutlinedIcon />
-                                                  {post.comments.length}
-                                              </div>
-                                              <div>
-                                                  {savedPosts[post._id] ===
-                                                      undefined ||
-                                                  savedPosts[post._id] ===
-                                                      false ? (
-                                                      <BookmarkBorderIcon
-                                                          onClick={() =>
-                                                              SavePost(post._id)
-                                                          }
-                                                          style={{
-                                                              cursor: "pointer",
-                                                          }}
-                                                      />
-                                                  ) : (
-                                                      <BookmarkIcon
-                                                          onClick={() =>
-                                                              SavePost(post._id)
-                                                          }
-                                                          style={{
-                                                              cursor: "pointer",
-                                                          }}
-                                                      />
-                                                  )}
-                                              </div>
-                                          </div>
-                                          <div className="post-profile-icon">
-                                              <img src={pp} alt="" />
-                                          </div>
-                                      </div>
-                                  </div>
-                              );
-                          } else {
-                              return (
-                                  <div className="post-container mb-5 card mx-auto shadow-sm">
-                                      <div className="post-row">
-                                          <div className="user-profile">
-                                              <img
-                                                  src={post.user.profilePic}
-                                                  alt="User profile Pic"
-                                              />
-                                              <div>
-                                                  <p>{post.user.username}</p>
-                                                  <span>{post.createdAt}</span>
-                                              </div>
-                                          </div>
-                                          {/* <a href="#"></a> */}
-                                      </div>
+                                return [...postData];
+                              });
+                              setpostLikesCount((postLikesCount) => {
+                                return [...postLikesCount];
+                              });
+                              //   console.log(postData);
+                            }}
+                          />
+                          {postLikesCount[idx]}
+                        </div>
+                        <div
+                          onClick={() => {
+                            show_comments(post._id);
+                          }}
+                          style={{ cursor: "pointer" }}
+                        >
+                          {/* <img src={comment} alt="" /> */}
+                          <ForumOutlinedIcon style={{height:"auto"}}/>
+                          {post.comments.length}
+                        </div>
+                        <div>
+                        {savedPosts[post._id] === undefined ||
+                          savedPosts[post._id] === false ? (
+                            <BookmarkBorderIcon
+                              onClick={() => SavePost(post._id)}
+                              style={{ cursor: "pointer" }}
+                            />
+                          ) : (
+                            <BookmarkIcon
+                              onClick={() => SavePost(post._id)}
+                              style={{
+                                cursor: "pointer",
+                              }}
+                            />
+                          )}
+                        </div>
+                      </div>
+                      <div className="post-profile-icon">
+                        <img src={pp} alt="" />
+                      </div>
+                    </div>
+                  </div>
+                );
+              } else {
+                return (
+                  <div className="post-container mb-5 card mx-auto shadow-sm">
+                    <div className="post-row">
+                      <div className="user-profile">
+                        <img
+                          src={post.user.profilePic}
+                          alt="User profile Pic"
+                        />
+                        <div>
+                          <p>{post.user.username}</p>
+                          <span>{post.createdAt}</span>
+                        </div>
+                      </div>
+                      {/* <a href="#"></a> */}
+                    </div>
 
                                       <p className="post-text">
                                           {post.caption}

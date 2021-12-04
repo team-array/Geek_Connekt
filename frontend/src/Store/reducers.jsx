@@ -25,6 +25,15 @@ export const EditProfile = (state = false, action) => {
     }
 };
 
+export const UserData = (state = {}, action) => {
+    switch (action.type) {
+        case "SET_USER_DATA":
+            return action.payload;
+        default:
+            return state;
+    }
+};
+
 export const AddUtility = (state = false, action) => {
     switch (action.type) {
         case "SET_ADD_UTILITY":

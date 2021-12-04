@@ -1,5 +1,6 @@
 const verify = require("../middlewares/verifyuser").verifyuser;
 const user = require("../models/user");
+const async = require("async"); 
 
 const SavePost = ({ res }, { req }) => {
   try {
@@ -129,26 +130,48 @@ const getMySavedPosts = ({ res }, { req }) => {
                     if (result) {
                         const { username } = result;
                         // get posts from users db which was refrenced by the user
-
                         const posts = await user.findOne({ username }).populate('savedPosts');
-                        return res.status(200).send({
-                            success: true,
-                            message: "Saved posts",
-                            savedPosts: posts.savedPosts,
+                        let saved = {};
+                        Promise.all(posts.savedPosts.map(async (post) => {
+                            const postData = await user.findOne({ _id: post.user }).select({'username':1,'profilePic':1});
+                            saved[post._id] = {
+                                username:postData.username,
+                                profilePic:postData.profilePic,
+                            }
+                        })).then(() => {
+                            console.log(saved);
+                            let savedPostsWithUser = [];
+                            posts.savedPosts.forEach((post) => {
+                                savedPostsWithUser.push({
+                                    postId: post._id,
+                                    caption: post.caption,
+                                    imageUrl: post.imageUrl,
+                                    comments: post.comments,
+                                    likes: post.likes,
+                                    createdAt: post.createdAt,
+                                    username: saved[post._id].username,
+                                    profilePic: saved[post._id].profilePic,
+                                });
+                            });
+                            return res.status(200).send({
+                                success: true,
+                                message: "Saved posts",
+                                savedPosts: savedPostsWithUser,
+                            });
                         });
                     } else {
                         return res.status(200).json({
                             message: "Unauthorized user",
                             success: false,
                         });
-                    }   
+                    }
                 } catch (err) {
                     console.log(err);
                     return res.status(500).json({
+
                         status: 500,
                         message: "Internal Server Error",
                     });
-
                 }
             })
             .catch((err) => {
@@ -164,7 +187,6 @@ const getMySavedPosts = ({ res }, { req }) => {
         });
     }
 };
-
 
                     
 
