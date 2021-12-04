@@ -72,14 +72,12 @@ const ProfessionalTools = () => {
         }
         {
           (JSON.parse(localStorage.getItem("user")).role === "Student") ? "":
-          <UtilityAddCard className="shadow my-4 mx-4">
+          <UtilityAddCard className="shadow my-4 mx-4 py-5">
           <h4
             className="text-center text-uppercase"
             style={{
-              position: "relative",
-              top: "40px",
-              left: "50%",
-              transform: "translateX(-50%)",
+              // left: "50%",
+              // transform: "translateX(-50%)",
               // backgroundColor: "#666",
             }}
           >
@@ -88,11 +86,9 @@ const ProfessionalTools = () => {
           <Fab
             color="primary"
             aria-label="add"
+
             style={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
+              display: "block",
               // backgroundColor: "#666",
             }}
             onClick={setUtility}

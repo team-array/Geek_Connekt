@@ -4,8 +4,33 @@ import like from '../Profile/components/img/like-blue.png';
 import comment from '../Profile/components/img/comments.png';
 import share from '../Profile/components/img/share.png';
 import feed from '../Profile/components/img/feed-image-1.png'
+import axios from "axios";
+import {BaseUrl} from "../../../constants";
+import {useDispatch} from "react-redux";
 
 const Favorites = () => {
+  const dispatch = useDispatch();
+  const [savedPosts, setSavedPosts] = React.useState([]);
+    React.useEffect(()=>{
+      let getMySavedPosts = async () => {
+        try{
+          dispatch({type: 'SET_LOADING',payload: true});
+          let response = await axios.post(BaseUrl+"/getMySavedPosts",{
+            token: localStorage.getItem("jwt")
+          });
+          dispatch({type: 'SET_LOADING',payload: false});
+          if(response.data.success){
+            setSavedPosts(response.data.savedPosts);
+          }
+        }
+        catch(err){
+          dispatch({type: 'SET_LOADING',payload: false});
+          console.log(err);
+        }
+      }
+      getMySavedPosts();
+    },[]);
+    console.log(savedPosts)
     return (
         <div className="feed-container">
 

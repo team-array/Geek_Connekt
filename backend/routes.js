@@ -61,4 +61,28 @@ router.post("/deleteAchievement",(res,req)=>{
     require("./controllers/Achievements").deleteAchievement(res,req);
 });
 
+router.post("/addNews",(res,req)=>{
+    require("./controllers/newsController").addNews(res,req);
+});
+
+router.post("/getNews",(res,req)=>{
+    require("./controllers/newsController").getNews(res,req);
+});
+
+router.post("/deleteNews",(res,req)=>{
+    require("./controllers/newsController").deleteNews(res,req);
+});
+
+router.post("/SavePost",(res,req)=>{
+    require("./controllers/savedPosts").SavePost(res,req);
+});
+
+router.post("/getSavedPosts",(res,req)=>{
+    require("./controllers/savedPosts").getSavedPosts(res,req);
+});
+
+router.post("/getMySavedPosts",(res,req)=>{
+    require("./controllers/savedPosts").getMySavedPosts(res,req);
+});
+
 module.exports = router;

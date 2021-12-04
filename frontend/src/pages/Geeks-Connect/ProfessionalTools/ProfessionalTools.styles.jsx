@@ -27,4 +27,9 @@ export const Utility = styled.div`
 
 export const UtilityAddCard = styled.div`
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  
 `;

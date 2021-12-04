@@ -93,6 +93,12 @@ const UserSchema = new Schema({
             type:String,
         }
     ],
+    savedPosts: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: "Post",
+        }
+    ],
 });
 
 UserSchema.methods.generateAuthToken = async function () {

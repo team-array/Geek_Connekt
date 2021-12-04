@@ -1,0 +1,16 @@
+.News {
+    .ant-card-body {
+      padding-bottom: 10px;
+  }
+  #feature{
+      @media (min-width: 768px) {
+          padding:0 50px!important;
+      }
+      @media screen and (max-width: 558px) {
+          padding:0 20px!important;          
+      }
+      @media screen and (max-width: 455px) {
+        padding:0 10px!important;          
+    }
+  }
+}
