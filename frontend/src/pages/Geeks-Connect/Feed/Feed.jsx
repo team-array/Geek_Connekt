@@ -235,7 +235,7 @@ const Feed = () => {
                           style={{ cursor: "pointer" }}
                         >
                           {/* <img src={comment} alt="" /> */}
-                          <ForumOutlinedIcon />
+                          <ForumOutlinedIcon style={{height:"auto"}}/>
                           {post.comments.length}
                         </div>
                         <div>
