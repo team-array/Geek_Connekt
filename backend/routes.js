@@ -81,4 +81,8 @@ router.post("/getSavedPosts",(res,req)=>{
     require("./controllers/savedPosts").getSavedPosts(res,req);
 });
 
+router.post("/getMySavedPosts",(res,req)=>{
+    require("./controllers/savedPosts").getMySavedPosts(res,req);
+});
+
 module.exports = router;

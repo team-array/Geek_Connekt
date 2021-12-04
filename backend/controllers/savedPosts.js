@@ -120,10 +120,58 @@ const getSavedPosts = ({ res }, { req }) => {
     }
 };
 
+const getMySavedPosts = ({ res }, { req }) => {
+    try {
+        console.log(req.body);
+        verify(req.body.token)
+            .then(async (result) => {
+                try {
+                    if (result) {
+                        const { username } = result;
+                        // get posts from users db which was refrenced by the user
+
+                        const posts = await user.findOne({ username }).populate('savedPosts');
+                        return res.status(200).send({
+                            success: true,
+                            message: "Saved posts",
+                            savedPosts: posts.savedPosts,
+                        });
+                    } else {
+                        return res.status(200).json({
+                            message: "Unauthorized user",
+                            success: false,
+                        });
+                    }   
+                } catch (err) {
+                    console.log(err);
+                    return res.status(500).json({
+                        status: 500,
+                        message: "Internal Server Error",
+                    });
+
+                }
+            })
+            .catch((err) => {
+                res.status(200).json({
+                    message: "Unauthorized user",
+                    success: false,
+                });
+            });
+    } catch (err) {
+        res.status(500).json({
+            message: "Internal server error",
+            success: false,
+        });
+    }
+};
+
+
+                    
 
 
 
 module.exports = {
     SavePost,
-    getSavedPosts
+    getSavedPosts,
+    getMySavedPosts
 };
