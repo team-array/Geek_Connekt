@@ -84,6 +84,7 @@ exports.uploadPost = async (req, res, next) => {
         user: user._id,
         caption: caption,
         imageUrl: uploadCloudinary.secure_url,
+        college: "CMRCET"
       });
       await post.save();
       user.posts.push(post._id);
