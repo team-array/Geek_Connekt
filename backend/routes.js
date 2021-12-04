@@ -87,4 +87,8 @@ router.post("/getMySavedPosts",(res,req)=>{
     require("./controllers/savedPosts").getMySavedPosts(res,req);
 });
 
+router.post("/getStarOfTheMonth",(res,req)=>{
+    require("./controllers/starofthemonth").getStarOfTheMonth(res,req);
+});
+
 module.exports = router;

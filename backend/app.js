@@ -20,6 +20,8 @@ app.use(fileUpload({ useTempFiles: true, tempFileDir: "/tmp/" }));
 
 require("./database/connect");
 
+require("./redis/redis").connect();
+
 const port = process.env.PORT || 8000;
 const server = app.listen(port, (e) => {
     if (e) {
