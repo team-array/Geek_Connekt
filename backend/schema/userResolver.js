@@ -6,11 +6,11 @@ const userResolver = async (args) => {
     const user = await User.findOne({
         username: args.username,
         college: args.college,
-        password:args.password,
+        password: args.password,
     });
     // console.log(user);
     if (user) {
-        const passMatch = args.password==user.password;
+        const passMatch = args.password == user.password;
         if (passMatch) {
             // const token = await user.authTokenGeneration();
             // console.log("User LoggedIn with Token: ", token);
@@ -86,8 +86,9 @@ const userAuthCheck = async (args) => {
 
 const editUserResolver = async (args) => {
     try {
-        const { username } = jwt.verify(args.token, process.env.JWT_SCRECT);
+        const { username } = jwt.verify(args.token, process.env.JWT_SECRET);
         const user = await User.findOne({ username: username });
+        console.log("editUserResolver: ", args);
         if (user) {
             // console.log("editUserResolver: ", username);
             const dupUser = await User.findOne({ username: args.username });
@@ -103,7 +104,7 @@ const editUserResolver = async (args) => {
                         role: user.role.toString(),
                         rollNumber: user.rollNumber.toString(),
                     },
-                    process.env.JWT_SCRECT
+                    process.env.JWT_SECRET
                 );
                 user.tokens = [];
                 user.tokens.push({ token: token.toString() });
@@ -114,6 +115,7 @@ const editUserResolver = async (args) => {
                     token: args.token,
                     result: "Username Already taken",
                 };
+                u;
             }
         }
         return {
