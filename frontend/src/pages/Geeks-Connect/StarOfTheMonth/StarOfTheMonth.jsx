@@ -57,11 +57,12 @@ const StarOfTheMonth = () => {
             mostSaved={...response.data.star.mostSaved.mostSaved.id,
               createdAt: m2.format("MMMM Do YYYY, h:mm a"),
               month:m3.format("MMMM YYYY"),
+              saves: response.data.star.mostSaved.mostSaved.saves,
             }
           }
           setStarData([{
-            mostLiked:{...mostLiked,_id:undefined},
-            mostSaved:{...mostSaved,_id:undefined}
+            mostLiked,
+            mostSaved
         }]);
         }
       };

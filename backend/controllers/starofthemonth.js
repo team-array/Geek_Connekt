@@ -2,11 +2,12 @@ const posts = require("../models/post");
 const user = require("../models/user");
 const verify = require("../middlewares/verifyuser");
 const async = require("async");
+const {client} = require("../redis/redis");
 
 const mostLikedPost = async () => {
   try {
     const date = new Date();
-    let monthNumber = date.getMonth() + 1;
+    let monthNumber = date.getMonth();
     let yearNumber = date.getFullYear();
     let returnValue = {};
     let response = await posts.find({
@@ -53,7 +54,7 @@ const mostLikedPost = async () => {
 let mostSavedPost = async () => {
   try {
     const date = new Date();
-    let monthNumber = date.getMonth() + 1;
+    let monthNumber = date.getMonth();
     let yearNumber = date.getFullYear();
     let data = await user.find({}).populate("savedPosts");
     if (data) {
@@ -110,32 +111,47 @@ let mostSavedPost = async () => {
 
 const getStarOfTheMonth = async ({ res }, { req }) => {
   try {
-    let mostLiked = await mostLikedPost();
-    console.log(mostLiked);
-    let mostSaved=await mostSavedPost();
-    let star = {
-        mostLiked: mostLiked,
-        mostSaved: mostSaved
-    };
-    console.log(star);
-    if(star.mostLiked.success && star.mostSaved.success){
-        return res.status(200).json({
-            success: true,
-            star
-        })
-    }else{
-        return res.status(400).json({
-            success: false,
-            message: "Error fetching data"
-        })
-    }
-  } catch (err) {
-    console.log(err);
-    return res.status(500).json({
-      success: false,
-      message: "Internal server error",
+    client.get("starofthemonth", async (err, reply) => {
+        let month = new Date().getMonth()-1;
+        if (reply && JSON.parse(reply).month === month) {
+            console.log("redis");
+            res.status(200).json({
+                success: true,
+                star: JSON.parse(reply).star,
+            });
+        } else {
+            console.log("db");
+            let mostLiked = await mostLikedPost();
+            let mostSaved=await mostSavedPost();
+            let star = {
+                mostLiked: mostLiked,
+                mostSaved: mostSaved
+            };
+            if(star.mostLiked.success && star.mostSaved.success){
+                client.set("starofthemonth", JSON.stringify({
+                    success: true,
+                    star,
+                    month
+                }));
+                return res.status(200).json({
+                    success: true,
+                    star,
+                })
+            }else{
+                return res.status(200).json({
+                    success: false,
+                    message: "Error fetching data"
+                })
+            }
+        }
     });
-  }
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error",
+        });
+    }
 };
 
 module.exports = {
