@@ -87,7 +87,7 @@ const Favorites = () => {
         {savedPosts.map((post, index) => {
           let date = post.createdAt.split("T")[0];
           let time = post.createdAt.split("T")[1].split(".")[0];
-          let month = parseInt(date.split("-")[1]);
+          let month = parseInt(date.split("-")[1])-1;
           let day = parseInt(date.split("-")[2]);
           let year = parseInt(date.split("-")[0]);
           let hour = parseInt(time.split(":")[0]);
