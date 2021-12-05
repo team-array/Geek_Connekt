@@ -49,7 +49,8 @@ const UserType = new GraphQLObjectType({
         birthDate: { type: GraphQLString },
         secondarySchool: { type: GraphQLString },
         primarySchool: { type: GraphQLString },
-        newNotifications: { type: GraphQLInt },
+        website: { type: GraphQLString },
+        fullName: { type: GraphQLString },
     }),
 });
 
@@ -157,6 +158,7 @@ const Mutation = new graphql.GraphQLObjectType({
                 username: { type: graphql.GraphQLString },
                 email: { type: graphql.GraphQLString },
                 birthDate: { type: graphql.GraphQLString },
+                website: { type: graphql.GraphQLString },
             },
             resolve(parent, args) {
                 return editUserResolver(args);

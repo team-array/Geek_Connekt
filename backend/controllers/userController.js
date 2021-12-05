@@ -6,12 +6,13 @@ const verify = require("../middlewares/verifyuser").verifyuser;
 
 exports.editProfilePic = async (req, res, next) => {
     try {
+        console.log(req.files);
         const token = req.body.token;
         const { username } = jwt.verify(token, process.env.JWT_SECRET);
         const user = await User.findOne({ username: username });
         if (user) {
             const uploadCloudinary = await cloudinary.uploader.upload(
-                req.files.file.tempFilePath,
+                req.files.image.tempFilePath,
                 {
                     upload_preset: "khq1jtjg",
                 }
@@ -37,21 +38,22 @@ exports.editProfilePic = async (req, res, next) => {
 
 exports.editBackgroundPic = async (req, res, next) => {
     try {
-        const uploadCloudinary = await cloudinary.uploader.upload(
-            req.files.file.tempFilePath,
-            {
-                upload_preset: "khq1jtjg",
-            }
-        );
-        console.log(uploadCloudinary);
+        console.log(req.files);
         const token = req.body.token;
         const { username } = jwt.verify(token, process.env.JWT_SECRET);
         const user = await User.findOne({ username: username });
         if (user) {
+            const uploadCloudinary = await cloudinary.uploader.upload(
+                req.files.image.tempFilePath,
+                {
+                    upload_preset: "khq1jtjg",
+                }
+            );
+            console.log(uploadCloudinary);
             user.backgroundPic = uploadCloudinary.secure_url;
             await user.save();
             res.status(200).json({
-                message: "Picture Successfully Updated updated successfully",
+                message: "Background pic updated successfully",
             });
         } else {
             res.status(404).json({
@@ -65,6 +67,7 @@ exports.editBackgroundPic = async (req, res, next) => {
         });
     }
 };
+
 
 exports.uploadPost = async (req, res, next) => {
     try {
@@ -196,3 +199,63 @@ exports.searchUsers = async (req, res, next) => {
         });
     }
 };
+
+
+exports.updateSchoolInfo = async (req,res) => {
+    try {
+        const { username } = jwt.verify(req.body.token, process.env.JWT_SECRET);
+        const user = await User.findOne({ username: username });
+        if (user) {
+            if (req.body.primarySchool!==undefined) {
+                user.primarySchool = req.body.primarySchool;
+            }
+            if (req.body.secondarySchool!==undefined) {
+                user.secondarySchool = req.body.secondarySchool;
+            }
+            if (req.body.bio!==undefined) {
+                user.bio = req.body.bio;
+            }
+            user.save();
+            res.status(200).json({
+                message: "School info updated successfully",
+            });
+        } else {
+            res.status(404).json({
+                message: "User not found",
+            });
+        }
+    }catch(err){
+        console.log(err);
+        res.status(500).json({
+            message: "Internal Server Error",
+        });
+    }
+}
+
+exports.updateLocationInfo = async (req,res) => {
+    try {
+        const { username } = jwt.verify(req.body.token, process.env.JWT_SECRET);
+        const user = await User.findOne({ username: username });
+        if (user) {
+            if (req.body.location!==undefined) {
+                user.location = req.body.location;
+            }
+            if (req.body.hometown!==undefined) {
+                user.hometown = req.body.hometown;
+            }
+            user.save();
+            res.status(200).json({
+                message: "Location info updated successfully",
+            });
+        } else {
+            res.status(404).json({
+                message: "User not found",
+            });
+        }
+    }catch(err){
+        console.log(err);
+        res.status(500).json({
+            message: "Internal Server Error",
+        });
+    }
+}

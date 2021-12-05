@@ -151,7 +151,9 @@ exports.getComments = async (req, res, next) => {
         const postId = req.query.postId;
         const post = await Post.findById(postId)
             .populate("comments.user", "username")
-            .populate("comments.user", "profilePic");
+            .populate("comments.user", "profilePic")
+            .populate("user", "username")
+            .populate("user", "profilePic");
         if (post) {
             res.status(200).json({
                 message: "Comments fetched successfully",

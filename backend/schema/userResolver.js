@@ -161,41 +161,35 @@ const userAuthCheck = async (args) => {
 
 const editUserResolver = async (args) => {
     try {
+        console.log(args);
         const { username } = jwt.verify(args.token, process.env.JWT_SECRET);
-        const user = await User.findOne({ username: username });
-        // console.log("editUserResolver: ", args);
-        if (user) {
-            // console.log("editUserResolver: ", username);
-            const dupUser = await User.findOne({ username: args.username });
-            if (user.username === args.username || dupUser === null) {
-                // console.log(dupUser);
-                // console.log("User not found");
-                user.username = args.username;
-                user.email = args.email;
-                const token = jwt.sign(
-                    {
-                        username: user.username.toString(),
-                        email: user.email.toString(),
-                        role: user.role.toString(),
-                        rollNumber: user.rollNumber.toString(),
-                    },
-                    process.env.JWT_SECRET
-                );
-                user.tokens = [];
-                user.tokens.push({ token: token.toString() });
-                await user.save();
-                return { token: token, result: "Success" };
-            } else {
-                return {
-                    token: args.token,
-                    result: "Username Already taken",
-                };
-                u;
-            }
+        console.log("editUserResolver: ", args);
+        let set = {};
+        if (args.username !== "") {
+            set.fullName = args.username;
         }
+        if (args.email !== "") {
+            set.email = args.email;
+        }
+        if (args.website !== "") {
+            set.website = args.website;
+        }
+        if (args.birthDate !== "") {
+            set.birthDate = args.birthDate;
+        }
+        // console.log("editUserResolver: ", username);
+        const result = await User.findOneAndUpdate(
+            {
+                username,
+            },
+            {
+                ...set,
+            }
+        );
+        console.log("result: ", result);
         return {
-            token: "",
-            result: "User doesn't Exist!",
+            token: args.token,
+            result: "Updated Successfully!",
         };
     } catch (error) {
         console.log(error);

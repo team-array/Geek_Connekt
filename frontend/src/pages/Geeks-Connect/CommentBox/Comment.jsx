@@ -58,8 +58,9 @@ const CommentBox = () => {
     const [msg, setmsg] = React.useState("");
     const [submitting, setSubmitting] = React.useState(false);
     const dispatch = useDispatch();
-
+    const [postedUser, setPostedUser] = useState({});
     const [commentsLoading, setCommentsLoading] = useState(false);
+    const [postedDate, setPostedDate] = useState("");
     const Comment_Box = useSelector((state) => state.Comment_Box);
     const {
         loading: userDataLoading,
@@ -176,7 +177,7 @@ const CommentBox = () => {
                     postId: Comment_Box.postId,
                 },
             });
-            console.log(result.data);
+            console.log("GEtcomments: ", result.data);
             result.data.post.comments.map((comment) => {
                 newComments.unshift({
                     author: comment.name,
@@ -185,6 +186,8 @@ const CommentBox = () => {
                     content: <p>{comment.comment}</p>,
                 });
             });
+            setPostedUser(result.data.post.user);
+            setPostedDate(result.data.post.createdAt);
             setComments(newComments);
             console.log(comments);
             setCommentsLoading(false);
@@ -200,34 +203,17 @@ const CommentBox = () => {
                     zIndex: "9999999",
                     backgroundColor: "rgba(0,0,0,.85)",
                 }}
+                onClick={() =>
+                    dispatch({
+                        type: "SET_COMMENT_BOX",
+                        payload: {
+                            postId: "",
+                            commentBox: false,
+                        },
+                    })
+                }
                 open={Comment_Box.commentBox}
             >
-                <IconButton
-                    aria-label="delete"
-                    sx={{
-                        position: "absolute",
-                        top: "15px",
-                        right: "15px",
-                        zIndex: "9999999",
-                    }}
-                    onClick={() => {
-                        dispatch({
-                            type: "SET_COMMENT_BOX",
-                            payload: {
-                                postId: "",
-                                commentBox: false,
-                            },
-                        });
-                    }}
-                >
-                    <CloseIcon
-                        style={{
-                            color: "#fff",
-                            zIndex: "9999999",
-                            fontSize: "35px",
-                        }}
-                    />
-                </IconButton>
                 <CommentBoxContainer>
                     <div
                         className="user-profile"
@@ -239,22 +225,47 @@ const CommentBox = () => {
                             width: "100%",
                         }}
                     >
-                        <img src={pp} alt="" />
+                        <img src={postedUser.profilePic} alt="" />
                         <div>
-                            <p>{Comment_Box.postId}</p>
-                            <span>June 24 2021, 13:40pm</span>
+                            <p>Comments</p>
+                            <span>{postedDate}</span>
                         </div>
+                        <IconButton
+                            aria-label="delete"
+                            sx={{
+                                marginLeft: "auto",
+                            }}
+                            onClick={() => {
+                                dispatch({
+                                    type: "SET_COMMENT_BOX",
+                                    payload: {
+                                        postId: "",
+                                        commentBox: false,
+                                    },
+                                });
+                            }}
+                        >
+                            <CloseIcon
+                                style={{
+                                    color: "#000",
+                                    zIndex: "9999999",
+                                    fontSize: "35px",
+                                }}
+                            />
+                        </IconButton>
                     </div>
                     {commentsLoading ? (
                         <LoadingComponent />
                     ) : (
                         comments.length > 0 && (
                             <div
-                                style={
-                                    {
-                                        // overflow: "scroll",
-                                    }
-                                }
+                                style={{
+                                    // overflow: "scroll",
+                                    width: "100%",
+                                    display: "flex",
+                                    alignItems: "flex-start",
+                                    flexDirection: "column",
+                                }}
                             >
                                 <CommentList comments={comments} />
                             </div>
