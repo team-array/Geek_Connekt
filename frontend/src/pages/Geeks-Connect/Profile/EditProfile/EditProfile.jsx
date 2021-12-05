@@ -452,10 +452,10 @@ const EditProfile = () => {
                 shape={"round"}
                 rotate={true}
                 maxZoom={5}
-                cropSize={{
-                  width: 400,
-                  height: 400,
-                }}
+                // cropSize={{
+                //   width: 600,
+                //   height: 600,
+                // }}
                 modalWidth={700}
                 modalTitle="Crop Image"
                 // onModalOk={uploadProfilePic}

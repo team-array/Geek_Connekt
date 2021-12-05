@@ -345,7 +345,7 @@ export const Profilepage = () => {
                 {/* 1 */}
                 <div className="ProfileBlog">
                     <div className="profile-info">
-                        <div className="info-col">
+                        <div className="info-col" >
                             <div className="profile-intro">
                                 <h3>Intro</h3>
                                 <p className="intro-text">

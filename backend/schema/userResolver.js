@@ -24,6 +24,9 @@ const getUserData = async (args) => {
                 profilePic: user.profilePic,
                 backgroundPic: user.backgroundPic,
                 newNotifications: user.newNotifications,
+                website: user.website,
+                birthDate: user.birthDate,
+                fullName: user.fullName,
             };
         }
         return {
@@ -62,6 +65,9 @@ const getOtherUserData = async (args) => {
                 profilePic: user.profilePic,
                 backgroundPic: user.backgroundPic,
                 newNotifications: user.newNotifications,
+                website: user.website,
+                birthDate: user.birthDate,
+                fullName: user.fullName,
             };
         }
         return {
