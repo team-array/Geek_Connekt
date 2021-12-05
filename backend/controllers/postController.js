@@ -51,14 +51,14 @@ exports.getAllPosts = async (req, res, next) => {
         if (user) {
             const posts = await Post.find({ college: user.college })
                 .populate("user")
-                .skip((req.query.pageNumber - 1) * 3)
+                .skip((req.query.pageNumber - 1) * 10)
                 .sort({ createdAt: -1 })
-                .limit(3);
+                .limit(10);
             Post.count().then((count) => {
                 res.status(200).json({
                     message: "Posts fetched successfully",
                     posts: posts,
-                    remPosts: count - req.query.pageNumber * 3,
+                    remPosts: count - req.query.pageNumber * 10,
                 });
             });
         } else {

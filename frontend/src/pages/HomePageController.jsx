@@ -29,14 +29,14 @@ const HomePageController = () => {
         setAuthLoading(false);
     }, [userAuthChecked]);
     useEffect(() => {
-        console.log(data);
+        // console.log(data);
         if (!loading && !error && data) {
             if (data.authCheck.result === "Success") {
-                console.log("success");
+                // console.log("success");
                 localStorage.setItem("user", JSON.stringify(data.authCheck));
                 setuserAuthChecked(true);
                 // setAuthLoading(false);
-                console.log("done");
+                // console.log("done");
             } else if (data.authCheck.result === "Error") {
             } else {
                 localStorage.removeItem("jwt");

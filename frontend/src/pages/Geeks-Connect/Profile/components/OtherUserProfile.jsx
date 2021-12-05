@@ -59,7 +59,7 @@ const USER_DATA = gql`
     }
 `;
 
-export const Profilepage = () => {
+export const OtherUserProfile = (props) => {
     const dispatch = useDispatch();
     const {
         loading: userDataLoading,
@@ -67,7 +67,7 @@ export const Profilepage = () => {
         error: userDataError,
     } = useQuery(USER_DATA, {
         variables: {
-            id: JSON.parse(localStorage.getItem("user")).id,
+            id: window.location.href.split("/")[5],
         },
     });
 
@@ -97,7 +97,7 @@ export const Profilepage = () => {
     };
 
     const { loading, error, posts, hasMore } = userPostHook(
-        JSON.parse(localStorage.getItem("user")).id,
+        window.location.href.split("/")[5],
         pageNumber
     );
 
@@ -184,6 +184,10 @@ export const Profilepage = () => {
     useEffect(() => {
         console.log("postData: ", postData);
     }, [postData]);
+
+    useEffect(() => {
+        console.log(window.location.href.split("/")[5]);
+    }, []);
 
     const lastPostReference = useRef();
 

@@ -63,7 +63,7 @@ const authCheckType = new GraphQLObjectType({
         result: { type: GraphQLString },
         id: { type: GraphQLString },
         username: { type: GraphQLString },
-        role: { type: GraphQLString }
+        role: { type: GraphQLString },
     }),
 });
 
