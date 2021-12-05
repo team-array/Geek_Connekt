@@ -30,6 +30,7 @@ export default function SearchHook(searchTerm, pagenumber) {
             params: {
                 searchTerm,
                 pageNumber,
+                token: localStorage.getItem("jwt"),
             },
             cancelToken: new axios.CancelToken((c) => (cancel = c)),
         })

@@ -165,14 +165,20 @@ exports.logout = ({ res }, { req }) => {
 
 exports.searchUsers = async (req, res, next) => {
     try {
-        if (req.body.searchTerm === "") {
-            res.status(200).json({
-                message: "Please enter a search term",
-            });
-        }
+        const { email } = jwt.verify(req.query.token, process.env.JWT_SECRET);
+        // if (req.query.searchTerm === "") {
+        //     res.status(200).json({
+        //         message: "Please enter a search term",
+        //     });
+        // }
         const searchUser = req.query.searchTerm;
         // console.log(searchUser);
-        User.find({ username: { $regex: searchUser, $options: "i" } })
+        User.find({
+            $and: [
+                { username: { $regex: searchUser, $options: "i" } },
+                { email: { $ne: email } },
+            ],
+        })
             .limit(6)
             .then((users) => {
                 res.status(200).json({ users: users });
