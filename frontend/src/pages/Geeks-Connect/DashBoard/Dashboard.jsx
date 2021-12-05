@@ -23,6 +23,9 @@ let socket;
 const Dashboard = () => {
     const currentPage = useSelector((state) => state.currentPage);
     const showNotifications = useSelector((state) => state.showNotifications);
+    const newNotificationCount = useSelector(
+        (state) => state.newNotificationCount
+    );
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -101,8 +104,28 @@ const Dashboard = () => {
     };
     const myprofile = () => {};
     const others_profile = () => {};
-    const notifications = () => {
+    const notifications = async () => {
         dispatch({ type: "SET_NOTIFICATIONS", payload: !showNotifications });
+        if (newNotificationCount > 0) {
+            try {
+                axios({
+                    url: `http://localhost:8000/deleteUserNotification`,
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    data: {
+                        token: localStorage.getItem("jwt"),
+                    },
+                });
+            } catch (err) {
+                console.log(err);
+            }
+            dispatch({
+                type: "SET_NEW_NOTIFICATION_COUNT_BACKEND",
+                payload: 0,
+            });
+        }
     };
     return (
         <div className="dashboard">

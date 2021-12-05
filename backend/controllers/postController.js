@@ -209,6 +209,17 @@ exports.commentPost = async (req, res, next) => {
                         postId: postId,
                     });
                 }
+                user.newNotifications = user.newNotifications + 1;
+                user.save();
+                const newNofication = new Notification({
+                    user: postUser.username,
+                    likedBy: user.username,
+                    postId: postId,
+                    type: "like",
+                    message: user.username + " liked your post",
+                    profilePic: user.profilePic,
+                });
+                newNofication.save();
             }
         } else {
             res.status(404).json({

@@ -94,4 +94,6 @@ router.post("/getStarOfTheMonth", (res, req) => {
 
 router.get("/getNotifications", notifcationController.getNotifications);
 
+router.delete("/deleteUserNotification", notifcationController.deleteUserNotification);
+
 module.exports = router;

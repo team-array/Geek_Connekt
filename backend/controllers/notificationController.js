@@ -22,3 +22,20 @@ exports.getNotifications = async (req, res) => {
         res.status(500).send("Server Error");
     }
 };
+
+exports.deleteUserNotification = async (req, res) => {
+    try {
+        // console.log("deleteUserNotification:", req.body);
+        const { username } = jwt.verify(req.body.token, process.env.JWT_SECRET);
+        const notification = await Notification.findOneAndDelete({
+            user: username,
+        });
+        const user = await User.findOne({ username });
+        user.newNotifications = 0;
+        await user.save();
+        res.json(notification);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send("Server Error");
+    }
+};
