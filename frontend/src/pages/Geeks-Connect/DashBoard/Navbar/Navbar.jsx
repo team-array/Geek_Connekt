@@ -40,7 +40,7 @@ const searchResult = (searchedUsers) => {
                     <span>
                         Found query on{" "}
                         <a
-                            href={`https://s.taobao.com/search?q=$query`}
+                            href={`http://localhost:3000/#/user/${user._id}`}
                             target="_blank"
                             rel="noopener noreferrer"
                         >

@@ -303,19 +303,6 @@ export const OtherUserProfile = (props) => {
                                 <h3>{userData.user.username}</h3>
                                 <p>{userData.user.role}</p>
                                 <img src={star} alt="star" />
-                                <Button
-                                    type="button"
-                                    className="my-2 mx-2"
-                                    onClick={() => {
-                                        setedit(!edit);
-                                        dispatch({
-                                            type: "SET_EDIT_PROFILE",
-                                            payload: true,
-                                        });
-                                    }}
-                                >
-                                    Edit profile
-                                </Button>
                             </div>
                         </div>
                     </div>
