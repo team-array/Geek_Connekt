@@ -1,6 +1,7 @@
 const graphql = require("graphql");
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const {
     userResolver,
     userCreateResolver,
@@ -8,6 +9,8 @@ const {
     editUserBioResolver,
     editUserLocationResolver,
     userAuthCheck,
+    getUserData,
+    getOtherUserData,
 } = require("./userResolver");
 
 const { profilePicUploadResolver } = require("./fileuploadResolver");
@@ -46,6 +49,7 @@ const UserType = new GraphQLObjectType({
         birthDate: { type: GraphQLString },
         secondarySchool: { type: GraphQLString },
         primarySchool: { type: GraphQLString },
+        newNotifications: { type: GraphQLInt },
     }),
 });
 
@@ -81,9 +85,17 @@ const RootQuery = new graphql.GraphQLObjectType({
     fields: {
         user: {
             type: UserType,
+            args: { token: { type: graphql.GraphQLString } },
+            resolve(parent, args) {
+                return getUserData(args);
+            },
+        },
+        otherUser: {
+            type: UserType,
             args: { id: { type: graphql.GraphQLString } },
             resolve(parent, args) {
-                return User.findById(args.id);
+                // console.log("args: ", args);
+                return getOtherUserData(args);
             },
         },
         auth: {

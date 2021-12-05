@@ -90,15 +90,19 @@ const UserSchema = new Schema({
     ],
     achievements: [
         {
-            type:String,
-        }
+            type: String,
+        },
     ],
     savedPosts: [
         {
             type: Schema.Types.ObjectId,
             ref: "Post",
-        }
+        },
     ],
+    newNotifications: {
+        type: Number,
+        default: 0,
+    },
 });
 
 UserSchema.methods.generateAuthToken = async function () {

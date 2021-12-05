@@ -2,6 +2,79 @@ const User = require("../models/user");
 // const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+const getUserData = async (args) => {
+    try {
+        const { username } = jwt.verify(args.token, process.env.JWT_SECRET);
+        const user = await User.findOne({ username: username });
+        if (user) {
+            return {
+                token: args.token,
+                result: "Success",
+                username: user.username,
+                email: user.email,
+                role: user.role,
+                rollNumber: user.rollNumber,
+                college: user.college,
+                bio: user.bio,
+                secondarySchool: user.secondarySchool,
+                primarySchool: user.primarySchool,
+                location: user.location,
+                homeTown: user.homeTown,
+                profilePic: user.profilePic,
+                backgroundPic: user.backgroundPic,
+                newNotifications: user.newNotifications,
+            };
+        }
+        return {
+            token: "",
+            result: "User doesn't Exist!",
+        };
+    } catch (error) {
+        console.log(error);
+        return {
+            token: "",
+            result: "Error",
+        };
+    }
+};
+
+const getOtherUserData = async (args) => {
+    try {
+        const user = await User.findById(args.id);
+        console.log("getOtherUserData: ", args);
+        console.log(user.username);
+        if (user) {
+            return {
+                token: args.token,
+                result: "Success",
+                username: user.username,
+                email: user.email,
+                role: user.role,
+                rollNumber: user.rollNumber,
+                college: user.college,
+                bio: user.bio,
+                secondarySchool: user.secondarySchool,
+                primarySchool: user.primarySchool,
+                location: user.location,
+                homeTown: user.homeTown,
+                profilePic: user.profilePic,
+                backgroundPic: user.backgroundPic,
+                newNotifications: user.newNotifications,
+            };
+        }
+        return {
+            token: "",
+            result: "User doesn't Exist!",
+        };
+    } catch (error) {
+        console.log(error);
+        return {
+            token: "",
+            result: "Error",
+        };
+    }
+};
+
 const userResolver = async (args) => {
     const user = await User.findOne({
         username: args.username,
@@ -88,7 +161,7 @@ const editUserResolver = async (args) => {
     try {
         const { username } = jwt.verify(args.token, process.env.JWT_SECRET);
         const user = await User.findOne({ username: username });
-        console.log("editUserResolver: ", args);
+        // console.log("editUserResolver: ", args);
         if (user) {
             // console.log("editUserResolver: ", username);
             const dupUser = await User.findOne({ username: args.username });
@@ -191,4 +264,6 @@ module.exports = {
     editUserBioResolver,
     editUserLocationResolver,
     userAuthCheck,
+    getUserData,
+    getOtherUserData,
 };

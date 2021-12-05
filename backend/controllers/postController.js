@@ -117,6 +117,7 @@ exports.likePost = async (req, res, next) => {
                             postId: postId,
                         });
                     }
+                    console.log("Seding Log");
                 }
             }
             // console.log(post.likes);

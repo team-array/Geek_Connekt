@@ -39,8 +39,8 @@ import LoadingComponent from "../../../../components/loadingComponent/LoadingCom
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 
 const USER_DATA = gql`
-    query user($id: String!) {
-        user(id: $id) {
+    query otherUser($id: String!) {
+        otherUser(id: $id) {
             id
             username
             email
@@ -101,49 +101,9 @@ export const OtherUserProfile = (props) => {
         pageNumber
     );
 
-    const editPictureHandler = (event) => {
-        if (event.target.name === "profilePic") {
-            setprofilePic({
-                ...profilePic,
-                image: event.target.files[0],
-            });
-            setprofilePic(event.target.files[0]);
-            console.log("Yp!");
-        }
-    };
-
-    const handleProfilePicSubmit = async (e) => {
-        e.preventDefault();
-        const formData = new FormData();
-        formData.append(
-            "token",
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkRlZXBlc2ggRHJhZ29uZWVsIiwiZW1haWwiOiJkZWVwZXNoYXNoNDQ0QGdtYWlsLmNvbSIsInJvbGUiOiJTdHVkZW50Iiwicm9sbE51bWJlciI6IjE5SDUxQTA1RzIiLCJpYXQiOjE2Mzc4MTYzNzF9.yrId7SkljS7Tl7b-iCx2LtT4wQakOWd9won9HzrNAms"
-        );
-        formData.append("file", e.target.profilePic.files[0]);
-        try {
-            const result = await axios({
-                method: "POST",
-                url: "http://localhost:8000/editProfilePic",
-                data: formData,
-                headers: {
-                    "content-type": "multipart/form-data",
-                },
-            });
-            console.log(result);
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
     React.useEffect(() => {
         if (!userDataLoading) {
-            console.log(userData);
-            dispatch({
-                type: "SET_USER_DATA",
-                payload: {
-                    userData: userData.user,
-                },
-            });
+            console.log("userData: ", userData);
         }
     }, [userDataLoading, userData]);
 
@@ -287,7 +247,7 @@ export const OtherUserProfile = (props) => {
         <div className="ProfilepageComponent">
             <div className="profile-container">
                 <img
-                    src={userData.user.backgroundPic}
+                    src={userData.otherUser.backgroundPic}
                     alt="coverimg"
                     className="cover-img"
                 />
@@ -295,13 +255,13 @@ export const OtherUserProfile = (props) => {
                     <div className="pd-left mr-auto my-2">
                         <div className="pd-row">
                             <img
-                                src={userData.user.profilePic}
+                                src={userData.otherUser.profilePic}
                                 alt="profileimg"
                                 className="pd-img"
                             />
                             <div>
-                                <h3>{userData.user.username}</h3>
-                                <p>{userData.user.role}</p>
+                                <h3>{userData.otherUser.username}</h3>
+                                <p>{userData.otherUser.role}</p>
                                 <img src={star} alt="star" />
                             </div>
                         </div>
@@ -328,35 +288,35 @@ export const OtherUserProfile = (props) => {
                             <div className="profile-intro">
                                 <h3>Intro</h3>
                                 <p className="intro-text">
-                                    {userData.user.bio}
+                                    {userData.otherUser.bio}
                                 </p>
                                 <hr />
                                 <ul>
                                     <li>
                                         <img src={job} alt="" />{" "}
-                                        {userData.user.role}
+                                        {userData.otherUser.role}
                                     </li>
                                     <li>
                                         <img src={study} alt="" />
-                                        {userData.user.role} in{" "}
-                                        {userData.user.college}
+                                        {userData.otherUser.role} in{" "}
+                                        {userData.otherUser.college}
                                     </li>
                                     <li>
                                         <img src={study} alt="" />
                                         Secondary School:{" "}
-                                        {userData.user.secondarySchool}
+                                        {userData.otherUser.secondarySchool}
                                     </li>
                                     <li>
                                         <img src={study} alt="" />
-                                        School: {userData.user.primarySchool}
+                                        School: {userData.otherUser.primarySchool}
                                     </li>
                                     <li>
                                         <img src={home} alt="" />
-                                        Lives in {userData.user.hometown}
+                                        Lives in {userData.otherUser.hometown}
                                     </li>
                                     <li>
                                         <img src={location} alt="" />
-                                        From {userData.user.location}
+                                        From {userData.otherUser.location}
                                     </li>
                                 </ul>
                             </div>
@@ -488,7 +448,7 @@ export const OtherUserProfile = (props) => {
                                                     <div className="user-profile">
                                                         <img
                                                             src={
-                                                                userData.user
+                                                                userData.otherUser
                                                                     .profilePic
                                                             }
                                                             alt=""
@@ -497,7 +457,7 @@ export const OtherUserProfile = (props) => {
                                                             <p>
                                                                 {
                                                                     userData
-                                                                        .user
+                                                                        .otherUser
                                                                         .username
                                                                 }
                                                             </p>
@@ -674,7 +634,7 @@ export const OtherUserProfile = (props) => {
                                                     <div className="user-profile">
                                                         <img
                                                             src={
-                                                                userData.user
+                                                                userData.otherUser
                                                                     .profilePic
                                                             }
                                                             alt=""
@@ -683,7 +643,7 @@ export const OtherUserProfile = (props) => {
                                                             <p>
                                                                 {
                                                                     userData
-                                                                        .user
+                                                                        .otherUser
                                                                         .username
                                                                 }
                                                             </p>

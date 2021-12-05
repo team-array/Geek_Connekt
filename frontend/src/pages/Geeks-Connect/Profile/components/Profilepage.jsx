@@ -39,8 +39,8 @@ import LoadingComponent from "../../../../components/loadingComponent/LoadingCom
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 
 const USER_DATA = gql`
-    query user($id: String!) {
-        user(id: $id) {
+    query user($token: String!) {
+        user(token: $token) {
             id
             username
             email
@@ -67,7 +67,7 @@ export const Profilepage = () => {
         error: userDataError,
     } = useQuery(USER_DATA, {
         variables: {
-            id: JSON.parse(localStorage.getItem("user")).id,
+            token: localStorage.getItem("jwt"),
         },
     });
 

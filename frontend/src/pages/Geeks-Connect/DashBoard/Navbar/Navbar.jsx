@@ -18,6 +18,15 @@ import { useDispatch } from "react-redux";
 import ArticleIcon from "@mui/icons-material/Article";
 import SearchHook from "../../../../hooks/SearchHook";
 import logo from "../../../../assets/logo1.png";
+import { gql, useQuery } from "@apollo/client";
+
+const GET_NOTIFCATION_COUNT = gql`
+    query user($token: String!) {
+        user(token: $token) {
+            newNotifications
+        }
+    }
+`;
 
 function getRandomInt(max, min = 0) {
     return Math.floor(Math.random() * (max - min + 1)) + min; // eslint-disable-line no-mixed-operators
@@ -52,36 +61,6 @@ const searchResult = (searchedUsers) => {
         };
     });
 };
-// new Array(getRandomInt(5))
-//     .join(".")
-//     .split(".")
-//     .map((_, idx) => {
-//         const category = `${query}${idx}`;
-//         return {
-//             value: category,
-//             label: (
-//                 <div
-//                     style={{
-//                         display: "flex",
-//                         justifyContent: "space-between",
-//                         zIndex: "999999!important",
-//                     }}
-//                 >
-//                     <span>
-//                         Found {query} on{" "}
-//                         <a
-//                             href={`https://s.taobao.com/search?q=${query}`}
-//                             target="_blank"
-//                             rel="noopener noreferrer"
-//                         >
-//                             {category}
-//                         </a>
-//                     </span>
-//                     <span>{getRandomInt(200, 100)} results</span>
-//                 </div>
-//             ),
-//         };
-//     });
 
 export default function PrimarySearchAppBar(props) {
     const [options, setOptions] = React.useState([]);
@@ -90,6 +69,16 @@ export default function PrimarySearchAppBar(props) {
 
     const { loading, error, searchedUsers, hasMore, setPageNumber } =
         SearchHook(searchTerm, 1);
+
+    const {
+        loading: loadingNoti,
+        error: errorNoti,
+        data: dataNoti,
+    } = useQuery(GET_NOTIFCATION_COUNT, {
+        variables: {
+            token: localStorage.getItem("jwt"),
+        },
+    });
 
     const handleSearch = (value) => {
         setSearchTerm(value);
@@ -195,10 +184,15 @@ export default function PrimarySearchAppBar(props) {
             <MenuItem onClick={props.notifications}>
                 <IconButton
                     size="large"
-                    aria-label="show 17 new notifications"
+                    // aria-label="show 17 new notifications"
                     color="inherit"
                 >
-                    <Badge badgeContent={17} color="error">
+                    <Badge
+                        badgeContent={
+                            !loadingNoti ? dataNoti.user.newNotifications : null
+                        }
+                        color="error"
+                    >
                         <NotificationsIcon />
                     </Badge>
                 </IconButton>
@@ -347,12 +341,19 @@ export default function PrimarySearchAppBar(props) {
                         </IconButton>
                         <IconButton
                             size="large"
-                            aria-label="show 17 new notifications"
+                            // aria-label="show 17 new notifications"
                             color="inherit"
                             className="mx-1"
                             onClick={props.notifications}
                         >
-                            <Badge badgeContent={17} color="error">
+                            <Badge
+                                badgeContent={
+                                    !loadingNoti
+                                        ? dataNoti.user.newNotifications
+                                        : null
+                                }
+                                color="error"
+                            >
                                 <NotificationsIcon />
                             </Badge>
                         </IconButton>

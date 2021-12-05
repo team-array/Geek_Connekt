@@ -15,8 +15,8 @@ import LoadingComponent from "../../../components/loadingComponent/LoadingCompon
 const { TextArea } = Input;
 
 const USER_DATA = gql`
-    query user($id: String!) {
-        user(id: $id) {
+    query user($token: String!) {
+        user(token: $token) {
             id
             username
             email
@@ -67,9 +67,7 @@ const CommentBox = () => {
         error: userDataError,
     } = useQuery(USER_DATA, {
         variables: {
-            id: localStorage.getItem("user")
-                ? JSON.parse(localStorage.getItem("user")).id
-                : "",
+            token: localStorage.getItem("jwt"),
         },
     });
 
