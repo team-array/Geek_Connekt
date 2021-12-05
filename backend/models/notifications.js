@@ -4,12 +4,24 @@ const jwt = require("jsonwebtoken");
 const Schema = mongoose.Schema;
 
 const notificationSchema = new Schema({
-    userId: {
+    user: {
+        type: String,
+        required: true,
+    },
+    postId: {
         type: Schema.Types.ObjectId,
-        ref: "User",
+        ref: "Post",
         required: true,
     },
     type: {
+        type: String,
+        required: true,
+    },
+    profilePic: {
+        type: String,
+        required: true,
+    },
+    likedBy: {
         type: String,
         required: true,
     },

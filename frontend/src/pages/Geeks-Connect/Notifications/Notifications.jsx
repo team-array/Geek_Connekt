@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 
 export default function Notifications() {
     const newNotification = useSelector((state) => state.newNotification);
+    
     return (
         <div class="notification_dd">
             <ul class="notification_ul">

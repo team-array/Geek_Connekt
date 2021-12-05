@@ -1,5 +1,6 @@
 const User = require("../models/user");
 const Post = require("../models/post");
+const Notification = require("../models/notifications");
 
 exports.getUserPosts = async (req, res, next) => {
     try {
@@ -117,7 +118,17 @@ exports.likePost = async (req, res, next) => {
                             postId: postId,
                         });
                     }
-                    console.log("Seding Log");
+                    user.newNotifications = user.newNotifications + 1;
+                    user.save();
+                    const newNofication = new Notification({
+                        user: postUser.username,
+                        likedBy: user.username,
+                        postId: postId,
+                        type: "like",
+                        message: user.username + " liked your post",
+                        profilePic: user.profilePic,
+                    });
+                    newNofication.save();
                 }
             }
             // console.log(post.likes);

@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const userController = require("./controllers/userController");
 const postController = require("./controllers/postController");
+const notifcationController = require("./controllers/notificationController");
 
 router.get("/searchUsers", userController.searchUsers);
 
@@ -23,72 +24,74 @@ router.get("/", (req, res, next) => {
     res.send("<h1>Welcome to Geek ConnecKt API!</h1>");
 });
 
-router.post("/addEvents",(res,req)=>{
-    require("./controllers/eventsController").addEvents(res,req);
+router.post("/addEvents", (res, req) => {
+    require("./controllers/eventsController").addEvents(res, req);
 });
 
-router.post("/getEvents",(res,req)=>{
-    require("./controllers/eventsController").getEvents(res,req);
+router.post("/getEvents", (res, req) => {
+    require("./controllers/eventsController").getEvents(res, req);
 });
 
-router.post("/getAllEvents",(res,req)=>{
-    require("./controllers/eventsController").getAllEvents(res,req);
+router.post("/getAllEvents", (res, req) => {
+    require("./controllers/eventsController").getAllEvents(res, req);
 });
 
-router.post("/logout",(res,req)=>{
-    require("./controllers/userController").logout(res,req);
+router.post("/logout", (res, req) => {
+    require("./controllers/userController").logout(res, req);
 });
 
-router.post("/addutility",(res,req)=>{
-    require("./controllers/utilityController").addutility(res,req);
+router.post("/addutility", (res, req) => {
+    require("./controllers/utilityController").addutility(res, req);
 });
 
-router.post("/getutilities",(res,req)=>{
-    require("./controllers/utilityController").getutilities(res,req);
+router.post("/getutilities", (res, req) => {
+    require("./controllers/utilityController").getutilities(res, req);
 });
 
-router.post("/updateRating",(res,req)=>{
-    require("./controllers/utilityController").updateRating(res,req);
+router.post("/updateRating", (res, req) => {
+    require("./controllers/utilityController").updateRating(res, req);
 });
 
-router.post("/addachievement",(res,req)=>{
-    require("./controllers/Achievements").addachievement(res,req);
+router.post("/addachievement", (res, req) => {
+    require("./controllers/Achievements").addachievement(res, req);
 });
 
-router.post("/getachievements",(res,req)=>{
-    require("./controllers/Achievements").getachievements(res,req);
+router.post("/getachievements", (res, req) => {
+    require("./controllers/Achievements").getachievements(res, req);
 });
 
-router.post("/deleteAchievement",(res,req)=>{
-    require("./controllers/Achievements").deleteAchievement(res,req);
+router.post("/deleteAchievement", (res, req) => {
+    require("./controllers/Achievements").deleteAchievement(res, req);
 });
 
-router.post("/addNews",(res,req)=>{
-    require("./controllers/newsController").addNews(res,req);
+router.post("/addNews", (res, req) => {
+    require("./controllers/newsController").addNews(res, req);
 });
 
-router.post("/getNews",(res,req)=>{
-    require("./controllers/newsController").getNews(res,req);
+router.post("/getNews", (res, req) => {
+    require("./controllers/newsController").getNews(res, req);
 });
 
-router.post("/deleteNews",(res,req)=>{
-    require("./controllers/newsController").deleteNews(res,req);
+router.post("/deleteNews", (res, req) => {
+    require("./controllers/newsController").deleteNews(res, req);
 });
 
-router.post("/SavePost",(res,req)=>{
-    require("./controllers/savedPosts").SavePost(res,req);
+router.post("/SavePost", (res, req) => {
+    require("./controllers/savedPosts").SavePost(res, req);
 });
 
-router.post("/getSavedPosts",(res,req)=>{
-    require("./controllers/savedPosts").getSavedPosts(res,req);
+router.post("/getSavedPosts", (res, req) => {
+    require("./controllers/savedPosts").getSavedPosts(res, req);
 });
 
-router.post("/getMySavedPosts",(res,req)=>{
-    require("./controllers/savedPosts").getMySavedPosts(res,req);
+router.post("/getMySavedPosts", (res, req) => {
+    require("./controllers/savedPosts").getMySavedPosts(res, req);
 });
 
-router.post("/getStarOfTheMonth",(res,req)=>{
-    require("./controllers/starofthemonth").getStarOfTheMonth(res,req);
+router.post("/getStarOfTheMonth", (res, req) => {
+    require("./controllers/starofthemonth").getStarOfTheMonth(res, req);
 });
+
+router.get("/getNotifications", notifcationController.getNotifications);
 
 module.exports = router;

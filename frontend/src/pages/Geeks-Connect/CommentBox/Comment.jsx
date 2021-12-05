@@ -71,11 +71,11 @@ const CommentBox = () => {
         },
     });
 
-    React.useEffect(() => {
-        if (!userDataLoading) {
-            console.log(userData);
-        }
-    }, [userDataLoading, userData]);
+    // React.useEffect(() => {
+    //     if (!userDataLoading) {
+    //         console.log(userData);
+    //     }
+    // }, [userDataLoading, userData]);
     React.useEffect(() => {
         if (userDataError) {
             console.log(userDataError);

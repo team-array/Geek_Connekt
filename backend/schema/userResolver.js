@@ -42,8 +42,8 @@ const getUserData = async (args) => {
 const getOtherUserData = async (args) => {
     try {
         const user = await User.findById(args.id);
-        console.log("getOtherUserData: ", args);
-        console.log(user.username);
+        // console.log("getOtherUserData: ", args);
+        // console.log(user.username);
         if (user) {
             return {
                 token: args.token,

@@ -35,7 +35,7 @@ const Dashboard = () => {
         // console.log("Changed: ", socket);
         if (socket) {
             socket.on("like", (data) => {
-                console.log(data);
+                // console.log(data);
                 dispatch({
                     type: "SET_NEW_NOTIFICATION",
                     payload: {
@@ -45,6 +45,9 @@ const Dashboard = () => {
                         image: data.profilePic,
                         message: "Liked your post",
                     },
+                });
+                dispatch({
+                    type: "SET_NEW_NOTIFICATION_COUNT",
                 });
             });
             socket.on("comment", (data) => {
@@ -58,6 +61,9 @@ const Dashboard = () => {
                         image: data.profilePic,
                         message: "Commented on your post",
                     },
+                });
+                dispatch({
+                    type: "SET_NEW_NOTIFICATION_COUNT",
                 });
             });
         }

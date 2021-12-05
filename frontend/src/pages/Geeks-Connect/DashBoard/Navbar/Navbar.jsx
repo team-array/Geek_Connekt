@@ -19,6 +19,8 @@ import ArticleIcon from "@mui/icons-material/Article";
 import SearchHook from "../../../../hooks/SearchHook";
 import logo from "../../../../assets/logo1.png";
 import { gql, useQuery } from "@apollo/client";
+import { useSelector } from "react-redux";
+import axios from "axios";
 
 const GET_NOTIFCATION_COUNT = gql`
     query user($token: String!) {
@@ -65,6 +67,12 @@ const searchResult = (searchedUsers) => {
 export default function PrimarySearchAppBar(props) {
     const [options, setOptions] = React.useState([]);
 
+    const newNoticationCount = useSelector(
+        (state) => state.newNotificationCount
+    );
+
+    const dispatch = useDispatch();
+
     const [searchTerm, setSearchTerm] = React.useState("");
 
     const { loading, error, searchedUsers, hasMore, setPageNumber } =
@@ -79,6 +87,54 @@ export default function PrimarySearchAppBar(props) {
             token: localStorage.getItem("jwt"),
         },
     });
+
+    const getNewNotications = async (newNotificationCount) => {
+        try {
+            let notification = [];
+            console.log("in get new noti");
+            const result = await axios({
+                method: "GET",
+                url: `http://localhost:8000/getNotifications`,
+                params: {
+                    token: localStorage.getItem("jwt"),
+                    count: +newNotificationCount,
+                },
+            });
+            result.data.forEach((noti) => {
+                notification.push({
+                    type: noti.type,
+                    title: noti.likedBy,
+                    postId: noti.postId,
+                    image: noti.profilePic,
+                    message: noti.message,
+                });
+            });
+            console.log(notification);
+            dispatch({
+                type: "SET_ALL_NEW_NOTIFICATION_BACKEND",
+                payload: notification,
+            });
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    React.useEffect(() => {
+        if (!loadingNoti && !errorNoti) {
+            console.log("newNotidications: ", dataNoti.user.newNotifications);
+            if (dataNoti.user.newNotifications > 0) {
+                getNewNotications(dataNoti.user.newNotifications);
+                dispatch({
+                    type: "SET_NEW_NOTIFICATION_COUNT_BACKEND",
+                    payload: dataNoti.user.newNotifications,
+                });
+            }
+        }
+    }, [loadingNoti, errorNoti, dataNoti]);
+
+    // React.useEffect(() => {
+
+    // }, [dataNoti]);
 
     const handleSearch = (value) => {
         setSearchTerm(value);
@@ -150,7 +206,6 @@ export default function PrimarySearchAppBar(props) {
             <MenuItem onClick={handleMenuClose}>My account</MenuItem>
         </Menu>
     );
-    const dispatch = useDispatch();
     const mobileMenuId = "primary-search-account-menu-mobile";
     const renderMobileMenu = (
         <Menu
@@ -187,12 +242,7 @@ export default function PrimarySearchAppBar(props) {
                     // aria-label="show 17 new notifications"
                     color="inherit"
                 >
-                    <Badge
-                        badgeContent={
-                            !loadingNoti ? dataNoti.user.newNotifications : null
-                        }
-                        color="error"
-                    >
+                    <Badge badgeContent={newNoticationCount} color="error">
                         <NotificationsIcon />
                     </Badge>
                 </IconButton>
@@ -347,11 +397,7 @@ export default function PrimarySearchAppBar(props) {
                             onClick={props.notifications}
                         >
                             <Badge
-                                badgeContent={
-                                    !loadingNoti
-                                        ? dataNoti.user.newNotifications
-                                        : null
-                                }
+                                badgeContent={newNoticationCount}
                                 color="error"
                             >
                                 <NotificationsIcon />

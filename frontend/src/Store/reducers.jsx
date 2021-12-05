@@ -79,8 +79,21 @@ export const newNotification = (
     action
 ) => {
     switch (action.type) {
+        case "SET_ALL_NEW_NOTIFICATION_BACKEND":
+            return action.payload;
         case "SET_NEW_NOTIFICATION":
             return [...state, action.payload];
+        default:
+            return state;
+    }
+};
+
+export const newNotificationCount = (state = 0, action) => {
+    switch (action.type) {
+        case "SET_NEW_NOTIFICATION_COUNT":
+            return (state = state + 1);
+        case "SET_NEW_NOTIFICATION_COUNT_BACKEND":
+            return (state = action.payload);
         default:
             return state;
     }
@@ -95,24 +108,18 @@ export const showAchievementsForm = (state = false, action) => {
     }
 };
 
-export const achievements = (
-    state = [],
-    action
-) => {
+export const achievements = (state = [], action) => {
     switch (action.type) {
         case "SET_ACHIEVEMENTS":
-            return action.payload
+            return action.payload;
         case "ADD_ACHIEVEMENTS":
-            return [...state,...action.payload];
+            return [...state, ...action.payload];
         default:
             return state;
     }
 };
 
-export const ImagesGridLength = (
-    state = 0,
-    action
-) => {
+export const ImagesGridLength = (state = 0, action) => {
     switch (action.type) {
         case "SET_GRID_LENGTH":
             return action.payload;
@@ -121,10 +128,7 @@ export const ImagesGridLength = (
     }
 };
 
-export const loading = (
-    state = false,
-    action
-) => {
+export const loading = (state = false, action) => {
     switch (action.type) {
         case "SET_LOADING":
             return action.payload;
@@ -133,10 +137,7 @@ export const loading = (
     }
 };
 
-export const reloadUtilities = (
-    state = false,
-    action
-) => {
+export const reloadUtilities = (state = false, action) => {
     switch (action.type) {
         case "SET_RELOAD_UTILITIES":
             return action.payload;
@@ -145,10 +146,7 @@ export const reloadUtilities = (
     }
 };
 
-export const reloadEvents = (
-    state = false,
-    action
-) => {
+export const reloadEvents = (state = false, action) => {
     switch (action.type) {
         case "SET_RELOAD_EVENTS":
             return action.payload;

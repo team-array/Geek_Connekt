@@ -21,30 +21,32 @@ export default function SearchHook(searchTerm, pagenumber) {
     }, [searchTerm, pageNumber]);
 
     const SearchFunction = () => {
-        let cancel;
-        setLoading(true);
-        setError(false);
-        axios({
-            method: "GET",
-            url: `http://localhost:8000/searchUsers`,
-            params: {
-                searchTerm,
-                pageNumber,
-                token: localStorage.getItem("jwt"),
-            },
-            cancelToken: new axios.CancelToken((c) => (cancel = c)),
-        })
-            .then((res) => {
-                console.log("Search Hook: ", res.data); 
-                setLoading(false);
-                setSearchedUsers(res.data.users);
-                setHasMore(res.data.hasMore);
+        if (searchTerm.length > 0) {
+            let cancel;
+            setLoading(true);
+            setError(false);
+            axios({
+                method: "GET",
+                url: `http://localhost:8000/searchUsers`,
+                params: {
+                    searchTerm,
+                    pageNumber,
+                    token: localStorage.getItem("jwt"),
+                },
+                cancelToken: new axios.CancelToken((c) => (cancel = c)),
             })
-            .catch((err) => {
-                if (axios.isCancel(err)) return;
-                setError(true);
-            });
-        return () => cancel();
+                .then((res) => {
+                    console.log("Search Hook: ", res.data);
+                    setLoading(false);
+                    setSearchedUsers(res.data.users);
+                    setHasMore(res.data.hasMore);
+                })
+                .catch((err) => {
+                    if (axios.isCancel(err)) return;
+                    setError(true);
+                });
+            return () => cancel();
+        }
     };
 
     return { loading, error, searchedUsers, hasMore, setPageNumber };
