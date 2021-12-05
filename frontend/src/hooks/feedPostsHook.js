@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import {BaseUrl} from "../constants";
 
 export default function UserPostHook(
     userId,
@@ -24,7 +25,7 @@ export default function UserPostHook(
         setError(false);
         axios({
             method: "get",
-            url: "http://localhost:8000/getAllPosts",
+            url: BaseUrl+"/getAllPosts",
             params: {
                 id:
                     localStorage.getItem("user") !== null

@@ -478,7 +478,7 @@ export const OtherUserProfile = (props) => {
                                                                 }
                                                             </p>
                                                             <span>
-                                                                {post.createdAt}
+                                                                {new Date(post.createdAt).toString().split("GMT")[0]}
                                                             </span>
                                                         </div>
                                                     </div>
@@ -527,7 +527,7 @@ export const OtherUserProfile = (props) => {
                                                                             await axios(
                                                                                 {
                                                                                     method: "post",
-                                                                                    url: `http://localhost:8000/likePost`,
+                                                                                    url: BaseUrl+`/likePost`,
                                                                                     data: {
                                                                                         postId: post._id,
                                                                                         userId: userId,
@@ -666,7 +666,7 @@ export const OtherUserProfile = (props) => {
                                                                 }
                                                             </p>
                                                             <span>
-                                                                {post.createdAt}
+                                                                {new Date(post.createdAt).toString().split("GMT")[0]}
                                                             </span>
                                                         </div>
                                                     </div>
@@ -715,7 +715,7 @@ export const OtherUserProfile = (props) => {
                                                                             await axios(
                                                                                 {
                                                                                     method: "post",
-                                                                                    url: `http://localhost:8000/likePost`,
+                                                                                    url: BaseUrl+`/likePost`,
                                                                                     data: {
                                                                                         postId: post._id,
                                                                                         userId: userId,

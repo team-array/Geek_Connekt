@@ -12,8 +12,10 @@ import {
     gql,
 } from "@apollo/client";
 
+import {BaseUrl} from "./constants";
+
 const client = new ApolloClient({
-    uri: "http://localhost:8000/graphql",
+    uri: BaseUrl+"/graphql",
     cache: new InMemoryCache(),
 });
 

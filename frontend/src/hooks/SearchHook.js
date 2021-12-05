@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { BaseUrl } from "../constants";
 
 export default function SearchHook(searchTerm, pagenumber) {
     const [loading, setLoading] = useState(true);
@@ -27,7 +28,7 @@ export default function SearchHook(searchTerm, pagenumber) {
             setError(false);
             axios({
                 method: "GET",
-                url: `http://localhost:8000/searchUsers`,
+                url: BaseUrl+`/searchUsers`,
                 params: {
                     searchTerm,
                     pageNumber,

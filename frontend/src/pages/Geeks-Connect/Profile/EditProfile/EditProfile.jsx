@@ -23,6 +23,7 @@ import { UploadOutlined } from "@ant-design/icons";
 import { gql, useMutation } from "@apollo/client";
 import axios from "axios";
 import MButton from "@mui/material/Button"
+import {BaseUrl} from "../../../../constants"
 
 const layout = {
   labelCol: {
@@ -176,7 +177,7 @@ const EditProfile = () => {
       dispatch({ type: "SET_LOADING", payload: true});
       const response = await axios({
         method: "post",
-        url: "http://localhost:8000/updateSchoolInfo",
+        url: BaseUrl+"/updateSchoolInfo",
         data: {
           primarySchool: values.primary,
           secondarySchool: values.secondary,
@@ -199,7 +200,7 @@ const EditProfile = () => {
       dispatch({ type: "SET_LOADING", payload: true});
       const response = await axios({
         method: "post",
-        url: "http://localhost:8000/updateLocationInfo",
+        url: BaseUrl+"/updateLocationInfo",
         data: {
           hometown: values.hometown,
           location: values.location,
@@ -249,7 +250,7 @@ const EditProfile = () => {
           formData.append("token", localStorage.getItem("jwt"));
           const response = await axios({
             method: "POST",
-            url: "http://localhost:8000/editProfilePic",
+            url: BaseUrl+"/editProfilePic",
             headers: {
               "content-type": "multipart/form-data",
             },
@@ -280,7 +281,7 @@ const EditProfile = () => {
       formData.append("token", localStorage.getItem("jwt"));
       const response = await axios({
         method: "POST",
-        url: "http://localhost:8000/editBackgroundPic",
+        url: BaseUrl+"/editBackgroundPic",
         headers: {
           "content-type": "multipart/form-data",
         },

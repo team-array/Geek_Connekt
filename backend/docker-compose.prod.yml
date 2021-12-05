@@ -3,4 +3,12 @@ services:
   geek_connekt:
     environment:
       - NODE_ENV=production
-    command: node app.js
+    command: node run start
+    deploy:
+      mode: replicated
+      replicas: 8
+      restart_policy:
+        condition: any
+      update_config:
+        parallelism: 2
+        delay: 10s

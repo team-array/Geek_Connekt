@@ -21,6 +21,7 @@ import logo from "../../../../assets/logo1.png";
 import { gql, useQuery } from "@apollo/client";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import {BaseUrl,ClientUrl} from "../../../../constants";
 
 const GET_NOTIFCATION_COUNT = gql`
     query user($token: String!) {
@@ -51,7 +52,7 @@ const searchResult = (searchedUsers) => {
                     <span>
                         Found query on{" "}
                         <a
-                            href={`http://localhost:3000/#/user/${user._id}`}
+                            href={ClientUrl+`/#/user/${user._id}`}
                             target="_blank"
                             rel="noopener noreferrer"
                         >
@@ -94,7 +95,7 @@ export default function PrimarySearchAppBar(props) {
             console.log("in get new noti");
             const result = await axios({
                 method: "GET",
-                url: `http://localhost:8000/getNotifications`,
+                url: BaseUrl+`/getNotifications`,
                 params: {
                     token: localStorage.getItem("jwt"),
                     count: +newNotificationCount,

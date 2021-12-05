@@ -208,8 +208,7 @@ const News = () => {
                   <Card hoverable>
                     <Meta title={ele.title} />
                     <p className="mb-0 mt-2">
-                      posted on {ele.postedOn.split("T")[0]}{" "}
-                      {ele.postedOn.split("T")[1].split(".")[0]}
+                      posted on {new Date(ele.postedOn).toString().split("GMT")[0]}
                     </p>
                     <hr />
                     <p className="mb-2">{ele.description}</p>
