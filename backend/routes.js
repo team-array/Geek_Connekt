@@ -7,6 +7,12 @@ router.get("/searchUsers", userController.searchUsers);
 
 router.post("/editProfilePic", userController.editProfilePic);
 
+router.post("/editBackgroundPic",userController.editBackgroundPic);
+
+router.post("/updateSchoolInfo", userController.updateSchoolInfo);
+
+router.post("/updateLocationInfo", userController.updateLocationInfo);
+
 router.post("/uploadPost", userController.uploadPost);
 
 router.get("/getUserImage", postController.getUserPosts);

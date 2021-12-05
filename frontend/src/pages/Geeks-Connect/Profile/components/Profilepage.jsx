@@ -22,6 +22,9 @@ import userPostHook from "../../../../hooks/userPostHook";
 import { useDispatch, useSelector } from "react-redux";
 import { useQuery, gql } from "@apollo/client";
 import ForumOutlinedIcon from "@mui/icons-material/ForumOutlined";
+import LinkIcon from '@mui/icons-material/Link';
+import CakeIcon from '@mui/icons-material/Cake';
+import PersonIcon from '@mui/icons-material/Person';
 
 // import post1 from "./img/photo1.png";
 // import post2 from "./img/photo2.png";
@@ -55,6 +58,8 @@ const USER_DATA = gql`
             birthDate
             secondarySchool
             primarySchool
+            website
+            fullName
         }
     }
 `;
@@ -294,11 +299,18 @@ export const Profilepage = () => {
                                 src={userData.user.profilePic}
                                 alt="profileimg"
                                 className="pd-img"
+                                style={{
+                                    borderRadius: "100%",
+                                }}
                             />
                             <div>
                                 <h3>{userData.user.username}</h3>
                                 <p>{userData.user.role}</p>
-                                <img src={star} alt="star" />
+                                {
+                                    (userData.user.role)?
+                                    <img src={star} alt="star" /> :""
+
+                                }
                                 <Button
                                     type="button"
                                     className="my-2 mx-2"
@@ -342,6 +354,21 @@ export const Profilepage = () => {
                                 <hr />
                                 <ul>
                                     <li>
+                                        <PersonIcon />
+                                        &nbsp;
+                                        &nbsp;
+
+                                        {userData.user.fullName}
+                                    </li>
+                                    <li>
+                                        <CakeIcon />
+                                        &nbsp;
+                                        &nbsp;
+                                        born on
+                                        &nbsp;  
+                                        {new Date(new Number(userData.user.birthDate)).toDateString()}
+                                    </li>
+                                    <li>
                                         <img src={job} alt="" />{" "}
                                         {userData.user.role}
                                     </li>
@@ -367,6 +394,10 @@ export const Profilepage = () => {
                                         <img src={location} alt="" />
                                         From {userData.user.location}
                                     </li>
+                                    <LinkIcon className="" style={{marginRight:"12px",marginLeft:"2.5px"}}/>
+                                    <a href={userData.user.website}>
+                                        {userData.user.website}
+                                    </a>
                                 </ul>
                             </div>
                             <div className="profile-intro">
@@ -442,9 +473,9 @@ export const Profilepage = () => {
                         <div className="post-col">
                             <div className="write-post-container">
                                 <div className="user-profile">
-                                    <img src={pp} alt="" />
+                                    <img src={userData.user.profilePic} alt="" />
                                     <div>
-                                        <p>Kranthi</p>
+                                        <p>{userData.user.username}</p>
                                         <small>
                                             Public
                                             <i class="fas fa-caret-down"></i>
