@@ -160,14 +160,16 @@ exports.getComments = async (req, res, next) => {
 };
 
 exports.commentPost = async (req, res, next) => {
+    console.log(req.body);
     try {
         const postId = req.body.postId;
         const userId = req.body.userId;
         const comment = req.body.comment;
+        // console.log(postId, userId, comment);
         const post = await Post.findById(postId);
         const user = await User.findById(userId);
         const postUser = await User.findById(post.user);
-        console.log(post, user);
+        // console.log(post, user);
         if (post && user) {
             post.comments.push({
                 user: userId,

@@ -32,7 +32,7 @@ const Dashboard = () => {
     }, []);
 
     useEffect(() => {
-        console.log("Changed: ", socket);
+        // console.log("Changed: ", socket);
         if (socket) {
             socket.on("like", (data) => {
                 console.log(data);

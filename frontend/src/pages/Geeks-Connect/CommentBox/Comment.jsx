@@ -71,11 +71,11 @@ const CommentBox = () => {
         },
     });
 
-    // React.useEffect(() => {
-    //     if (!userDataLoading) {
-    //         // console.log(userData);
-    //     }
-    // }, [userDataLoading, userData]);
+    React.useEffect(() => {
+        if (!userDataLoading) {
+            console.log(userData);
+        }
+    }, [userDataLoading, userData]);
     React.useEffect(() => {
         if (userDataError) {
             console.log(userDataError);
@@ -140,13 +140,13 @@ const CommentBox = () => {
             setSubmitting(true); // for load effect
             console.log(msg);
             setComments((comments) => [
-                ...comments,
                 {
                     author: userData.user.username,
                     avatar: userData.user.profilePic,
                     datetime: moment().fromNow(),
                     content: <p>{msg}</p>,
                 },
+                ...comments,
             ]);
 
             setmsg("");
@@ -159,8 +159,8 @@ const CommentBox = () => {
                     userId: userData.user.id,
                 },
             });
-            console.log(result);
             setSubmitting(false); // stop loading effect}
+            console.log(result);
         } catch (err) {
             console.log(err);
         }

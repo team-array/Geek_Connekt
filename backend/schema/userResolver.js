@@ -10,6 +10,7 @@ const getUserData = async (args) => {
             return {
                 token: args.token,
                 result: "Success",
+                id: user._id,
                 username: user.username,
                 email: user.email,
                 role: user.role,
@@ -47,6 +48,7 @@ const getOtherUserData = async (args) => {
             return {
                 token: args.token,
                 result: "Success",
+                id: user._id,
                 username: user.username,
                 email: user.email,
                 role: user.role,
