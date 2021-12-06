@@ -51,6 +51,7 @@ const UserType = new GraphQLObjectType({
         primarySchool: { type: GraphQLString },
         website: { type: GraphQLString },
         fullName: { type: GraphQLString },
+        newNotifications: { type: GraphQLString },
     }),
 });
 
