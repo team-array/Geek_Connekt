@@ -118,8 +118,8 @@ exports.likePost = async (req, res, next) => {
                             postId: postId,
                         });
                     }
-                    user.newNotifications = user.newNotifications + 1;
-                    user.save();
+                    postUser.newNotifications = postUser.newNotifications + 1;
+                    postUser.save();
                     const newNofication = new Notification({
                         user: postUser.username,
                         likedBy: user.username,
@@ -211,8 +211,8 @@ exports.commentPost = async (req, res, next) => {
                         postId: postId,
                     });
                 }
-                user.newNotifications = user.newNotifications + 1;
-                user.save();
+                postUser.newNotifications = postUser.newNotifications + 1;
+                postUser.save();
                 const newNofication = new Notification({
                     user: postUser.username,
                     likedBy: user.username,
