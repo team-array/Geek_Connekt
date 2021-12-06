@@ -11,6 +11,7 @@ import Notifications from "./pages/Geeks-Connect/Notifications/Notifications";
 import HomePageController from "./pages/HomePageController";
 import Spinner from "./components/Spinner/Spinner";
 import { OtherUserProfile } from "./pages/Geeks-Connect/Profile/components/OtherUserProfile";
+import UploadAttendance from './pages/Geeks-Connect/UploadAttendance/UploadAttendance';
 
 config.console(config.MODE);
 
@@ -25,7 +26,7 @@ const App = () => {
             <Spinner />
             <HashRouter>
                 <Routes>
-                    <Route path="/" element={<HomePageController />} />
+                    <Route path="/" element={<UploadAttendance />} />
                     <Route path="/login" element={<Signin />} />
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/notifications" element={<Notifications />} />

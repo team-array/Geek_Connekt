@@ -3,12 +3,13 @@ const router = express.Router();
 const userController = require("./controllers/userController");
 const postController = require("./controllers/postController");
 const notifcationController = require("./controllers/notificationController");
+const AttendanceController = require("./controllers/AttendanceController");
 
 router.get("/searchUsers", userController.searchUsers);
 
 router.post("/editProfilePic", userController.editProfilePic);
 
-router.post("/editBackgroundPic",userController.editBackgroundPic);
+router.post("/editBackgroundPic", userController.editBackgroundPic);
 
 router.post("/updateSchoolInfo", userController.updateSchoolInfo);
 
@@ -100,6 +101,11 @@ router.post("/getStarOfTheMonth", (res, req) => {
 
 router.get("/getNotifications", notifcationController.getNotifications);
 
-router.delete("/deleteUserNotification", notifcationController.deleteUserNotification);
+router.delete(
+    "/deleteUserNotification",
+    notifcationController.deleteUserNotification
+);
+
+router.post("/uploadAttendance", AttendanceController.uploadAttendance);
 
 module.exports = router;
