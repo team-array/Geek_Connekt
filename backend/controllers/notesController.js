@@ -1,6 +1,6 @@
 const notes = require("../models/notes");
 const nanoid = require("nanoid").nanoid;
-const verify = require("../middlewares/verifyuser");
+const verify = require("../middlewares/verifyuser").verifyuser;
 const fs = require("fs");
 
 const uploadNotes = async (req, res) => {
@@ -16,7 +16,7 @@ const uploadNotes = async (req, res) => {
           return res.status(200).send("You are not authorized to upload notes !");
         }
         const filename = nanoid();
-        req.files.file.mv(`${__dirname}/../notes/${filename}`, (err) => {
+        req.files.file.mv(`${__dirname}/../notes/${filename}.pdf`,async (err) => {
           if (err) {
             console.log(err);
             return res.status(200).json({
@@ -25,7 +25,7 @@ const uploadNotes = async (req, res) => {
             });
           }
           const newNote = await notes({
-            title: req.body.title,
+            subject: req.body.subject,
             description: req.body.description,
             file: filename,
             postedBy: user.username,
@@ -34,9 +34,11 @@ const uploadNotes = async (req, res) => {
           newNote.save((err, newNote) => {
             if (err) {
               console.log(err);
+              fs.unlink(`${__dirname}/../notes/${filename}.pdf`);
               return res.status(200).json({
                 success: false,
                 message: "failed to save note",
+
               });
             }
             return res.status(200).json({

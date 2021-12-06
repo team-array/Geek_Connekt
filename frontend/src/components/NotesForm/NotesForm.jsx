@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import Backdrop from "@mui/material/Backdrop";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import { UtilityFormContainer } from "../../pages/Geek-Connect/ProfessionalTools/UtilityForm/UtilityForm.style";
+import { UtilityFormContainer } from "../../pages/Geeks-Connect/ProfessionalTools/UtilityForm/UtilityForm.style";
 import { Form, Input,Button, notification } from "antd";
 import "./NotesForm.scss";
 import axios from "axios";
@@ -58,24 +58,40 @@ const NewsForm = (props) => {
   const handleClose = () => {
         props.onclose();
   };
+  const [pdf,setpdf] = React.useState();
   const postNews = async (values) => {
     try {
         dispatch({
             type: "SET_LOADING",
             payload: true,
           });
-        const response = await axios.post(`${BaseUrl}/addNews`, {...values,token:localStorage.getItem("jwt")});
+        const formData = new FormData();
+        formData.append("subject", values.subject);
+        formData.append("description", values.description);
+        formData.append("file", pdf);
+        formData.append("topicName", values.topicName);
+        formData.append("token", localStorage.getItem("jwt"));
+        console.log(formData);
+        const response = await axios({
+          method: "POST",
+          url: `${BaseUrl}/uploadNotes`,
+          data: formData,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
         console.log(response);
+        props.onclose();
         dispatch({
             type: "SET_LOADING",
             payload: false,
           });
         if(response.data.success){
-            props.afterpost(response.data.news);
+            props.afterpost(response.data.newNote);
             openNotificationWithIcon({
                 type: "success",
                 title: "Success",
-                message: "News added successfully",
+                message: "Notes uploaded successfully",
             });
         }else{
             props.afterpost(null);
@@ -148,34 +164,44 @@ const NewsForm = (props) => {
                     display: "flex",
                     flexDirection: "row",
                     flexWrap: "wrap",
-                    justifyContent: "space-between",
+                    justifyContent: "space-around",
                     alignItems: "center",
+                    margin: "0px auto 20px auto",
+                    width: "max-content",
                 }}
             >
                 <input
                     accept=".pdf"
                     style={{ display: 'none' }}
-                    id="raised-button-file1"
+                    id="raised-button-file"
                     type="file"
+                    onChange={(e) => {
+                        setpdf(e.target.files[0]);
+                    }}
                 />
-                <label htmlFor="raised-button-file1">
-                <MButton variant="raised" component="span" >
-                    Upload Pdf
-                </MButton>
+                <label htmlFor="raised-button-file">
+                  <MButton variant="raised" 
+                    component="span" 
+                    variant="outlined"
+                  >
+                      Upload Pdf
+                  </MButton>
                 </label> 
                 <MButton
                     variant="outlined"
                     component="label"
+                    style={{
+                      marginLeft: "10px",
+                    }}
                     >
                     Preview pdf
-                    <input
-                        type="file"
-                        accept="application/pdf"
-                        hidden
-                    />
                 </MButton>
             </div>
-              <Button type="primary" htmlType="submit">
+              <Button type="primary" htmlType="submit"
+                style={{
+                  width: "100%",
+                }}
+              >
                 Upload
               </Button>
             </Form.Item>
