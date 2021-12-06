@@ -277,6 +277,15 @@ function NotesBlog() {
                   <p>
                     {note.description}
                   </p>
+                  <figure
+                      className="text-end mt-3 mb-0"
+                      style={{ marginBottom: "-2rem" }}
+                    >
+                      <figcaption class="blockquote-footer">
+                        posted by{" "}
+                        <cite title="Source Title">{note.postedBy}</cite>
+                      </figcaption>
+                    </figure>
                   <div style={{
                     display:"flex",
                     justifyContent:"space-between",

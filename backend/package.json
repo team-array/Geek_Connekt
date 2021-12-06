@@ -22,7 +22,8 @@
         "nanoid": "^3.1.30",
         "redis": "3.1.2",
         "socket.io": "^4.4.0",
-        "validator": "^13.7.0"
+        "validator": "^13.7.0",
+        "xlsx": "^0.17.4"
     },
     "devDependencies": {
         "nodemon": "^2.0.15"
