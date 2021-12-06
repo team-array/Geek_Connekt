@@ -1,5 +1,5 @@
 import React from "react";
-import { DownloadOutlined } from "@ant-design/icons";
+import { DownloadOutlined ,DeleteOutlined } from "@ant-design/icons";
 import { Button, Radio } from "antd";
 import { Row, Col } from "antd";
 import "antd/dist/antd.css";
@@ -7,7 +7,7 @@ import { Card } from "antd";
 import { Alert } from "antd";
 import { Pagination } from "antd";
 import { PageHeader } from "antd";
-import { Input, Space } from "antd";
+import { Input, Space,notification } from "antd";
 import "./Notes.scss";
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
@@ -24,6 +24,8 @@ import NotesForm from "../../../components/NotesForm/NotesForm";
 import {BaseUrl} from "../../../constants";
 import { AudioOutlined } from "@ant-design/icons";
 import {useDispatch} from "react-redux";
+import { saveAs } from 'file-saver';
+
 
 import axios from "axios";
 const Search = styled("div")(({ theme }) => ({
@@ -68,9 +70,18 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
+const openNotificationWithIcon = (noti) => {
+  notification[noti.type]({
+    message: noti.title,
+    description: noti.message,
+  });
+};
+
 function NotesBlog() {
   const [openForm,setOpenForm] = React.useState(false);
   const [notes,setnotes] = React.useState([]);
+  const [search,setSearch] = React.useState(false);
+  const [searchResult,setSearchResult] = React.useState([]);
   const dispatch = useDispatch();
   const onclose = () => {
     setOpenForm(false);
@@ -96,6 +107,7 @@ function NotesBlog() {
         dispatch({type:"SET_LOADING", payload: false});
         if(response.data.success){
           setnotes(response.data.notes);
+
         }
       }
       catch(error){
@@ -105,10 +117,77 @@ function NotesBlog() {
     }
     getNotes();
   },[]);
-  const download = (fileName) => {
+  const download = async (fileName) => {
     console.log(fileName);
+    try{
+      dispatch({type:"SET_LOADING", payload: true});
+      const result = await axios({
+        method:"post",
+        url:BaseUrl+"/downloadNotes",
+        data:{
+          token:localStorage.getItem("jwt"),
+          fileName:fileName
+        },
+        responseType: 'arraybuffer'
+      });
+      console.log(result);
+      dispatch({type:"SET_LOADING", payload: false});
+      const blob = new Blob([result.data], { type: 'application/pdf' })
+      saveAs(blob, `${fileName}.pdf`);
+    }catch(err){
+      dispatch({type:"SET_LOADING", payload: false});
+      console.log(err);
+    }
   }
-  console.log(notes);
+  const deleteNotes = async (fileName,index) => {
+    try{
+      dispatch({type:"SET_LOADING", payload: true});
+      const response = await axios({
+        method:"post",
+        url:BaseUrl+"/deleteNotes",
+        data:{
+          token:localStorage.getItem("jwt"),
+          fileName:fileName
+        }
+      });
+      dispatch({type:"SET_LOADING", payload: false});
+      if(response.data.success){
+        setnotes((pre)=>{
+          const newNotes = [...pre];
+          newNotes.splice(index,1);
+          return newNotes;
+        });
+        openNotificationWithIcon({
+          type:"success",
+          title:"Success",
+          message:"Notes deleted successfully"
+        })
+      }
+    }catch(err){
+      dispatch({type:"SET_LOADING", payload: false});
+      console.log(err);
+      openNotificationWithIcon({
+        type:"error",
+        title:"Error",
+        message:"Something went wrong"
+      })
+    }
+  }
+  const onSearch = (value) => {
+    console.log(value);
+    if(value === ""){
+      setSearch(false);
+      setSearchResult([]);
+    }
+    else{
+      setSearch(true);
+      setSearchResult(notes.filter((note)=>{
+        return note.subject.toLowerCase().includes(value.toLowerCase()) 
+          || note.postedBy.toLowerCase().includes(value.toLowerCase()) 
+          || note.topicName.toLowerCase().includes(value.toLowerCase()) 
+      }));
+    }
+  }
   return (
     <>
     {
@@ -156,6 +235,7 @@ function NotesBlog() {
                       <StyledInputBase
                         placeholder="Search…"
                         inputProps={{ "aria-label": "search" }}
+                        onChange={(e)=>onSearch(e.target.value)}
                       />
                     </Search>
                     {
@@ -181,10 +261,14 @@ function NotesBlog() {
             marginRight: "50px",
           }}>
             {
-              notes.map((note,index)=>{
+              search ?
+              searchResult.map((note,index)=>{
                 return (
-                <Card hoverable>
+                  <Card hoverable>
                   <h3>{note.subject}</h3>
+                  <p className="mb-0 mt-2">
+                      posted on {new Date(note.postedOn).toString().split("GMT")[0]}
+                    </p>
                   <hr />
                   <Alert
                     style={{ margin: "16px 0" }}
@@ -193,9 +277,66 @@ function NotesBlog() {
                   <p>
                     {note.description}
                   </p>
-                  <Button type="primary" icon={<DownloadOutlined />} size="large">
-                    Download
-                  </Button>
+                  <div style={{
+                    display:"flex",
+                    justifyContent:"space-between",
+                    alignItems:"center",
+                    flexWrap:"wrap"
+                  }}>
+                    <Button type="primary" icon={<DownloadOutlined />} size="large" onClick={()=>download(note.file)}>
+                      Download
+                    </Button>
+                    {
+                      (JSON.parse(localStorage.getItem("user")).username === note.postedBy) &&
+                        <Button danger icon={<DeleteOutlined />} size="large" onClick={()=>deleteNotes(note.file)}>
+                          Delete
+                        </Button>
+                    }
+                  </div>
+                </Card>
+                )
+              })
+              :
+              notes.map((note,index)=>{
+                return (
+                <Card hoverable>
+                  <h3 className="mb-1">{note.subject}</h3>
+                  <p className="mb-0 mt-0">
+                      posted on {new Date(note.postedOn).toString().split("GMT")[0]}
+                    </p>
+                  <hr />
+                  <Alert
+                    style={{ margin: "16px 0" }}
+                    message={note.topicName}
+                  />
+                  <p>
+                    {note.description}
+                  </p>
+                  <figure
+                      className="text-end mt-3 mb-0"
+                      style={{ marginBottom: "-2rem" }}
+                    >
+                      <figcaption class="blockquote-footer">
+                        posted by{" "}
+                        <cite title="Source Title">{note.postedBy}</cite>
+                      </figcaption>
+                    </figure>
+                  <div style={{
+                    display:"flex",
+                    justifyContent:"space-between",
+                    alignItems:"center",
+                    flexWrap:"wrap"
+                  }}>
+                    <Button type="primary" icon={<DownloadOutlined />} size="large" onClick={()=>download(note.file)}>
+                      Download
+                    </Button>
+                    {
+                      (JSON.parse(localStorage.getItem("user")).username === note.postedBy) &&
+                        <Button danger icon={<DeleteOutlined />} size="large" onClick={()=>deleteNotes(note.file)}>
+                          Delete
+                        </Button>
+                    }
+                  </div>
                 </Card>
               )
               })

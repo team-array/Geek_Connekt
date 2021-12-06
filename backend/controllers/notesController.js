@@ -63,9 +63,17 @@ const uploadNotes = async (req, res) => {
 
 const downloadNotes = async (req, res) => {
   try {
-    const fileName = req.params.file;
-    const file = `${__dirname}/../notes/${fileName}.pdf`;
-    res.download(file);
+    verify(req.body.token).then(async (user) => {
+      const fileName = req.body.fileName;
+      const file = `${__dirname}/../notes/${fileName}.pdf`;
+      return res.download(file);
+    }).catch((err) => {
+      console.log(err);
+      return res.status(200).json({
+        success: false,
+        message: "Invalid token",
+      });
+    });
   } catch (error) {
     res.status(400).send("error occured while dowloading file !!");
   }
@@ -75,34 +83,25 @@ const deleteNotes = async (req, res) => {
   try {
     verify(req.body.token)
       .then(async (user) => {
-        const fileName = req.body.file;
+        const fileName = req.body.fileName;
         const file = `${__dirname}/../notes/${fileName}.pdf`;
         fs.unlink(file, (err) => {
           if (err) throw err;
-          console.log("path/file.txt was deleted");
+          console.log("path/file was deleted");
         });
 
-        await notes.findOneAndDelete({ file: fileName }, (err, note) => {
-          if (err) {
-            console.log(err);
-            return res.status(200).json({
-              success: false,
-              message: "failed to delete note",
-            });
-          }
-          if (!note) {
-            return res.status(200).json({
-              success: false,
-              message: "note not found",
-            });
-          }
+        const newNote = await notes.findOneAndDelete({ file: fileName, postedBy:user.username });
+        if (!newNote) {
           return res.status(200).json({
-            success: true,
-            message: "note deleted successfully",
+            success: false,
+            message: "note not found",
           });
+        }
+        return res.status(200).json({
+          success: true,
+          message: "note deleted successfully",
         });
-      })
-      .catch((err) => {
+      }).catch((err) => {
         console.log(err);
         return res.status(200).json({
           success: false,
@@ -111,6 +110,10 @@ const deleteNotes = async (req, res) => {
       });
   } catch (err) {
     console.log(err);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
   }
 };
 
