@@ -5,7 +5,7 @@ module.exports.client = null;
 module.exports.connect = () => {
         
         const client = redis.createClient({
-                host: process.env.redis_host,
+                host: process.env.redisUrl,
                 port: 6379
         });
 

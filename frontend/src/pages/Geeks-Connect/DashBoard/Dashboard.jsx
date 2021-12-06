@@ -30,7 +30,7 @@ const Dashboard = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        socket = io("http://localhost:8000");
+        socket = io(BaseUrl);
         // console.log(socket);
     }, []);
 
@@ -109,7 +109,7 @@ const Dashboard = () => {
         if (newNotificationCount > 0) {
             try {
                 axios({
-                    url: `http://localhost:8000/deleteUserNotification`,
+                    url: BaseUrl+`/deleteUserNotification`,
                     method: "DELETE",
                     headers: {
                         "Content-Type": "application/json",

@@ -4,7 +4,6 @@ import profileimg from "./img/profile.png";
 import star from "./img/star.jfif";
 import micon from "./img/message.png";
 import info from "./img/info.jfif";
-import pp from "./img/profile-pic.png";
 import live from "./img/live-video.png";
 import photo from "./img/photo.png";
 import feeling from "./img/feeling.png";
@@ -22,6 +21,8 @@ import userPostHook from "../../../../hooks/userPostHook";
 import { useDispatch, useSelector } from "react-redux";
 import { useQuery, gql } from "@apollo/client";
 import ForumOutlinedIcon from "@mui/icons-material/ForumOutlined";
+import PersonIcon from '@mui/icons-material/Person';
+import CakeIcon from '@mui/icons-material/Cake';
 
 // import post1 from "./img/photo1.png";
 // import post2 from "./img/photo2.png";
@@ -55,6 +56,9 @@ const USER_DATA = gql`
             birthDate
             secondarySchool
             primarySchool
+            fullName
+            birthDate
+            website
         }
     }
 `;
@@ -255,6 +259,9 @@ export const OtherUserProfile = (props) => {
                     <div className="pd-left mr-auto my-2">
                         <div className="pd-row">
                             <img
+                                style={{
+                                    borderRadius: "100%",
+                                }}
                                 src={userData.otherUser.profilePic}
                                 alt="profileimg"
                                 className="pd-img"
@@ -284,14 +291,33 @@ export const OtherUserProfile = (props) => {
                 {/* 1 */}
                 <div className="ProfileBlog">
                     <div className="profile-info">
-                        <div className="info-col">
-                            <div className="profile-intro">
+                        <div className="info-col"
+                        >
+                            <div className="profile-intro"
+                            style={{boxShadow:"0px 0px 5px 0px rgb(0 0 0 / 10%)"}}
+                            
+                            >
                                 <h3>Intro</h3>
                                 <p className="intro-text">
                                     {userData.otherUser.bio}
                                 </p>
                                 <hr />
                                 <ul>
+                                <li>
+                                    <PersonIcon />
+                                        &nbsp;
+                                        &nbsp;
+
+                                        {userData.otherUser.fullName}
+                                    </li>
+                                    <li>
+                                        <CakeIcon />
+                                        &nbsp;
+                                        &nbsp;
+                                        born on
+                                        &nbsp;  
+                                        {new Date(new Number(userData.otherUser.birthDate)).toDateString()}
+                                    </li>
                                     <li>
                                         <img src={job} alt="" />{" "}
                                         {userData.otherUser.role}
@@ -320,7 +346,9 @@ export const OtherUserProfile = (props) => {
                                     </li>
                                 </ul>
                             </div>
-                            <div className="profile-intro">
+                            <div className="profile-intro"
+                                style={{boxShadow:"0px 0px 5px 0px rgb(0 0 0 / 10%)"}}
+                            >
                                 <div className="title-box">
                                     <h4 style={{ marginLeft: "9px" }}>
                                         info & posts
@@ -369,19 +397,6 @@ export const OtherUserProfile = (props) => {
                                                         alt=""
                                                         className="post-img mx-3"
                                                     />
-                                                    <Button
-                                                        className="mb-3 mx-3"
-                                                        style={{
-                                                            width: "150px",
-                                                        }}
-                                                        onClick={() =>
-                                                            deleteAchievement(
-                                                                index
-                                                            )
-                                                        }
-                                                    >
-                                                        delete
-                                                    </Button>
                                                 </div>
                                             );
                                         })}
@@ -393,9 +408,9 @@ export const OtherUserProfile = (props) => {
                         <div className="post-col">
                             <div className="write-post-container">
                                 <div className="user-profile">
-                                    <img src={pp} alt="" />
+                                    <img src={userData.otherUser.profilePic} alt="" />
                                     <div>
-                                        <p>Kranthi</p>
+                                        <p>{userData.otherUser.username}</p>
                                         <small>
                                             Public
                                             <i class="fas fa-caret-down"></i>
@@ -442,6 +457,7 @@ export const OtherUserProfile = (props) => {
                                         return (
                                             <div
                                                 className="post-container"
+                                                style={{boxShadow: "0px 0px 5px 0px rgb(0 0 0 / 10%)"}}
                                                 ref={lastPostRefChanger}
                                             >
                                                 <div className="post-row">
@@ -462,7 +478,7 @@ export const OtherUserProfile = (props) => {
                                                                 }
                                                             </p>
                                                             <span>
-                                                                {post.createdAt}
+                                                                {new Date(post.createdAt).toString().split("GMT")[0]}
                                                             </span>
                                                         </div>
                                                     </div>
@@ -511,7 +527,7 @@ export const OtherUserProfile = (props) => {
                                                                             await axios(
                                                                                 {
                                                                                     method: "post",
-                                                                                    url: `http://localhost:8000/likePost`,
+                                                                                    url: BaseUrl+`/likePost`,
                                                                                     data: {
                                                                                         postId: post._id,
                                                                                         userId: userId,
@@ -622,14 +638,16 @@ export const OtherUserProfile = (props) => {
                                                         </div>
                                                     </div>
                                                     <div className="post-profile-icon">
-                                                        <img src={pp} alt="" />
+                                                        <img src={userData.otherUser.profilePic} alt="" />
                                                     </div>
                                                 </div>
                                             </div>
                                         );
                                     } else {
                                         return (
-                                            <div className="post-container">
+                                            <div className="post-container" style={{
+                                                boxShadow: "0px 0px 5px 0px rgb(0 0 0 / 10%)"
+                                            }}>
                                                 <div className="post-row">
                                                     <div className="user-profile">
                                                         <img
@@ -648,7 +666,7 @@ export const OtherUserProfile = (props) => {
                                                                 }
                                                             </p>
                                                             <span>
-                                                                {post.createdAt}
+                                                                {new Date(post.createdAt).toString().split("GMT")[0]}
                                                             </span>
                                                         </div>
                                                     </div>
@@ -697,7 +715,7 @@ export const OtherUserProfile = (props) => {
                                                                             await axios(
                                                                                 {
                                                                                     method: "post",
-                                                                                    url: `http://localhost:8000/likePost`,
+                                                                                    url: BaseUrl+`/likePost`,
                                                                                     data: {
                                                                                         postId: post._id,
                                                                                         userId: userId,
@@ -820,7 +838,7 @@ export const OtherUserProfile = (props) => {
                                                         </div>
                                                     </div>
                                                     <div className="post-profile-icon">
-                                                        <img src={pp} alt="" />
+                                                        <img src={userData.otherUser.profilePic} alt="" />
                                                     </div>
                                                 </div>
                                             </div>

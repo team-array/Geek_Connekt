@@ -128,7 +128,7 @@ export const Profilepage = () => {
         try {
             const result = await axios({
                 method: "POST",
-                url: "http://localhost:8000/editProfilePic",
+                url: BaseUrl+"/editProfilePic",
                 data: formData,
                 headers: {
                     "content-type": "multipart/form-data",
@@ -345,7 +345,7 @@ export const Profilepage = () => {
                 {/* 1 */}
                 <div className="ProfileBlog">
                     <div className="profile-info">
-                        <div className="info-col">
+                        <div className="info-col" >
                             <div className="profile-intro">
                                 <h3>Intro</h3>
                                 <p className="intro-text">
@@ -542,7 +542,7 @@ export const Profilepage = () => {
                                                                 }
                                                             </p>
                                                             <span>
-                                                                {post.createdAt}
+                                                                {new Date(post.createdAt).toString().split("GMT")[0]}
                                                             </span>
                                                         </div>
                                                     </div>
@@ -591,7 +591,7 @@ export const Profilepage = () => {
                                                                             await axios(
                                                                                 {
                                                                                     method: "post",
-                                                                                    url: `http://localhost:8000/likePost`,
+                                                                                    url: BaseUrl+`/likePost`,
                                                                                     data: {
                                                                                         postId: post._id,
                                                                                         userId: userId,
@@ -702,7 +702,7 @@ export const Profilepage = () => {
                                                         </div>
                                                     </div>
                                                     <div className="post-profile-icon">
-                                                        <img src={pp} alt="" />
+                                                        <img src={userData.user.profilePic} alt="" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -728,7 +728,7 @@ export const Profilepage = () => {
                                                                 }
                                                             </p>
                                                             <span>
-                                                                {post.createdAt}
+                                                                {new Date(post.createdAt).toString().split("GMT")[0]}
                                                             </span>
                                                         </div>
                                                     </div>
@@ -777,7 +777,7 @@ export const Profilepage = () => {
                                                                             await axios(
                                                                                 {
                                                                                     method: "post",
-                                                                                    url: `http://localhost:8000/likePost`,
+                                                                                    url: BaseUrl+`/likePost`,
                                                                                     data: {
                                                                                         postId: post._id,
                                                                                         userId: userId,

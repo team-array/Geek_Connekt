@@ -1,10 +1,22 @@
-version: '3'
+version: "3"
 services:
-  geek_connekt:
-    build:
-      context: .
-    ports:
-      - "8000:8000"
-    # volumes:
-    #   - ./:/app
-    #   - /app/node_modules
+    geek_connekt:
+      build:
+        context: .
+        dockerfile: Dockerfile
+      ports:
+        - "8000:8000"
+      volumes:
+        - ./:/app
+        - /app/node_modules
+    redis:
+        image: redis
+    nginx:
+        image: nginx:stable-alpine
+        ports:
+            - "80:80"
+            - "443:443"
+        depends_on:
+            - geek_connekt
+        volumes:
+            - ./nginx/default.conf:/etc/nginx/conf.d/default.conf

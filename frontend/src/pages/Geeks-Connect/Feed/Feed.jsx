@@ -173,7 +173,7 @@ const Feed = () => {
                                                           {post.user.username}
                                                       </p>
                                                   </Link>
-                                                  <span>{post.createdAt}</span>
+                                                  <span>{new Date(post.createdAt).toString().split("GMT")[0]}</span>
                                               </div>
                                           </div>
                                           {/* <a href="#"></a> */}
@@ -215,7 +215,7 @@ const Feed = () => {
                                                               const result =
                                                                   await axios({
                                                                       method: "post",
-                                                                      url: `http://localhost:8000/likePost`,
+                                                                      url: BaseUrl+`/likePost`,
                                                                       data: {
                                                                           postId: post._id,
                                                                           userId: userId,
@@ -352,7 +352,7 @@ const Feed = () => {
                                                           {post.user.username}
                                                       </p>
                                                   </Link>
-                                                  <span>{post.createdAt}</span>
+                                                  <span>{new Date(post.createdAt).toString().split("GMT")[0]}</span>
                                               </div>
                                           </div>
                                           {/* <a href="#"></a> */}
@@ -394,7 +394,7 @@ const Feed = () => {
                                                               const result =
                                                                   await axios({
                                                                       method: "post",
-                                                                      url: `http://localhost:8000/likePost`,
+                                                                      url: BaseUrl+`/likePost`,
                                                                       data: {
                                                                           postId: post._id,
                                                                           userId: userId,
