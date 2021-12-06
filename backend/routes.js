@@ -102,4 +102,28 @@ router.get("/getNotifications", notifcationController.getNotifications);
 
 router.delete("/deleteUserNotification", notifcationController.deleteUserNotification);
 
+router.post("/deleteNotes",(req,res)=>{
+    require("./controllers/notesController").deleteNotes(req,res);
+});
+
+router.post("/uploadNotes", (req, res) => {
+    require("./controllers/notesController").uploadNotes(req, res);
+});
+
+router.post("/downloadNotes", (req, res) => {
+    require("./controllers/notesController").downloadNotes(req, res);
+});
+
+router.post("/searchNotes", (req, res) => {
+    require("./controllers/notesController").searchNotes(req, res);
+});
+
+router.post("/getNotes", (req, res) => {
+    require("./controllers/notesController").getNotes(req, res);
+});
+
+router.post("/getAllNotes", (req, res) => {
+    require("./controllers/notesController").getAllNotes(req, res);
+});
+
 module.exports = router;
