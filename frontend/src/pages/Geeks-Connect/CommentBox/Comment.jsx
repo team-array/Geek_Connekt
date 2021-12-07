@@ -12,7 +12,7 @@ import axios from "axios";
 import { useQuery, gql } from "@apollo/client";
 import defaultProfilePic from "../../../assets/profilePic.png";
 import LoadingComponent from "../../../components/loadingComponent/LoadingComponent.jsx";
-import {BaseUrl} from '../../../constants';
+import { BaseUrl } from "../../../constants";
 const { TextArea } = Input;
 
 const USER_DATA = gql`
@@ -154,7 +154,7 @@ const CommentBox = () => {
             setmsg("");
             const result = await axios({
                 method: "POST",
-                url: BaseUrl+"/commentPost",
+                url: BaseUrl + "/commentPost",
                 data: {
                     postId: Comment_Box.postId,
                     comment: msg,
@@ -173,7 +173,7 @@ const CommentBox = () => {
             const newComments = [];
             const result = await axios({
                 method: "GET",
-                url: BaseUrl+`/getComments`,
+                url: BaseUrl + `/getComments`,
                 params: {
                     postId: Comment_Box.postId,
                 },
@@ -215,7 +215,11 @@ const CommentBox = () => {
                 }
                 open={Comment_Box.commentBox}
             >
-                <CommentBoxContainer>
+                <CommentBoxContainer
+                    onClick={(e) => {
+                        e.stopPropagation();
+                    }}
+                >
                     <div
                         className="user-profile"
                         style={{
