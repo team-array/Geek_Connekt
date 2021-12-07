@@ -34,10 +34,18 @@ exports.uploadAttendance = async (req, res) => {
                             attendanceList.push(temp);
                         }
                     }
-                    const attendance = new Attendance({
+                    const updateAttendance = await Attendance.find({
                         userId: user._id,
-                        attendanceList: attendanceList,
                     });
+                    if (updateAttendance) {
+                        updateAttendance.attendanceList = attendanceList;
+                        updateAttendance.save();
+                    } else {
+                        const attendance = new Attendance({
+                            userId: user._id,
+                            attendanceList: attendanceList,
+                        });
+                    }
                     console.log(attendance);
                     attendance.save();
                 }

@@ -22,9 +22,9 @@ import userPostHook from "../../../../hooks/userPostHook";
 import { useDispatch, useSelector } from "react-redux";
 import { useQuery, gql } from "@apollo/client";
 import ForumOutlinedIcon from "@mui/icons-material/ForumOutlined";
-import LinkIcon from '@mui/icons-material/Link';
-import CakeIcon from '@mui/icons-material/Cake';
-import PersonIcon from '@mui/icons-material/Person';
+import LinkIcon from "@mui/icons-material/Link";
+import CakeIcon from "@mui/icons-material/Cake";
+import PersonIcon from "@mui/icons-material/Person";
 
 // import post1 from "./img/photo1.png";
 // import post2 from "./img/photo2.png";
@@ -40,6 +40,13 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import "./porfilepage.scss";
 import LoadingComponent from "../../../../components/loadingComponent/LoadingComponent";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+
+const options = ["Delete"];
+
+const ITEM_HEIGHT = 48;
 
 const USER_DATA = gql`
     query user($token: String!) {
@@ -84,9 +91,20 @@ export const Profilepage = () => {
 
     const [tab, setTab] = React.useState(0);
 
+    const [deletePostId, setDeletePostId] = React.useState();
+
     const [pageNumber, setpageNumber] = React.useState(1);
 
     const [edit, setedit] = React.useState(false);
+
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
     const [profilePic, setprofilePic] = React.useState({});
     const [postData, setpostData] = useState([]);
@@ -128,7 +146,7 @@ export const Profilepage = () => {
         try {
             const result = await axios({
                 method: "POST",
-                url: BaseUrl+"/editProfilePic",
+                url: BaseUrl + "/editProfilePic",
                 data: formData,
                 headers: {
                     "content-type": "multipart/form-data",
@@ -306,11 +324,11 @@ export const Profilepage = () => {
                             <div>
                                 <h3>{userData.user.username}</h3>
                                 <p>{userData.user.role}</p>
-                                {
-                                    (userData.user.role)?
-                                    <img src={star} alt="star" /> :""
-
-                                }
+                                {userData.user.role ? (
+                                    <img src={star} alt="star" />
+                                ) : (
+                                    ""
+                                )}
                                 <Button
                                     type="button"
                                     className="my-2 mx-2"
@@ -345,7 +363,7 @@ export const Profilepage = () => {
                 {/* 1 */}
                 <div className="ProfileBlog">
                     <div className="profile-info">
-                        <div className="info-col" >
+                        <div className="info-col">
                             <div className="profile-intro">
                                 <h3>Intro</h3>
                                 <p className="intro-text">
@@ -355,18 +373,15 @@ export const Profilepage = () => {
                                 <ul>
                                     <li>
                                         <PersonIcon />
-                                        &nbsp;
-                                        &nbsp;
-
+                                        &nbsp; &nbsp;
                                         {userData.user.fullName}
                                     </li>
                                     <li>
                                         <CakeIcon />
-                                        &nbsp;
-                                        &nbsp;
-                                        born on
-                                        &nbsp;  
-                                        {new Date(new Number(userData.user.birthDate)).toDateString()}
+                                        &nbsp; &nbsp; born on &nbsp;
+                                        {new Date(
+                                            new Number(userData.user.birthDate)
+                                        ).toDateString()}
                                     </li>
                                     <li>
                                         <img src={job} alt="" />{" "}
@@ -394,7 +409,13 @@ export const Profilepage = () => {
                                         <img src={location} alt="" />
                                         From {userData.user.location}
                                     </li>
-                                    <LinkIcon className="" style={{marginRight:"12px",marginLeft:"2.5px"}}/>
+                                    <LinkIcon
+                                        className=""
+                                        style={{
+                                            marginRight: "12px",
+                                            marginLeft: "2.5px",
+                                        }}
+                                    />
                                     <a href={userData.user.website}>
                                         {userData.user.website}
                                     </a>
@@ -473,7 +494,10 @@ export const Profilepage = () => {
                         <div className="post-col">
                             <div className="write-post-container">
                                 <div className="user-profile">
-                                    <img src={userData.user.profilePic} alt="" />
+                                    <img
+                                        src={userData.user.profilePic}
+                                        alt=""
+                                    />
                                     <div>
                                         <p>{userData.user.username}</p>
                                         <small>
@@ -512,7 +536,7 @@ export const Profilepage = () => {
                                     </div>
                                 </div>
                             </div>
-                            {posts.length === 0 && posts === undefined ? (
+                            {postData.length === 0 || postData === undefined ? (
                                 <h1>Write you first post now!</h1>
                             ) : postData !== undefined &&
                               postData !== null &&
@@ -521,11 +545,23 @@ export const Profilepage = () => {
                                     if (posts.length === idx + 1) {
                                         return (
                                             <div
+                                                // onClick={(e) => {
+                                                //     console.log(idx);
+                                                // }}
                                                 className="post-container"
                                                 ref={lastPostRefChanger}
                                             >
+                                                {/* <p>{idx}</p> */}
                                                 <div className="post-row">
-                                                    <div className="user-profile">
+                                                    <div
+                                                        className="user-profile"
+                                                        style={{
+                                                            display: "flex",
+                                                            justifyContent:
+                                                                "space-between",
+                                                            width: "100%",
+                                                        }}
+                                                    >
                                                         <img
                                                             src={
                                                                 userData.user
@@ -542,8 +578,119 @@ export const Profilepage = () => {
                                                                 }
                                                             </p>
                                                             <span>
-                                                                {new Date(post.createdAt).toString().split("GMT")[0]}
+                                                                {
+                                                                    new Date(
+                                                                        post.createdAt
+                                                                    )
+                                                                        .toString()
+                                                                        .split(
+                                                                            "GMT"
+                                                                        )[0]
+                                                                }
                                                             </span>
+                                                        </div>
+                                                        <div
+                                                            style={{
+                                                                marginLeft:
+                                                                    "auto",
+                                                            }}
+                                                        >
+                                                            <IconButton
+                                                                aria-label="more"
+                                                                id="long-button"
+                                                                aria-controls="long-menu-if"
+                                                                aria-expanded={
+                                                                    open
+                                                                        ? "true"
+                                                                        : undefined
+                                                                }
+                                                                aria-haspopup="true"
+                                                                onClick={(
+                                                                    e
+                                                                ) => {
+                                                                    handleClick(
+                                                                        e
+                                                                    );
+                                                                    setDeletePostId(
+                                                                        idx
+                                                                    );
+                                                                }}
+                                                            >
+                                                                <MoreVertIcon />
+                                                            </IconButton>
+                                                            <Menu
+                                                                id="long-menu-if"
+                                                                MenuListProps={{
+                                                                    "aria-labelledby":
+                                                                        "long-button",
+                                                                }}
+                                                                anchorEl={
+                                                                    anchorEl
+                                                                }
+                                                                open={open}
+                                                                onClose={(
+                                                                    e
+                                                                ) => {
+                                                                    handleClose(
+                                                                        e
+                                                                    );
+                                                                    setDeletePostId(
+                                                                        idx
+                                                                    );
+                                                                }}
+                                                                PaperProps={{
+                                                                    style: {
+                                                                        maxHeight:
+                                                                            ITEM_HEIGHT *
+                                                                            4.5,
+                                                                        width: "20ch",
+                                                                    },
+                                                                }}
+                                                            >
+                                                                <MenuItem
+                                                                    key="delete"
+                                                                    onClick={async (
+                                                                        e
+                                                                    ) => {
+                                                                        try {
+                                                                            handleClose(
+                                                                                e
+                                                                            );
+                                                                            console.log(
+                                                                                `if ${deletePostId}`
+                                                                            );
+                                                                            const result =
+                                                                                await axios(
+                                                                                    {
+                                                                                        method: "POST",
+                                                                                        url: `http://localhost:8000/deletePost`,
+                                                                                        data: {
+                                                                                            postId: posts[
+                                                                                                deletePostId
+                                                                                            ]
+                                                                                                ._id,
+                                                                                            token: localStorage.getItem(
+                                                                                                "jwt"
+                                                                                            ),
+                                                                                        },
+                                                                                    }
+                                                                                );
+                                                                        } catch (err) {
+                                                                            console.log(
+                                                                                err
+                                                                            );
+                                                                        }
+                                                                    }}
+                                                                >
+                                                                    <span
+                                                                        style={{
+                                                                            color: "red",
+                                                                        }}
+                                                                    >
+                                                                        Delete
+                                                                    </span>
+                                                                </MenuItem>
+                                                            </Menu>
                                                         </div>
                                                     </div>
                                                     {/* <a href="#"></a> */}
@@ -591,7 +738,9 @@ export const Profilepage = () => {
                                                                             await axios(
                                                                                 {
                                                                                     method: "post",
-                                                                                    url: BaseUrl+`/likePost`,
+                                                                                    url:
+                                                                                        BaseUrl +
+                                                                                        `/likePost`,
                                                                                     data: {
                                                                                         postId: post._id,
                                                                                         userId: userId,
@@ -702,16 +851,36 @@ export const Profilepage = () => {
                                                         </div>
                                                     </div>
                                                     <div className="post-profile-icon">
-                                                        <img src={userData.user.profilePic} alt="" />
+                                                        <img
+                                                            src={
+                                                                userData.user
+                                                                    .profilePic
+                                                            }
+                                                            alt=""
+                                                        />
                                                     </div>
                                                 </div>
                                             </div>
                                         );
                                     } else {
                                         return (
-                                            <div className="post-container">
+                                            <div
+                                                className="post-container"
+                                                // onClick={(e) => {
+                                                //     console.log(idx);
+                                                // }}
+                                            >
+                                                <p>{idx}</p>
                                                 <div className="post-row">
-                                                    <div className="user-profile">
+                                                    <div
+                                                        className="user-profile"
+                                                        style={{
+                                                            display: "flex",
+                                                            justifyContent:
+                                                                "space-between",
+                                                            width: "100%",
+                                                        }}
+                                                    >
                                                         <img
                                                             src={
                                                                 userData.user
@@ -728,8 +897,112 @@ export const Profilepage = () => {
                                                                 }
                                                             </p>
                                                             <span>
-                                                                {new Date(post.createdAt).toString().split("GMT")[0]}
+                                                                {
+                                                                    new Date(
+                                                                        post.createdAt
+                                                                    )
+                                                                        .toString()
+                                                                        .split(
+                                                                            "GMT"
+                                                                        )[0]
+                                                                }
                                                             </span>
+                                                        </div>
+                                                        <div
+                                                            style={{
+                                                                marginLeft:
+                                                                    "auto",
+                                                            }}
+                                                        >
+                                                            <IconButton
+                                                                aria-label="more"
+                                                                id="long-button"
+                                                                aria-controls="long-menu"
+                                                                aria-expanded={
+                                                                    open
+                                                                        ? "true"
+                                                                        : undefined
+                                                                }
+                                                                aria-haspopup="true"
+                                                                onClick={(
+                                                                    e
+                                                                ) => {
+                                                                    handleClick(
+                                                                        e
+                                                                    );
+                                                                    setDeletePostId(
+                                                                        idx
+                                                                    );
+                                                                }}
+                                                            >
+                                                                <MoreVertIcon />
+                                                            </IconButton>
+                                                            <Menu
+                                                                id="long-menu"
+                                                                MenuListProps={{
+                                                                    "aria-labelledby":
+                                                                        "long-button",
+                                                                }}
+                                                                anchorEl={
+                                                                    anchorEl
+                                                                }
+                                                                open={open}
+                                                                onClose={
+                                                                    handleClose
+                                                                }
+                                                                PaperProps={{
+                                                                    style: {
+                                                                        maxHeight:
+                                                                            ITEM_HEIGHT *
+                                                                            4.5,
+                                                                        width: "20ch",
+                                                                    },
+                                                                }}
+                                                            >
+                                                                <MenuItem
+                                                                    key="delete"
+                                                                    onClick={async (
+                                                                        e
+                                                                    ) => {
+                                                                        try {
+                                                                            handleClose(
+                                                                                e
+                                                                            );
+                                                                            console.log(
+                                                                                deletePostId
+                                                                            );
+                                                                            const result =
+                                                                                await axios(
+                                                                                    {
+                                                                                        method: "POST",
+                                                                                        url: `http://localhost:8000/deletePost`,
+                                                                                        data: {
+                                                                                            postId: posts[
+                                                                                                deletePostId
+                                                                                            ]
+                                                                                                ._id,
+                                                                                            token: localStorage.getItem(
+                                                                                                "jwt"
+                                                                                            ),
+                                                                                        },
+                                                                                    }
+                                                                                );
+                                                                        } catch (err) {
+                                                                            console.log(
+                                                                                err
+                                                                            );
+                                                                        }
+                                                                    }}
+                                                                >
+                                                                    <span
+                                                                        style={{
+                                                                            color: "red",
+                                                                        }}
+                                                                    >
+                                                                        Delete
+                                                                    </span>
+                                                                </MenuItem>
+                                                            </Menu>
                                                         </div>
                                                     </div>
                                                     {/* <a href="#"></a> */}
@@ -777,7 +1050,9 @@ export const Profilepage = () => {
                                                                             await axios(
                                                                                 {
                                                                                     method: "post",
-                                                                                    url: BaseUrl+`/likePost`,
+                                                                                    url:
+                                                                                        BaseUrl +
+                                                                                        `/likePost`,
                                                                                     data: {
                                                                                         postId: post._id,
                                                                                         userId: userId,

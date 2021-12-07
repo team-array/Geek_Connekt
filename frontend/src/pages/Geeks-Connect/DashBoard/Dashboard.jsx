@@ -102,6 +102,9 @@ const Dashboard = () => {
             console.log(err);
         }
     };
+    const notes = () => {
+        navigate("/notes");
+    }
     const myprofile = () => {};
     const others_profile = () => {};
     const notifications = async () => {
@@ -136,6 +139,7 @@ const Dashboard = () => {
                 myprofile={myprofile}
                 others_profile={others_profile}
                 notifications={notifications}
+                notes={notes}
             />
             {showNotifications ? <Notifications /> : ""}
             {currentPage === 0 ? (

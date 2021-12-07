@@ -1,6 +1,7 @@
 const User = require("../models/user");
 const Post = require("../models/post");
 const Notification = require("../models/notifications");
+const jwt = require("jsonwebtoken");
 
 exports.getUserPosts = async (req, res, next) => {
     try {
@@ -8,35 +9,35 @@ exports.getUserPosts = async (req, res, next) => {
         const userId = req.query.userId;
         const user = await User.findById(userId).populate("posts");
         // console.log(user);
-        if (user) {
-            res.status(200).json({
-                message: "User posts fetched successfully",
-                posts: user.posts.slice(
-                    (req.query.pageNumber - 1) * 10,
-                    req.query.pageNumber * 10
-                ),
-            });
-        } else {
-            res.status(404).json({
-                message: "User not found",
-            });
-        }
         // if (user) {
-        //     const posts = await Post.find({ user: userId })
-        //         .skip((req.query.pageNumber - 1) * 6)
-        //         .limit(6);
-        //     Post.count({ userId: userId }).then((count) => {
-        //         res.status(200).json({
-        //             message: "Posts fetched successfully",
-        //             posts: posts,
-        //             remPosts: count - req.query.pageNumber * 6,
-        //         });
+        //     res.status(200).json({
+        //         message: "User posts fetched successfully",
+        //         posts: user.posts.slice(
+        //             (req.query.pageNumber - 1) * 3,
+        //             req.query.pageNumber * 3
+        //         ),
         //     });
         // } else {
         //     res.status(404).json({
         //         message: "User not found",
         //     });
         // }
+        if (user) {
+            const posts = await Post.find({ user: userId })
+                .skip((req.query.pageNumber - 1) * 3)
+                .limit(3);
+            Post.count({ userId: userId }).then((count) => {
+                res.status(200).json({
+                    message: "Posts fetched successfully",
+                    posts: posts,
+                    remPosts: count - req.query.pageNumber * 3,
+                });
+            });
+        } else {
+            res.status(404).json({
+                message: "User not found",
+            });
+        }
     } catch (err) {
         console.log(err);
         res.status(500).json({
@@ -52,14 +53,14 @@ exports.getAllPosts = async (req, res, next) => {
         if (user) {
             const posts = await Post.find({ college: user.college })
                 .populate("user")
-                .skip((req.query.pageNumber - 1) * 10)
+                .skip((req.query.pageNumber - 1) * 3)
                 .sort({ createdAt: -1 })
-                .limit(10);
+                .limit(3);
             Post.count().then((count) => {
                 res.status(200).json({
                     message: "Posts fetched successfully",
                     posts: posts,
-                    remPosts: count - req.query.pageNumber * 10,
+                    remPosts: count - req.query.pageNumber * 3,
                 });
             });
         } else {
@@ -232,6 +233,48 @@ exports.commentPost = async (req, res, next) => {
         console.log(err);
         res.status(500).json({
             message: "Error occured while commenting post",
+        });
+    }
+};
+
+exports.deletePost = async (req, res, next) => {
+    try {
+        console.log(req.body);
+        const postId = req.body.postId;
+        const { username } = jwt.verify(req.body.token, process.env.JWT_SECRET);
+        const post = await Post.findById(postId);
+        const user = await User.findOne({ username: username });
+        // console.log(username, user);
+        console.log(post.caption);
+        // console.log(post.user, user._id);
+        // console.log(post.user.toString() == user._id.toString());
+        console.log(post._id);
+        if (post && user) {
+            if (post.user.toString() == user._id.toString()) {
+                post.remove();
+                console.log(user.posts);
+                user.posts = user.posts.filter(
+                    (p) => p.toString() != postId.toString()
+                );
+                console.log(user.posts);
+                user.save();
+                res.status(200).json({
+                    message: "Post deleted successfully",
+                });
+            } else {
+                res.status(401).json({
+                    message: "Unauthorized",
+                });
+            }
+        } else {
+            res.status(404).json({
+                message: "Post or user not found",
+            });
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            message: "Error occured while deleting post",
         });
     }
 };

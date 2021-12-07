@@ -15,7 +15,8 @@ import {
   ImagesGridLength,
   loading,
   reloadUtilities,
-  reloadEvents
+  reloadEvents,
+  pdfFile
 } from "./reducers";
 
 const reducers = combineReducers({
@@ -33,7 +34,8 @@ const reducers = combineReducers({
   ImagesGridLength,
   loading,
   reloadUtilities,
-  reloadEvents
+  reloadEvents,
+  pdfFile
 });
 
 const Store = createStore(reducers);

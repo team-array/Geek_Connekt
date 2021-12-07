@@ -154,3 +154,13 @@ export const reloadEvents = (state = false, action) => {
             return state;
     }
 };
+
+
+export const pdfFile = (state = null, action) => {
+    switch (action.type) {
+        case "SET_PDF_FILE":
+            return action.payload;
+        default:
+            return state;
+    }
+};

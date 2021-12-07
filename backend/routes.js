@@ -17,6 +17,8 @@ router.post("/updateLocationInfo", userController.updateLocationInfo);
 
 router.post("/uploadPost", userController.uploadPost);
 
+router.post("/deletePost", postController.deletePost);
+
 router.get("/getUserImage", postController.getUserPosts);
 
 router.get("/getAllPosts", postController.getAllPosts);
@@ -107,5 +109,29 @@ router.delete(
 );
 
 router.post("/uploadAttendance", AttendanceController.uploadAttendance);
+
+router.post("/deleteNotes", (req, res) => {
+    require("./controllers/notesController").deleteNotes(req, res);
+});
+
+router.post("/uploadNotes", (req, res) => {
+    require("./controllers/notesController").uploadNotes(req, res);
+});
+
+router.post("/downloadNotes", (req, res) => {
+    require("./controllers/notesController").downloadNotes(req, res);
+});
+
+router.post("/searchNotes", (req, res) => {
+    require("./controllers/notesController").searchNotes(req, res);
+});
+
+router.post("/getNotes", (req, res) => {
+    require("./controllers/notesController").getNotes(req, res);
+});
+
+router.post("/getAllNotes", (req, res) => {
+    require("./controllers/notesController").getAllNotes(req, res);
+});
 
 module.exports = router;

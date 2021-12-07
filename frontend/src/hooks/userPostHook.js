@@ -37,7 +37,7 @@ export default function UserPostHook(
                 setPosts((posts) => {
                     return [...posts].concat(res.data.posts);
                 });
-                console.log("SET POSTS: ", posts);
+                // console.log("SET POSTS: ", posts);
                 setHasMore(res.data.remPosts);
                 setLoading(false);
             })
