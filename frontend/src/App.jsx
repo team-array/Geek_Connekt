@@ -11,6 +11,9 @@ import Notifications from "./pages/Geeks-Connect/Notifications/Notifications";
 import HomePageController from "./pages/HomePageController";
 import Spinner from "./components/Spinner/Spinner";
 import { OtherUserProfile } from "./pages/Geeks-Connect/Profile/components/OtherUserProfile";
+import NotesBlog from "./pages/Geeks-Connect/Notes/Notes";
+import PreviewPdf from "./pages/PreviewPdf/PreviewPdf";
+import UploadAttendance from './pages/Geeks-Connect/UploadAttendance/UploadAttendance';
 
 config.console(config.MODE);
 
@@ -30,6 +33,8 @@ const App = () => {
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/notifications" element={<Notifications />} />
                     <Route path={"/user/:id"} element={<OtherUserProfile />} />
+                    <Route path="/notes" element={<NotesBlog />} />
+                    <Route path="/preview" element={<PreviewPdf />} />
                 </Routes>
             </HashRouter>
         </div>

@@ -22,6 +22,7 @@ import { gql, useQuery } from "@apollo/client";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import {BaseUrl,ClientUrl} from "../../../../constants";
+import MenuBookIcon from '@mui/icons-material/MenuBook';
 
 const GET_NOTIFCATION_COUNT = gql`
     query user($token: String!) {
@@ -295,6 +296,18 @@ export default function PrimarySearchAppBar(props) {
                 </IconButton>
                 <p>News</p>
             </MenuItem>
+            <MenuItem onClick={props.notes}>
+                <IconButton
+                    size="large"
+                    // aria-label="show 17 new notifications"
+                    color="inherit"
+                >
+                    <Badge badgeContent={newNoticationCount} color="error">
+                        <MenuBookIcon />
+                    </Badge>
+                </IconButton>
+                <p>Notes</p>
+            </MenuItem>
             <MenuItem onClick={props.logout}>
                 <IconButton
                     size="large"
@@ -363,6 +376,14 @@ export default function PrimarySearchAppBar(props) {
                             }}
                         >
                             <ArticleIcon />
+                        </IconButton>
+                        <IconButton
+                            size="large"
+                            color="inherit"
+                            className="mx-1"
+                            onClick={props.notes}
+                        >
+                            <MenuBookIcon />
                         </IconButton>
                         <IconButton
                             size="large"

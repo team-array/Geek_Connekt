@@ -3,12 +3,13 @@ const router = express.Router();
 const userController = require("./controllers/userController");
 const postController = require("./controllers/postController");
 const notifcationController = require("./controllers/notificationController");
+const AttendanceController = require("./controllers/AttendanceController");
 
 router.get("/searchUsers", userController.searchUsers);
 
 router.post("/editProfilePic", userController.editProfilePic);
 
-router.post("/editBackgroundPic",userController.editBackgroundPic);
+router.post("/editBackgroundPic", userController.editBackgroundPic);
 
 router.post("/updateSchoolInfo", userController.updateSchoolInfo);
 
@@ -100,6 +101,35 @@ router.post("/getStarOfTheMonth", (res, req) => {
 
 router.get("/getNotifications", notifcationController.getNotifications);
 
-router.delete("/deleteUserNotification", notifcationController.deleteUserNotification);
+router.delete(
+    "/deleteUserNotification",
+    notifcationController.deleteUserNotification
+);
+
+router.post("/uploadAttendance", AttendanceController.uploadAttendance);
+
+router.post("/deleteNotes",(req,res)=>{
+    require("./controllers/notesController").deleteNotes(req,res);
+});
+
+router.post("/uploadNotes", (req, res) => {
+    require("./controllers/notesController").uploadNotes(req, res);
+});
+
+router.post("/downloadNotes", (req, res) => {
+    require("./controllers/notesController").downloadNotes(req, res);
+});
+
+router.post("/searchNotes", (req, res) => {
+    require("./controllers/notesController").searchNotes(req, res);
+});
+
+router.post("/getNotes", (req, res) => {
+    require("./controllers/notesController").getNotes(req, res);
+});
+
+router.post("/getAllNotes", (req, res) => {
+    require("./controllers/notesController").getAllNotes(req, res);
+});
 
 module.exports = router;
