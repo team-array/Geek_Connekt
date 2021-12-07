@@ -44,8 +44,6 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 
-const options = ["Delete"];
-
 const ITEM_HEIGHT = 48;
 
 const USER_DATA = gql`
@@ -536,7 +534,9 @@ export const Profilepage = () => {
                                     </div>
                                 </div>
                             </div>
-                            {postData.length === 0 || postData === undefined ? (
+                            {!loading &&
+                            (postData.length === 0 ||
+                                postData === undefined) ? (
                                 <h1>Write you first post now!</h1>
                             ) : postData !== undefined &&
                               postData !== null &&

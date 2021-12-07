@@ -4,9 +4,13 @@ import like from "../Profile/components/img/like-blue.png";
 import comment from "../Profile/components/img/comments.png";
 import share from "../Profile/components/img/share.png";
 import feed from "../Profile/components/img/feed-image-1.png";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 import "./Feed.scss";
 import axios from "axios";
 import Comment from "../CommentBox/Comment";
+import IconButton from "@mui/material/IconButton";
 import { useDispatch } from "react-redux";
 import feedPostsHook from "../../../hooks/feedPostsHook";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
@@ -25,6 +29,8 @@ const openNotificationWithIcon = (info) => {
     });
 };
 
+const ITEM_HEIGHT = 48;
+
 const Feed = () => {
     const dispatch = useDispatch();
     const show_comments = (id) => {
@@ -40,6 +46,21 @@ const Feed = () => {
     const [pageNumber, setpageNumber] = useState(1);
 
     const [postData, setpostData] = useState([]);
+    const [deletePostId, setDeletePostId] = React.useState();
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const [userRole, setUserRole] = useState(
+        localStorage.getItem("user")
+            ? JSON.parse(localStorage.getItem("user")).role
+            : null
+    );
     const [postLikesCount, setpostLikesCount] = useState([]);
 
     const { loading, error, posts, hasMore } = feedPostsHook(
@@ -173,7 +194,15 @@ const Feed = () => {
                                                           {post.user.username}
                                                       </p>
                                                   </Link>
-                                                  <span>{new Date(post.createdAt).toString().split("GMT")[0]}</span>
+                                                  <span>
+                                                      {
+                                                          new Date(
+                                                              post.createdAt
+                                                          )
+                                                              .toString()
+                                                              .split("GMT")[0]
+                                                      }
+                                                  </span>
                                               </div>
                                           </div>
                                           {/* <a href="#"></a> */}
@@ -215,7 +244,9 @@ const Feed = () => {
                                                               const result =
                                                                   await axios({
                                                                       method: "post",
-                                                                      url: BaseUrl+`/likePost`,
+                                                                      url:
+                                                                          BaseUrl +
+                                                                          `/likePost`,
                                                                       data: {
                                                                           postId: post._id,
                                                                           userId: userId,
@@ -335,7 +366,22 @@ const Feed = () => {
                               return (
                                   <div className="post-container mb-5 card mx-auto shadow-sm">
                                       <div className="post-row">
-                                          <div className="user-profile">
+                                          <div
+                                              className="user-profile"
+                                              style={{
+                                                  display: `${
+                                                      userRole === "Teacher"
+                                                          ? "flex"
+                                                          : ""
+                                                  }`,
+                                                  justifyContent: `${
+                                                      userRole === "Teacher"
+                                                          ? "space-between"
+                                                          : ""
+                                                  }`,
+                                                  width: "100%",
+                                              }}
+                                          >
                                               <Link
                                                   to={`/user/${post.user._id}`}
                                               >
@@ -352,8 +398,105 @@ const Feed = () => {
                                                           {post.user.username}
                                                       </p>
                                                   </Link>
-                                                  <span>{new Date(post.createdAt).toString().split("GMT")[0]}</span>
+                                                  <span>
+                                                      {
+                                                          new Date(
+                                                              post.createdAt
+                                                          )
+                                                              .toString()
+                                                              .split("GMT")[0]
+                                                      }
+                                                  </span>
                                               </div>
+                                              {userRole === "Teacher" ? (
+                                                  <div
+                                                      style={{
+                                                          marginLeft: "auto",
+                                                      }}
+                                                  >
+                                                      <IconButton
+                                                          aria-label="more"
+                                                          id="long-button"
+                                                          aria-controls="long-menu"
+                                                          aria-expanded={
+                                                              open
+                                                                  ? "true"
+                                                                  : undefined
+                                                          }
+                                                          aria-haspopup="true"
+                                                          onClick={(e) => {
+                                                              handleClick(e);
+                                                              setDeletePostId(
+                                                                  idx
+                                                              );
+                                                          }}
+                                                      >
+                                                          <MoreVertIcon />
+                                                      </IconButton>
+                                                      <Menu
+                                                          id="long-menu"
+                                                          MenuListProps={{
+                                                              "aria-labelledby":
+                                                                  "long-button",
+                                                          }}
+                                                          anchorEl={anchorEl}
+                                                          open={open}
+                                                          onClose={handleClose}
+                                                          PaperProps={{
+                                                              style: {
+                                                                  maxHeight:
+                                                                      ITEM_HEIGHT *
+                                                                      4.5,
+                                                                  width: "20ch",
+                                                              },
+                                                          }}
+                                                      >
+                                                          <MenuItem
+                                                              key="delete"
+                                                              onClick={async (
+                                                                  e
+                                                              ) => {
+                                                                  try {
+                                                                      handleClose(
+                                                                          e
+                                                                      );
+                                                                      console.log(
+                                                                          deletePostId
+                                                                      );
+                                                                      const result =
+                                                                          await axios(
+                                                                              {
+                                                                                  method: "POST",
+                                                                                  url: `http://localhost:8000/deletePostAdmin`,
+                                                                                  data: {
+                                                                                      postId: posts[
+                                                                                          deletePostId
+                                                                                      ]
+                                                                                          ._id,
+                                                                                      token: localStorage.getItem(
+                                                                                          "jwt"
+                                                                                      ),
+                                                                                  },
+                                                                              }
+                                                                          );
+                                                                  } catch (err) {
+                                                                      console.log(
+                                                                          err
+                                                                      );
+                                                                  }
+                                                              }}
+                                                          >
+                                                              <span
+                                                                  style={{
+                                                                      color: "red",
+                                                                  }}
+                                                              >
+                                                                  Delete
+                                                              </span>
+                                                          </MenuItem>
+                                                      </Menu>
+                                                  </div>
+                                              ) : null}
                                           </div>
                                           {/* <a href="#"></a> */}
                                       </div>
@@ -394,7 +537,9 @@ const Feed = () => {
                                                               const result =
                                                                   await axios({
                                                                       method: "post",
-                                                                      url: BaseUrl+`/likePost`,
+                                                                      url:
+                                                                          BaseUrl +
+                                                                          `/likePost`,
                                                                       data: {
                                                                           postId: post._id,
                                                                           userId: userId,

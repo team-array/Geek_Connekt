@@ -19,6 +19,8 @@ router.post("/uploadPost", userController.uploadPost);
 
 router.post("/deletePost", postController.deletePost);
 
+router.post("/deletePostAdmin", postController.deletePostAdmin);
+
 router.get("/getUserImage", postController.getUserPosts);
 
 router.get("/getAllPosts", postController.getAllPosts);

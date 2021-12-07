@@ -278,3 +278,33 @@ exports.deletePost = async (req, res, next) => {
         });
     }
 };
+
+exports.deletePostAdmin = async (req, res, next) => {
+    try {
+        console.log(req.body);
+        const postId = req.body.postId;
+        const post = await Post.findById(postId);
+        console.log(post.caption);
+        if (post) {
+            post.remove();
+            const userId = post.user;
+            const user = await User.findById(userId);
+            user.posts = user.posts.filter(
+                (p) => p.toString() != postId.toString()
+            );
+            user.save();
+            res.status(200).json({
+                message: "Post deleted successfully",
+            });
+        } else {
+            res.status(404).json({
+                message: "Post not found",
+            });
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            message: "Error occured while deleting post",
+        });
+    }
+};
