@@ -140,4 +140,8 @@ router.post("/getUserDetails", (res, req) => {
     require("./controllers/userController").getUserDetails(res, req);
 })
 
+router.post("/getAttendance", (res, req) => {
+    require("./controllers/AttendanceController").getAttendance(res, req);
+});
+
 module.exports = router;

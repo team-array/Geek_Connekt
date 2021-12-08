@@ -77,3 +77,59 @@ exports.uploadAttendance = async (req, res) => {
     }
     );
 };
+
+
+exports.getAttendance = async (req, res) => {
+    try{
+        const attendance = await Attendance.findOne({
+            userId: req.body.userId,
+        });
+        console.log(attendance);
+        if(attendance){
+            let classNames = [];
+            let totalClasses = [];
+            let attendedClasses = [];
+            attendance.attendanceList.forEach((element)=>{
+                classNames.push(element.attendanceCategory.className);
+                totalClasses.push(element.attendanceCategory.totalClasses);
+                attendedClasses.push(element.attendanceCategory.attendedClasses);
+            });
+            let sumOfTotalClasses = totalClasses.reduce((a, b) => a + b, 0);
+            let sumOfAttendedClasses = attendedClasses.reduce((a, b) => a + b, 0);
+            try{
+                let percentage = ((sumOfAttendedClasses/sumOfTotalClasses)*100).toFixed(2);
+                return res.status(200).json({
+                    message: "Attendance Fetched Successfully",
+                    success: true,
+                    classNames: classNames,
+                    totalClasses: totalClasses,
+                    attendedClasses: attendedClasses,
+                    percentage: percentage,
+                    sumOfTotalClasses,
+                    sumOfAttendedClasses,
+                });
+            }catch{
+                return res.status(200).json({
+                    message: "Attendance fetched Successfully",
+                    success: true,
+                    classNames,
+                    totalClasses,
+                    attendedClasses,
+                    sumOfTotalClasses,
+                    sumOfAttendedClasses,
+                    percentage: "NA",
+                });
+            }
+        }else{
+            return res.status(200).json({
+                message: "Attendance not found",
+                success: false,
+            });
+        }
+    }catch(Err){
+        console.log(Err);
+        return res.status(400).json({
+            error: Err,
+        });
+    }
+};

@@ -7,8 +7,9 @@ import { cardShadow, hoverEffect, themeColor } from "../../Attendance/utils";
 import { PieChartOutlined } from "@ant-design/icons";
 
 const SideBar = (props) => {
-  const userData=props.userData;
+  const userData = props.userData;
   console.log(userData);
+  let percentage = props.attendance.percentage ;
   try {
     return (
       <Container>
@@ -18,26 +19,62 @@ const SideBar = (props) => {
           <UserName>{userData.fullName}</UserName>
         </ProfileContainer>
         <LinksContainer>
-          <Link onClick={()=>{
-            props.setpage(0);
-          }}
-            className={props.curr===0?"active":"text-muted"}
-          >Profile</Link>
-          <Link onClick={()=>{
-            props.setpage(1);
-          }} 
-          className={props.curr===1?"active":"text-muted"}
-          >Attendance</Link>
-          <EarningsCard>
-            <CardContent>
-              <Chart>
-                <PieChartOutlined />
-              </Chart>
-              <EarningsText>Attandance</EarningsText>
-              <Earning>75%</Earning>
-              <EarningsIncrease>Required More +0%</EarningsIncrease>
-            </CardContent>
-          </EarningsCard>
+          <Link
+            onClick={() => {
+              props.setpage(0);
+            }}
+            className={props.curr === 0 ? "active" : "text-muted"}
+          >
+            Profile
+          </Link>
+          <Link
+            onClick={() => {
+              props.setpage(1);
+            }}
+            className={props.curr === 1 ? "active" : "text-muted"}
+          >
+            Attendance
+          </Link>
+          {props.curr === 0 ? (
+            <EarningsCard>
+              <CardContent>
+                <Chart>
+                  <PieChartOutlined />
+                </Chart>
+                <EarningsText>Attandance</EarningsText>
+                <Earning>{percentage}%</Earning>
+                {
+                  (percentage !== "NA") &&
+                    <EarningsIncrease>Required More +{(100-percentage<=25)?"0":75-percentage}%</EarningsIncrease>
+                }
+              </CardContent>
+            </EarningsCard>
+          ) : (
+            <InfoCard>
+              <Card>
+                <CardContent2>
+                  <Row>
+                    <Digit>{props.attendance.sumOfAttendedClasses}</Digit>
+                    <InfoContainer>
+                      <Titlee>Classes</Titlee>
+                      <SubTitle>Attanded class</SubTitle>
+                    </InfoContainer>
+                  </Row>
+                </CardContent2>
+              </Card>
+              <Card>
+                <CardContent2>
+                  <Row>
+                    <Digit>{props.attendance.sumOfTotalClasses}</Digit>
+                    <InfoContainer>
+                      <Titlee>Classes</Titlee>
+                      <SubTitle>Conducted classes Attanded</SubTitle>
+                    </InfoContainer>
+                  </Row>
+                </CardContent2>
+              </Card>
+            </InfoCard>
+          )}
         </LinksContainer>
       </Container>
     );
@@ -156,8 +193,8 @@ const EarningsCard = styled.div`
   height: 220px;
   width: 17rem;
   background-color: ${themeColor};
-  margin-left:auto;
-  margin-right:auto;
+  margin-left: auto;
+  margin-right: auto;
   margin-top: 1rem;
   padding: 1rem;
   border-radius: 1rem;
@@ -195,16 +232,73 @@ const EarningsText = styled.h4`
 const Earning = styled.h4`
   text-align: center;
   color: white;
-
 `;
 
 const EarningsIncrease = styled.h5`
   text-align: center;
   font-weight: normal;
-  background-color: rgba(0, 0, 0, 0.150);
+  background-color: rgba(0, 0, 0, 0.15);
   color: white;
   padding: 0.5rem;
   border-radius: 2rem;
+`;
+
+
+const InfoCard = styled.div`
+  width: 20rem;
+  background-color: white;
+  border-radius: 1rem;
+  padding: 1rem 1rem 0rem 1rem;
+  color: white;
+  box-shadow: ${cardShadow};
+  margin-top: 1rem;
+  margin-left: auto;
+  margin-right: auto;
+  transition: 0.4s ease-in-out;
+  &:hover {
+    box-shadow: ${hoverEffect};
+  }
+  @media screen and (min-width: 320px) and (max-width: 1080px) {
+    width: 80%;
+  }
+`;
+
+const Card = styled.div`
+  background-color: rgba(183, 194, 243, 0.3);
+  border-radius: 1rem;
+  margin-bottom: 1rem;
+`;
+
+const CardContent2 = styled.div`
+  padding: 0.7rem 1rem 0.3rem 1rem;
+`;
+
+const Row = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.4rem;
+  ${({ justify }) =>
+    justify &&
+    `
+      justify-content:space-around;
+      width:90%
+  `}
+`;
+const Digit = styled.div`
+  background-color: ${themeColor};
+  padding: 0.8rem 1rem;
+  font-size: 0.8rem;
+  border-radius: 1rem;
+`;
+const InfoContainer = styled.div`
+  margin-left: 0.7rem;
+`;
+const Titlee = styled.h5`
+  color: black;
+`;
+const SubTitle = styled.h6`
+  color: #333333;
+  font-weight: normal;
 `;
 
 export default SideBar;
