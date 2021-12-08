@@ -52,6 +52,7 @@ const UserType = new GraphQLObjectType({
         website: { type: GraphQLString },
         fullName: { type: GraphQLString },
         newNotifications: { type: GraphQLString },
+        phoneNumber: { type: GraphQLString },
     }),
 });
 
@@ -83,6 +84,7 @@ const authCheckType = new GraphQLObjectType({
         primarySchool: { type: GraphQLString },
         website: { type: GraphQLString },
         fullName: { type: GraphQLString },
+        phoneNumber: { type: GraphQLString },
     }),
 });
 

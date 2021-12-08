@@ -288,7 +288,9 @@ const Feed = () => {
                             </p>
                             <p>{userData ? userData.bio : ""}</p>
                             <hr />
-                            <div className="feedRandomQuote">
+                            <div className="feedRandomQuote" style={{
+                                overflow: "hidden",
+                            }}>
                                 <p style={{
                                     fontSize: "1rem",
                                     fontWeight: "700",
