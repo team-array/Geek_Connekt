@@ -447,8 +447,11 @@ export const OtherUserProfile = (props) => {
                                     </div>
                                 </div>
                             </div>
-                            {posts.length === 0 && posts === undefined ? (
-                                <h1>Write you first post now!</h1>
+                            {posts.length === 0 || posts === undefined ? (
+                                <h1 style={{
+                                    margin: "2rem",
+                                    textAlign: "center",
+                                }}>{userData.otherUser.username} doen't have any Post's yet!</h1>
                             ) : postData !== undefined &&
                               postData !== null &&
                               postData.length > 0 ? (

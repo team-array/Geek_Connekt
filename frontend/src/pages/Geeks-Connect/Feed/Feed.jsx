@@ -7,6 +7,10 @@ import feed from "../Profile/components/img/feed-image-1.png";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import job from "./img/profile-job.png";
+import study from "./img/profile-study.png";
+import home from "./img//profile-home.png";
+import location from "./img/profile-location.png";
 import "./Feed.scss";
 import axios from "axios";
 import Comment from "../CommentBox/Comment";
@@ -21,6 +25,38 @@ import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import { BaseUrl } from "../../../constants";
 import { notification } from "antd";
 import { Link } from "react-router-dom";
+import LinkIcon from "@mui/icons-material/Link";
+import CakeIcon from "@mui/icons-material/Cake";
+import PersonIcon from "@mui/icons-material/Person";
+import Quote from "inspirational-quotes";
+
+function useWindowDimensions() {
+    const hasWindow = typeof window !== "undefined";
+
+    function getWindowDimensions() {
+        const width = hasWindow ? window.innerWidth : null;
+        return {
+            width,
+        };
+    }
+
+    const [windowDimensions, setWindowDimensions] = useState(
+        getWindowDimensions()
+    );
+
+    useEffect(() => {
+        if (hasWindow) {
+            function handleResize() {
+                setWindowDimensions(getWindowDimensions());
+            }
+
+            window.addEventListener("resize", handleResize);
+            return () => window.removeEventListener("resize", handleResize);
+        }
+    }, [hasWindow]);
+
+    return windowDimensions;
+}
 
 const openNotificationWithIcon = (info) => {
     notification[info.type]({
@@ -43,8 +79,15 @@ const Feed = () => {
         });
     };
 
+    const { width } = useWindowDimensions();
+
     const [pageNumber, setpageNumber] = useState(1);
 
+    const [userData, setUserData] = useState(
+        localStorage.getItem("user")
+            ? JSON.parse(localStorage.getItem("user"))
+            : null
+    );
     const [postData, setpostData] = useState([]);
     const [deletePostId, setDeletePostId] = React.useState();
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -166,496 +209,646 @@ const Feed = () => {
     return (
         <div className="feed-container">
             <Comment />
-            <div className="Feed ">
+            <div
+                className="Feed "
+                style={
+                    {
+                        // display: "flex",
+                    }
+                }
+            >
                 {/* {temp ? <h1>Liked</h1> : <h1>Like</h1>} */}
-                {postData !== undefined && postData !== null
-                    ? posts.map((post, idx) => {
-                          if (posts.length === idx + 1) {
-                              return (
-                                  <div
-                                      className="post-container mb-5 card mx-auto shadow-sm"
-                                      ref={lastPostRefChanger}
-                                  >
-                                      <div className="post-row">
-                                          <div className="user-profile">
-                                              <Link
-                                                  to={`/user/${post.user._id}`}
-                                              >
-                                                  <img
-                                                      src={post.user.profilePic}
-                                                      alt="User profile Pic"
-                                                  />
-                                              </Link>
-                                              <div>
+                <div
+                    style={{
+                        position: "fixed",
+                        top: "5rem",
+                        left: "10px",
+                        width: "20%",
+                        height: "70%",
+                        borderRadius: "10px",
+                        border: "grey 1px solid",
+                        display: `${width < 800 ? "none" : "block"}`,
+                    }}
+                >
+                    <div
+                        className="feedProfileCoverPage"
+                        style={{
+                            backgroundImage: `url(${
+                                userData ? userData.backgroundPic : ""
+                            })`,
+                            backgroundSize: "cover",
+                            width: "100%",
+                            height: "15%",
+                            borderRadius: "10px 10px 0 0",
+                            position: "relative",
+                        }}
+                    >
+                        <div
+                            className="feedProfilePic"
+                            style={{
+                                width: "5rem",
+                                height: "5rem",
+                                borderRadius: "50%",
+                                backgroundImage: `url(${
+                                    userData ? userData.profilePic : ""
+                                })`,
+                                backgroundSize: "cover",
+                                margin: "auto",
+                                position: "absolute",
+                                transform: "translateX(-50%)",
+                                top: "50%",
+                                left: "50%",
+                            }}
+                        ></div>
+                    </div>
+                    <div className="feedUserDeatials">
+                        <div
+                            style={{
+                                margin: "auto",
+                                width: "80%",
+                                textAlign: "center",
+                                marginTop: "50px",
+                            }}
+                        >
+                            <p
+                                style={{
+                                    fontSize: "1.5rem",
+                                    fontWeight: "bold",
+                                    margin: "2px",
+                                }}
+                            >
+                                {userData ? userData.username : ""}
+                            </p>
+                            <p
+                                style={{
+                                    margin: "0",
+                                }}
+                            >
+                                {userData ? userData.role : ""}
+                            </p>
+                            <p>{userData ? userData.bio : ""}</p>
+                            <hr />
+                            <div className="feedRandomQuote">
+                                <p style={{
+                                    fontSize: "1rem",
+                                    fontWeight: "700",
+                                }}>“{Quote.getQuote().text}”</p>
+                                <p>~{Quote.getQuote().author}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    {postData !== undefined && postData !== null
+                        ? posts.map((post, idx) => {
+                              if (posts.length === idx + 1) {
+                                  return (
+                                      <div
+                                          className="post-container mb-5 card mx-auto shadow-sm"
+                                          ref={lastPostRefChanger}
+                                      >
+                                          <div className="post-row">
+                                              <div className="user-profile">
                                                   <Link
                                                       to={`/user/${post.user._id}`}
                                                   >
-                                                      <p>
-                                                          {post.user.username}
-                                                      </p>
-                                                  </Link>
-                                                  <span>
-                                                      {
-                                                          new Date(
-                                                              post.createdAt
-                                                          )
-                                                              .toString()
-                                                              .split("GMT")[0]
-                                                      }
-                                                  </span>
-                                              </div>
-                                          </div>
-                                          {/* <a href="#"></a> */}
-                                      </div>
-
-                                      <p className="post-text">
-                                          {post.caption}
-                                      </p>
-                                      <img
-                                          src={post.imageUrl}
-                                          alt="post"
-                                          className="post-img"
-                                      />
-                                      <div className="post-row">
-                                          <div className="activity-icons">
-                                              <div>
-                                                  <ThumbUpIcon
-                                                      style={{
-                                                          cursor: "pointer",
-                                                          color:
-                                                              postData[idx] ===
-                                                              1
-                                                                  ? "blue"
-                                                                  : "",
-                                                      }}
-                                                      onClick={async () => {
-                                                          console.log("like");
-                                                          try {
-                                                              const userId =
-                                                                  localStorage.getItem(
-                                                                      "user"
-                                                                  ) !== null
-                                                                      ? JSON.parse(
-                                                                            localStorage.getItem(
-                                                                                "user"
-                                                                            )
-                                                                        ).id
-                                                                      : "";
-                                                              const result =
-                                                                  await axios({
-                                                                      method: "post",
-                                                                      url:
-                                                                          BaseUrl +
-                                                                          `/likePost`,
-                                                                      data: {
-                                                                          postId: post._id,
-                                                                          userId: userId,
-                                                                      },
-                                                                  });
-                                                              console.log(
-                                                                  result
-                                                              );
-                                                              if (
-                                                                  result.data
-                                                                      .message ===
-                                                                  "Post liked successfully"
-                                                              ) {
-                                                                  postData[
-                                                                      idx
-                                                                  ] = 1;
-                                                                  postLikesCount[
-                                                                      idx
-                                                                  ] =
-                                                                      postLikesCount[
-                                                                          idx
-                                                                      ] + 1;
-                                                              } else {
-                                                                  postData[
-                                                                      idx
-                                                                  ] = 0;
-                                                                  postLikesCount[
-                                                                      idx
-                                                                  ] =
-                                                                      postLikesCount[
-                                                                          idx
-                                                                      ] - 1;
-                                                              }
-                                                          } catch (err) {
-                                                              console.log(err);
+                                                      <img
+                                                          src={
+                                                              post.user
+                                                                  .profilePic
                                                           }
-                                                          //   if (postData[idx] === 0) {
-                                                          //       postData[idx] = 1;
-                                                          //   } else if (
-                                                          //       postData[idx] === 1
-                                                          //   ) {
-                                                          //       console.log("Hello");
-                                                          //       postData[idx] = 0;
-                                                          //   }
-                                                          setpostData(
-                                                              (postData) => {
-                                                                  //   postData[idx] = 1;
+                                                          alt="User profile Pic"
+                                                      />
+                                                  </Link>
+                                                  <div>
+                                                      <Link
+                                                          to={`/user/${post.user._id}`}
+                                                      >
+                                                          <p>
+                                                              {
+                                                                  post.user
+                                                                      .username
+                                                              }
+                                                          </p>
+                                                      </Link>
+                                                      <span>
+                                                          {
+                                                              new Date(
+                                                                  post.createdAt
+                                                              )
+                                                                  .toString()
+                                                                  .split(
+                                                                      "GMT"
+                                                                  )[0]
+                                                          }
+                                                      </span>
+                                                  </div>
+                                              </div>
+                                              {/* <a href="#"></a> */}
+                                          </div>
+
+                                          <p className="post-text">
+                                              {post.caption}
+                                          </p>
+                                          <img
+                                              src={post.imageUrl}
+                                              alt="post"
+                                              className="post-img"
+                                          />
+                                          <div className="post-row">
+                                              <div className="activity-icons">
+                                                  <div>
+                                                      <ThumbUpIcon
+                                                          style={{
+                                                              cursor: "pointer",
+                                                              color:
+                                                                  postData[
+                                                                      idx
+                                                                  ] === 1
+                                                                      ? "blue"
+                                                                      : "",
+                                                          }}
+                                                          onClick={async () => {
+                                                              console.log(
+                                                                  "like"
+                                                              );
+                                                              try {
+                                                                  const userId =
+                                                                      localStorage.getItem(
+                                                                          "user"
+                                                                      ) !== null
+                                                                          ? JSON.parse(
+                                                                                localStorage.getItem(
+                                                                                    "user"
+                                                                                )
+                                                                            ).id
+                                                                          : "";
+                                                                  const result =
+                                                                      await axios(
+                                                                          {
+                                                                              method: "post",
+                                                                              url:
+                                                                                  BaseUrl +
+                                                                                  `/likePost`,
+                                                                              data: {
+                                                                                  postId: post._id,
+                                                                                  userId: userId,
+                                                                              },
+                                                                          }
+                                                                      );
                                                                   console.log(
+                                                                      result
+                                                                  );
+                                                                  if (
+                                                                      result
+                                                                          .data
+                                                                          .message ===
+                                                                      "Post liked successfully"
+                                                                  ) {
                                                                       postData[
                                                                           idx
-                                                                      ]
+                                                                      ] = 1;
+                                                                      postLikesCount[
+                                                                          idx
+                                                                      ] =
+                                                                          postLikesCount[
+                                                                              idx
+                                                                          ] + 1;
+                                                                  } else {
+                                                                      postData[
+                                                                          idx
+                                                                      ] = 0;
+                                                                      postLikesCount[
+                                                                          idx
+                                                                      ] =
+                                                                          postLikesCount[
+                                                                              idx
+                                                                          ] - 1;
+                                                                  }
+                                                              } catch (err) {
+                                                                  console.log(
+                                                                      err
                                                                   );
+                                                              }
+                                                              //   if (postData[idx] === 0) {
+                                                              //       postData[idx] = 1;
+                                                              //   } else if (
+                                                              //       postData[idx] === 1
+                                                              //   ) {
+                                                              //       console.log("Hello");
+                                                              //       postData[idx] = 0;
+                                                              //   }
+                                                              setpostData(
+                                                                  (
+                                                                      postData
+                                                                  ) => {
+                                                                      //   postData[idx] = 1;
+                                                                      console.log(
+                                                                          postData[
+                                                                              idx
+                                                                          ]
+                                                                      );
 
-                                                                  return [
-                                                                      ...postData,
-                                                                  ];
-                                                              }
+                                                                      return [
+                                                                          ...postData,
+                                                                      ];
+                                                                  }
+                                                              );
+                                                              setpostLikesCount(
+                                                                  (
+                                                                      postLikesCount
+                                                                  ) => {
+                                                                      return [
+                                                                          ...postLikesCount,
+                                                                      ];
+                                                                  }
+                                                              );
+                                                              //   console.log(postData);
+                                                          }}
+                                                      />
+                                                      {postLikesCount[idx]}
+                                                  </div>
+                                                  <div
+                                                      onClick={() => {
+                                                          show_comments(
+                                                              post._id
                                                           );
-                                                          setpostLikesCount(
-                                                              (
-                                                                  postLikesCount
-                                                              ) => {
-                                                                  return [
-                                                                      ...postLikesCount,
-                                                                  ];
-                                                              }
-                                                          );
-                                                          //   console.log(postData);
                                                       }}
-                                                  />
-                                                  {postLikesCount[idx]}
-                                              </div>
-                                              <div
-                                                  onClick={() => {
-                                                      show_comments(post._id);
-                                                  }}
-                                                  style={{ cursor: "pointer" }}
-                                              >
-                                                  {/* <img src={comment} alt="" /> */}
-                                                  <ForumOutlinedIcon
-                                                      style={{ height: "auto" }}
-                                                  />
-                                                  {post.comments.length}
-                                              </div>
-                                              <div>
-                                                  {savedPosts[post._id] ===
-                                                      undefined ||
-                                                  savedPosts[post._id] ===
-                                                      false ? (
-                                                      <BookmarkBorderIcon
-                                                          onClick={() =>
-                                                              SavePost(post._id)
-                                                          }
+                                                      style={{
+                                                          cursor: "pointer",
+                                                      }}
+                                                  >
+                                                      {/* <img src={comment} alt="" /> */}
+                                                      <ForumOutlinedIcon
                                                           style={{
-                                                              cursor: "pointer",
+                                                              height: "auto",
                                                           }}
                                                       />
-                                                  ) : (
-                                                      <BookmarkIcon
-                                                          onClick={() =>
-                                                              SavePost(post._id)
-                                                          }
-                                                          style={{
-                                                              cursor: "pointer",
-                                                          }}
-                                                      />
-                                                  )}
+                                                      {post.comments.length}
+                                                  </div>
+                                                  <div>
+                                                      {savedPosts[post._id] ===
+                                                          undefined ||
+                                                      savedPosts[post._id] ===
+                                                          false ? (
+                                                          <BookmarkBorderIcon
+                                                              onClick={() =>
+                                                                  SavePost(
+                                                                      post._id
+                                                                  )
+                                                              }
+                                                              style={{
+                                                                  cursor: "pointer",
+                                                              }}
+                                                          />
+                                                      ) : (
+                                                          <BookmarkIcon
+                                                              onClick={() =>
+                                                                  SavePost(
+                                                                      post._id
+                                                                  )
+                                                              }
+                                                              style={{
+                                                                  cursor: "pointer",
+                                                              }}
+                                                          />
+                                                      )}
+                                                  </div>
                                               </div>
-                                          </div>
-                                          <div className="post-profile-icon">
-                                              <img src={pp} alt="" />
+                                              <div className="post-profile-icon">
+                                                  <img src={pp} alt="" />
+                                              </div>
                                           </div>
                                       </div>
-                                  </div>
-                              );
-                          } else {
-                              return (
-                                  <div className="post-container mb-5 card mx-auto shadow-sm">
-                                      <div className="post-row">
-                                          <div
-                                              className="user-profile"
-                                              style={{
-                                                  display: `${
-                                                      userRole === "Teacher"
-                                                          ? "flex"
-                                                          : ""
-                                                  }`,
-                                                  justifyContent: `${
-                                                      userRole === "Teacher"
-                                                          ? "space-between"
-                                                          : ""
-                                                  }`,
-                                                  width: "100%",
-                                              }}
-                                          >
-                                              <Link
-                                                  to={`/user/${post.user._id}`}
+                                  );
+                              } else {
+                                  return (
+                                      <div className="post-container mb-5 card mx-auto shadow-sm">
+                                          <div className="post-row">
+                                              <div
+                                                  className="user-profile"
+                                                  style={{
+                                                      display: `${
+                                                          userRole === "Teacher"
+                                                              ? "flex"
+                                                              : ""
+                                                      }`,
+                                                      justifyContent: `${
+                                                          userRole === "Teacher"
+                                                              ? "space-between"
+                                                              : ""
+                                                      }`,
+                                                      width: "100%",
+                                                  }}
                                               >
-                                                  <img
-                                                      src={post.user.profilePic}
-                                                      alt="User profile Pic"
-                                                  />
-                                              </Link>
-                                              <div>
                                                   <Link
                                                       to={`/user/${post.user._id}`}
                                                   >
-                                                      <p>
-                                                          {post.user.username}
-                                                      </p>
-                                                  </Link>
-                                                  <span>
-                                                      {
-                                                          new Date(
-                                                              post.createdAt
-                                                          )
-                                                              .toString()
-                                                              .split("GMT")[0]
-                                                      }
-                                                  </span>
-                                              </div>
-                                              {userRole === "Teacher" ? (
-                                                  <div
-                                                      style={{
-                                                          marginLeft: "auto",
-                                                      }}
-                                                  >
-                                                      <IconButton
-                                                          aria-label="more"
-                                                          id="long-button"
-                                                          aria-controls="long-menu"
-                                                          aria-expanded={
-                                                              open
-                                                                  ? "true"
-                                                                  : undefined
+                                                      <img
+                                                          src={
+                                                              post.user
+                                                                  .profilePic
                                                           }
-                                                          aria-haspopup="true"
-                                                          onClick={(e) => {
-                                                              handleClick(e);
-                                                              setDeletePostId(
-                                                                  idx
-                                                              );
+                                                          alt="User profile Pic"
+                                                      />
+                                                  </Link>
+                                                  <div>
+                                                      <Link
+                                                          to={`/user/${post.user._id}`}
+                                                      >
+                                                          <p>
+                                                              {
+                                                                  post.user
+                                                                      .username
+                                                              }
+                                                          </p>
+                                                      </Link>
+                                                      <span>
+                                                          {
+                                                              new Date(
+                                                                  post.createdAt
+                                                              )
+                                                                  .toString()
+                                                                  .split(
+                                                                      "GMT"
+                                                                  )[0]
+                                                          }
+                                                      </span>
+                                                  </div>
+                                                  {userRole === "Teacher" ? (
+                                                      <div
+                                                          style={{
+                                                              marginLeft:
+                                                                  "auto",
                                                           }}
                                                       >
-                                                          <MoreVertIcon />
-                                                      </IconButton>
-                                                      <Menu
-                                                          id="long-menu"
-                                                          MenuListProps={{
-                                                              "aria-labelledby":
-                                                                  "long-button",
-                                                          }}
-                                                          anchorEl={anchorEl}
-                                                          open={open}
-                                                          onClose={handleClose}
-                                                          PaperProps={{
-                                                              style: {
-                                                                  maxHeight:
-                                                                      ITEM_HEIGHT *
-                                                                      4.5,
-                                                                  width: "20ch",
-                                                              },
-                                                          }}
-                                                      >
-                                                          <MenuItem
-                                                              key="delete"
-                                                              onClick={async (
-                                                                  e
-                                                              ) => {
-                                                                  try {
-                                                                      handleClose(
-                                                                          e
-                                                                      );
-                                                                      console.log(
-                                                                          deletePostId
-                                                                      );
-                                                                      const result =
-                                                                          await axios(
-                                                                              {
-                                                                                  method: "POST",
-                                                                                  url: `http://localhost:8000/deletePostAdmin`,
-                                                                                  data: {
-                                                                                      postId: posts[
-                                                                                          deletePostId
-                                                                                      ]
-                                                                                          ._id,
-                                                                                      token: localStorage.getItem(
-                                                                                          "jwt"
-                                                                                      ),
-                                                                                  },
-                                                                              }
-                                                                          );
-                                                                  } catch (err) {
-                                                                      console.log(
-                                                                          err
-                                                                      );
-                                                                  }
+                                                          <IconButton
+                                                              aria-label="more"
+                                                              id="long-button"
+                                                              aria-controls="long-menu"
+                                                              aria-expanded={
+                                                                  open
+                                                                      ? "true"
+                                                                      : undefined
+                                                              }
+                                                              aria-haspopup="true"
+                                                              onClick={(e) => {
+                                                                  handleClick(
+                                                                      e
+                                                                  );
+                                                                  setDeletePostId(
+                                                                      idx
+                                                                  );
                                                               }}
                                                           >
-                                                              <span
-                                                                  style={{
-                                                                      color: "red",
+                                                              <MoreVertIcon />
+                                                          </IconButton>
+                                                          <Menu
+                                                              id="long-menu"
+                                                              MenuListProps={{
+                                                                  "aria-labelledby":
+                                                                      "long-button",
+                                                              }}
+                                                              anchorEl={
+                                                                  anchorEl
+                                                              }
+                                                              open={open}
+                                                              onClose={
+                                                                  handleClose
+                                                              }
+                                                              PaperProps={{
+                                                                  style: {
+                                                                      maxHeight:
+                                                                          ITEM_HEIGHT *
+                                                                          4.5,
+                                                                      width: "20ch",
+                                                                  },
+                                                              }}
+                                                          >
+                                                              <MenuItem
+                                                                  key="delete"
+                                                                  onClick={async (
+                                                                      e
+                                                                  ) => {
+                                                                      try {
+                                                                          handleClose(
+                                                                              e
+                                                                          );
+                                                                          console.log(
+                                                                              deletePostId
+                                                                          );
+                                                                          const result =
+                                                                              await axios(
+                                                                                  {
+                                                                                      method: "POST",
+                                                                                      url: `http://localhost:8000/deletePostAdmin`,
+                                                                                      data: {
+                                                                                          postId: posts[
+                                                                                              deletePostId
+                                                                                          ]
+                                                                                              ._id,
+                                                                                          token: localStorage.getItem(
+                                                                                              "jwt"
+                                                                                          ),
+                                                                                      },
+                                                                                  }
+                                                                              );
+                                                                      } catch (err) {
+                                                                          console.log(
+                                                                              err
+                                                                          );
+                                                                      }
                                                                   }}
                                                               >
-                                                                  Delete
-                                                              </span>
-                                                          </MenuItem>
-                                                      </Menu>
-                                                  </div>
-                                              ) : null}
+                                                                  <span
+                                                                      style={{
+                                                                          color: "red",
+                                                                      }}
+                                                                  >
+                                                                      Delete
+                                                                  </span>
+                                                              </MenuItem>
+                                                          </Menu>
+                                                      </div>
+                                                  ) : null}
+                                              </div>
+                                              {/* <a href="#"></a> */}
                                           </div>
-                                          {/* <a href="#"></a> */}
-                                      </div>
 
-                                      <p className="post-text">
-                                          {post.caption}
-                                      </p>
-                                      <img
-                                          src={post.imageUrl}
-                                          alt="post"
-                                          className="post-img"
-                                      />
-                                      <div className="post-row">
-                                          <div className="activity-icons">
-                                              <div>
-                                                  <ThumbUpIcon
-                                                      style={{
-                                                          cursor: "pointer",
-                                                          color:
-                                                              postData[idx] ===
-                                                              1
-                                                                  ? "blue"
-                                                                  : "",
-                                                      }}
-                                                      onClick={async () => {
-                                                          console.log("like");
-                                                          try {
-                                                              const userId =
-                                                                  localStorage.getItem(
-                                                                      "user"
-                                                                  ) !== null
-                                                                      ? JSON.parse(
-                                                                            localStorage.getItem(
-                                                                                "user"
-                                                                            )
-                                                                        ).id
-                                                                      : "";
-                                                              const result =
-                                                                  await axios({
-                                                                      method: "post",
-                                                                      url:
-                                                                          BaseUrl +
-                                                                          `/likePost`,
-                                                                      data: {
-                                                                          postId: post._id,
-                                                                          userId: userId,
-                                                                      },
-                                                                  });
+                                          <p className="post-text">
+                                              {post.caption}
+                                          </p>
+                                          <img
+                                              src={post.imageUrl}
+                                              alt="post"
+                                              className="post-img"
+                                          />
+                                          <div className="post-row">
+                                              <div className="activity-icons">
+                                                  <div>
+                                                      <ThumbUpIcon
+                                                          style={{
+                                                              cursor: "pointer",
+                                                              color:
+                                                                  postData[
+                                                                      idx
+                                                                  ] === 1
+                                                                      ? "blue"
+                                                                      : "",
+                                                          }}
+                                                          onClick={async () => {
                                                               console.log(
-                                                                  result
+                                                                  "like"
                                                               );
-                                                              if (
-                                                                  result.data
-                                                                      .message ===
-                                                                  "Post liked successfully"
-                                                              ) {
-                                                                  postData[
-                                                                      idx
-                                                                  ] = 1;
-                                                                  postLikesCount[
-                                                                      idx
-                                                                  ] =
-                                                                      postLikesCount[
-                                                                          idx
-                                                                      ] + 1;
-                                                              } else {
-                                                                  postData[
-                                                                      idx
-                                                                  ] = 0;
-                                                                  postLikesCount[
-                                                                      idx
-                                                                  ] =
-                                                                      postLikesCount[
-                                                                          idx
-                                                                      ] - 1;
-                                                              }
-                                                          } catch (err) {
-                                                              console.log(err);
-                                                          }
-                                                          //   if (postData[idx] === 0) {
-                                                          //       postData[idx] = 1;
-                                                          //   } else if (
-                                                          //       postData[idx] === 1
-                                                          //   ) {
-                                                          //       console.log("Hello");
-                                                          //       postData[idx] = 0;
-                                                          //   }
-                                                          setpostData(
-                                                              (postData) => {
-                                                                  //   postData[idx] = 1;
+                                                              try {
+                                                                  const userId =
+                                                                      localStorage.getItem(
+                                                                          "user"
+                                                                      ) !== null
+                                                                          ? JSON.parse(
+                                                                                localStorage.getItem(
+                                                                                    "user"
+                                                                                )
+                                                                            ).id
+                                                                          : "";
+                                                                  const result =
+                                                                      await axios(
+                                                                          {
+                                                                              method: "post",
+                                                                              url:
+                                                                                  BaseUrl +
+                                                                                  `/likePost`,
+                                                                              data: {
+                                                                                  postId: post._id,
+                                                                                  userId: userId,
+                                                                              },
+                                                                          }
+                                                                      );
                                                                   console.log(
+                                                                      result
+                                                                  );
+                                                                  if (
+                                                                      result
+                                                                          .data
+                                                                          .message ===
+                                                                      "Post liked successfully"
+                                                                  ) {
                                                                       postData[
                                                                           idx
-                                                                      ]
+                                                                      ] = 1;
+                                                                      postLikesCount[
+                                                                          idx
+                                                                      ] =
+                                                                          postLikesCount[
+                                                                              idx
+                                                                          ] + 1;
+                                                                  } else {
+                                                                      postData[
+                                                                          idx
+                                                                      ] = 0;
+                                                                      postLikesCount[
+                                                                          idx
+                                                                      ] =
+                                                                          postLikesCount[
+                                                                              idx
+                                                                          ] - 1;
+                                                                  }
+                                                              } catch (err) {
+                                                                  console.log(
+                                                                      err
                                                                   );
+                                                              }
+                                                              //   if (postData[idx] === 0) {
+                                                              //       postData[idx] = 1;
+                                                              //   } else if (
+                                                              //       postData[idx] === 1
+                                                              //   ) {
+                                                              //       console.log("Hello");
+                                                              //       postData[idx] = 0;
+                                                              //   }
+                                                              setpostData(
+                                                                  (
+                                                                      postData
+                                                                  ) => {
+                                                                      //   postData[idx] = 1;
+                                                                      console.log(
+                                                                          postData[
+                                                                              idx
+                                                                          ]
+                                                                      );
 
-                                                                  return [
-                                                                      ...postData,
-                                                                  ];
-                                                              }
+                                                                      return [
+                                                                          ...postData,
+                                                                      ];
+                                                                  }
+                                                              );
+                                                              setpostLikesCount(
+                                                                  (
+                                                                      postLikesCount
+                                                                  ) => {
+                                                                      return [
+                                                                          ...postLikesCount,
+                                                                      ];
+                                                                  }
+                                                              );
+                                                              //   console.log(postData);
+                                                          }}
+                                                      />
+                                                      {postLikesCount[idx]}
+                                                  </div>
+                                                  <div
+                                                      onClick={() => {
+                                                          show_comments(
+                                                              post._id
                                                           );
-                                                          setpostLikesCount(
-                                                              (
-                                                                  postLikesCount
-                                                              ) => {
-                                                                  return [
-                                                                      ...postLikesCount,
-                                                                  ];
-                                                              }
-                                                          );
-                                                          //   console.log(postData);
                                                       }}
-                                                  />
-                                                  {postLikesCount[idx]}
+                                                      style={{
+                                                          cursor: "pointer",
+                                                      }}
+                                                  >
+                                                      {/* <img src={comment} alt="" /> */}
+                                                      <ForumOutlinedIcon />
+                                                      {post.comments.length}
+                                                  </div>
+                                                  <div>
+                                                      {savedPosts[post._id] ===
+                                                          undefined ||
+                                                      savedPosts[post._id] ===
+                                                          false ? (
+                                                          <BookmarkBorderIcon
+                                                              onClick={() =>
+                                                                  SavePost(
+                                                                      post._id
+                                                                  )
+                                                              }
+                                                              style={{
+                                                                  cursor: "pointer",
+                                                              }}
+                                                          />
+                                                      ) : (
+                                                          <BookmarkIcon
+                                                              onClick={() =>
+                                                                  SavePost(
+                                                                      post._id
+                                                                  )
+                                                              }
+                                                              style={{
+                                                                  cursor: "pointer",
+                                                              }}
+                                                          />
+                                                      )}
+                                                  </div>
                                               </div>
-                                              <div
-                                                  onClick={() => {
-                                                      show_comments(post._id);
-                                                  }}
-                                                  style={{ cursor: "pointer" }}
-                                              >
-                                                  {/* <img src={comment} alt="" /> */}
-                                                  <ForumOutlinedIcon />
-                                                  {post.comments.length}
+                                              <div className="post-profile-icon">
+                                                  <img src={pp} alt="" />
                                               </div>
-                                              <div>
-                                                  {savedPosts[post._id] ===
-                                                      undefined ||
-                                                  savedPosts[post._id] ===
-                                                      false ? (
-                                                      <BookmarkBorderIcon
-                                                          onClick={() =>
-                                                              SavePost(post._id)
-                                                          }
-                                                          style={{
-                                                              cursor: "pointer",
-                                                          }}
-                                                      />
-                                                  ) : (
-                                                      <BookmarkIcon
-                                                          onClick={() =>
-                                                              SavePost(post._id)
-                                                          }
-                                                          style={{
-                                                              cursor: "pointer",
-                                                          }}
-                                                      />
-                                                  )}
-                                              </div>
-                                          </div>
-                                          <div className="post-profile-icon">
-                                              <img src={pp} alt="" />
                                           </div>
                                       </div>
-                                  </div>
-                              );
-                          }
-                      })
-                    : null}
+                                  );
+                              }
+                          })
+                        : null}
+                </div>
                 {loading ? <LoadingComponent /> : null}
             </div>
             <div style={{ height: "2.3rem" }}></div>

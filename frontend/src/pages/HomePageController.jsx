@@ -9,7 +9,13 @@ const AUTH_CHECK = gql`
         authCheck(token: $token) {
             id
             username
+            fullName
             result
+            website
+            backgroundPic
+            profilePic
+            bio
+            email
             role
         }
     }

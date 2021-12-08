@@ -148,6 +148,20 @@ const userAuthCheck = async (args) => {
                 username: user.username,
                 result: "Success",
                 role: user.role,
+                email: user.email,
+                rollNumber: user.rollNumber,
+                college: user.college,
+                bio: user.bio,
+                secondarySchool: user.secondarySchool,
+                primarySchool: user.primarySchool,
+                location: user.location,
+                homeTown: user.homeTown,
+                profilePic: user.profilePic,
+                backgroundPic: user.backgroundPic,
+                newNotifications: user.newNotifications,
+                website: user.website,
+                birthDate: user.birthDate,
+                fullName: user.fullName,
             };
         }
         return {

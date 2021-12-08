@@ -23,6 +23,7 @@
     "file-saver": "^2.0.5",
     "gh-pages": "^3.2.3",
     "graphql": "^16.0.1",
+    "inspirational-quotes": "^2.0.1",
     "jquery": "^3.6.0",
     "moment": "^2.29.1",
     "pdfjs-dist": "^2.6.347",

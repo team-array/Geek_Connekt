@@ -302,7 +302,7 @@ export const Profilepage = () => {
         <div>loading...</div>
     ) : (
         <div className="ProfilepageComponent">
-            <Comment/>
+            <Comment />
             <div className="profile-container">
                 <img
                     src={userData.user.backgroundPic}
@@ -538,7 +538,14 @@ export const Profilepage = () => {
                             {!loading &&
                             (postData.length === 0 ||
                                 postData === undefined) ? (
-                                <h1>Write you first post now!</h1>
+                                <h1
+                                    style={{
+                                        margin: "2rem",
+                                        textAlign: "center",
+                                    }}
+                                >
+                                    Write you first post now!
+                                </h1>
                             ) : postData !== undefined &&
                               postData !== null &&
                               postData.length > 0 ? (
