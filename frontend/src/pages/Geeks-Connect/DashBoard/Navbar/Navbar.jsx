@@ -23,6 +23,7 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import {BaseUrl,ClientUrl} from "../../../../constants";
 import MenuBookIcon from '@mui/icons-material/MenuBook';
+import UploadIcon from '@mui/icons-material/Upload';
 
 const GET_NOTIFCATION_COUNT = gql`
     query user($token: String!) {
@@ -226,18 +227,16 @@ export default function PrimarySearchAppBar(props) {
             open={isMobileMenuOpen}
             onClose={handleMobileMenuClose}
         >
-            <MenuItem onClick={handleProfileMenuOpen}>
-                <IconButton
-                    size="large"
-                    aria-label="account of current user"
-                    aria-controls="primary-search-account-menu"
-                    aria-haspopup="true"
-                    color="inherit"
+            {
+                (JSON.parse(localStorage.getItem("user")).role === "Teacher")?
+                <MenuItem
+                    onClick={props.tools}
+                    onClick={props.uploadAttendance}
                 >
-                    <AccountCircle />
-                </IconButton>
-                <p>Profile</p>
-            </MenuItem>
+                        <UploadIcon />
+                    <p className="mt-2">Upload Attendance</p>
+                </MenuItem>:""
+            }
             <MenuItem onClick={props.notifications}>
                 <IconButton
                     size="large"
@@ -364,6 +363,17 @@ export default function PrimarySearchAppBar(props) {
                     </AutoComplete>
                     <Box sx={{ flexGrow: 1 }} />
                     <Box sx={{ display: { xs: "none", md: "flex" } }}>
+                        {
+                            (JSON.parse(localStorage.getItem("user")).role === "Teacher")?
+                            <IconButton
+                                size="large"
+                                color="inherit"
+                                className="mx-1"
+                                onClick={props.uploadAttendance}
+                            >
+                                <UploadIcon/>
+                            </IconButton>:""
+                        }
                         <IconButton
                             size="large"
                             color="inherit"
@@ -425,17 +435,7 @@ export default function PrimarySearchAppBar(props) {
                                 <NotificationsIcon />
                             </Badge>
                         </IconButton>
-                        <IconButton
-                            className="mx-1"
-                            size="large"
-                            aria-label="account of current user"
-                            aria-controls={menuId}
-                            aria-haspopup="true"
-                            onClick={handleProfileMenuOpen}
-                            color="inherit"
-                        >
-                            <AccountCircle />
-                        </IconButton>
+                    
                         <IconButton
                             onClick={props.logout}
                             className="mx-1"

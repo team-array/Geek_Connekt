@@ -14,6 +14,8 @@ import { OtherUserProfile } from "./pages/Geeks-Connect/Profile/components/Other
 import UploadAttendance from "./pages/Geeks-Connect/UploadAttendance/UploadAttendance";
 import NotesBlog from "./pages/Geeks-Connect/Notes/Notes";
 import PreviewPdf from "./pages/PreviewPdf/PreviewPdf";
+import Attendance from "./pages/Geeks-Connect/Attendance/App";
+import AttendaceV2 from "./pages/Geeks-Connect/AttendanceV2/AttendaceV2";
 
 config.console(config.MODE);
 
@@ -36,6 +38,8 @@ const App = () => {
                     <Route path={"/user/:id"} element={<OtherUserProfile />} />
                     <Route path="/notes" element={<NotesBlog />} />
                     <Route path="/preview" element={<PreviewPdf />} />
+                    <Route path="/attendance" element={<AttendaceV2 />} />
+                    <Route path="/attendance1" element={<Attendance />} />
                 </Routes>
             </HashRouter>
         </div>

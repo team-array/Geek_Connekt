@@ -136,4 +136,8 @@ router.post("/getAllNotes", (req, res) => {
     require("./controllers/notesController").getAllNotes(req, res);
 });
 
+router.post("/getUserDetails", (res, req) => {
+    require("./controllers/userController").getUserDetails(res, req);
+})
+
 module.exports = router;

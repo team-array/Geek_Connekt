@@ -259,3 +259,30 @@ exports.updateLocationInfo = async (req,res) => {
         });
     }
 }
+
+exports.getUserDetails = async (req, res) => {
+    try{
+        const { username } = jwt.verify(req.body.token, process.env.JWT_SECRET);
+        const user = await User.findOne({ username: username })
+                            .select({"username":1,"email":1,"_id":0,"rollNumber":1,"profilePic":1,"fullName":1,
+                            "Regulation":1,"Programme":1,"Year":1,"Branch":1,"Section":1,"DateOfAdmission":1,
+                            "Status":1,"Gender":1,"BloodGroup":1,"FatherName":1,"MotherName":1,"AadharNumber":1,
+                            "Mobile":1,"birthDate":1
+                        });
+        if (user) {
+            res.status(200).json({
+                user: user,
+                success: true,
+            });
+        } else {
+            res.status(404).json({
+                message: "User not found",
+            });
+        }
+    }catch (err) {
+        console.log(err);
+        res.status(500).json({
+            message: "Internal Server Error",
+        });
+    }
+}

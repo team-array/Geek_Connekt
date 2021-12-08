@@ -1,10 +1,10 @@
-import "./App.css";
+import "./App.scss";
 import styled from "styled-components";
 import Sidebar from "./components/Sidebar";
 import MainContent from "./components/MainContent";
-function App() {
+function Attendance() {
   return (
-    <Container>
+    <Container className="AttendaceDashboard">
       <Sidebar />
       <MainContent />
     </Container>
@@ -22,4 +22,4 @@ const Container = styled.div`
   }
 `;
 
-export default App;
+export default Attendance;
