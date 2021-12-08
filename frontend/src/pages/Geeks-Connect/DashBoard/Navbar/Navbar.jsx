@@ -1,8 +1,11 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
+import Button from "@mui/material/Button";
+import NewspaperIcon from "@mui/icons-material/Newspaper";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import Typography from "@mui/material/Typography";
 import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
@@ -21,8 +24,12 @@ import logo from "../../../../assets/logo1.png";
 import { gql, useQuery } from "@apollo/client";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import {BaseUrl,ClientUrl} from "../../../../constants";
-import MenuBookIcon from '@mui/icons-material/MenuBook';
+import { BaseUrl, ClientUrl } from "../../../../constants";
+import MenuBookIcon from "@mui/icons-material/MenuBook";
+import InputBase from "@mui/material/InputBase";
+import MenuIcon from "@mui/icons-material/Menu";
+import { styled, alpha } from "@mui/material/styles";
+import SearchIcon from "@mui/icons-material/Search";
 
 const GET_NOTIFCATION_COUNT = gql`
     query user($token: String!) {
@@ -53,7 +60,7 @@ const searchResult = (searchedUsers) => {
                     <span>
                         Found query on{" "}
                         <a
-                            href={ClientUrl+`/#/user/${user._id}`}
+                            href={ClientUrl + `/#/user/${user._id}`}
                             target="_blank"
                             rel="noopener noreferrer"
                         >
@@ -66,8 +73,69 @@ const searchResult = (searchedUsers) => {
     });
 };
 
+const Search = styled("div")(({ theme }) => ({
+    position: "relative",
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: alpha(theme.palette.common.white, 0.15),
+    "&:hover": {
+        backgroundColor: alpha(theme.palette.common.white, 0.25),
+    },
+    marginLeft: 0,
+    width: "100%",
+    [theme.breakpoints.up("sm")]: {
+        marginLeft: theme.spacing(1),
+        width: "auto",
+    },
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+    color: "inherit",
+    "& .MuiInputBase-input": {
+        padding: theme.spacing(1, 1, 1, 0),
+        // vertical padding + font size from searchIcon
+        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+        transition: theme.transitions.create("width"),
+        width: "100%",
+        [theme.breakpoints.up("sm")]: {
+            width: "12ch",
+            "&:focus": {
+                width: "20ch",
+            },
+        },
+    },
+}));
+
+const SearchIconWrapper = styled("div")(({ theme }) => ({
+    padding: theme.spacing(0, 2),
+    height: "100%",
+    position: "absolute",
+    pointerEvents: "none",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+}));
+
 export default function PrimarySearchAppBar(props) {
     const [options, setOptions] = React.useState([]);
+
+    const [userData, setUserData] = useState(
+        localStorage.getItem("user")
+            ? JSON.parse(localStorage.getItem("user"))
+            : null
+    );
+
+    const [anchorEl2, setAnchorEl2] = React.useState(null);
+    const open2 = Boolean(anchorEl2);
+    const handleClick2 = (event) => {
+        if (anchorEl2) {
+            setAnchorEl2(null);
+        } else {
+            setAnchorEl2(event.currentTarget);
+        }
+    };
+    const handleClose2 = () => {
+        setAnchorEl2(null);
+    };
 
     const newNoticationCount = useSelector(
         (state) => state.newNotificationCount
@@ -96,7 +164,7 @@ export default function PrimarySearchAppBar(props) {
             console.log("in get new noti");
             const result = await axios({
                 method: "GET",
-                url: BaseUrl+`/getNotifications`,
+                url: BaseUrl + `/getNotifications`,
                 params: {
                     token: localStorage.getItem("jwt"),
                     count: +newNotificationCount,
@@ -347,23 +415,204 @@ export default function PrimarySearchAppBar(props) {
                         />
                         {/* {props.name} */}
                     </Typography>
-                    <AutoComplete
-                        dropdownMatchSelectWidth={252}
+                    <div
+                        className="feedSearchBarDiv"
                         style={{
-                            width: 300,
+                            borderRadius: "10px",
+                            overflow: "hidden",
                         }}
-                        options={options}
-                        onSelect={onSelect}
-                        onSearch={handleSearch}
                     >
-                        <Input.Search
-                            size="large"
-                            placeholder="Search ..."
-                            enterButton
-                        />
-                    </AutoComplete>
+                        <AutoComplete
+                            dropdownMatchSelectWidth={252}
+                            style={{
+                                width: 300,
+                            }}
+                            options={options}
+                            onSelect={onSelect}
+                            onSearch={handleSearch}
+                        >
+                            <Input.Search
+                                size="large"
+                                placeholder="Search ..."
+                                enterButton
+                                radius="10"
+                            />
+                            {/* <Search>
+                            <SearchIconWrapper>
+                                <SearchIcon />
+                            </SearchIconWrapper>
+                            <StyledInputBase
+                                placeholder="Search…"
+                                inputProps={{ "aria-label": "search" }}
+                            />
+                        </Search> */}
+                        </AutoComplete>
+                    </div>
                     <Box sx={{ flexGrow: 1 }} />
-                    <Box sx={{ display: { xs: "none", md: "flex" } }}>
+                    <IconButton
+                        size="large"
+                        // aria-label="show 17 new notifications"
+                        color="inherit"
+                        className="mx-1"
+                        onClick={props.notifications}
+                    >
+                        <div
+                            style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "center",
+                                justifyContent: "center",
+                            }}
+                        >
+                            <Badge
+                                badgeContent={newNoticationCount}
+                                color="error"
+                            >
+                                <NotificationsIcon
+                                    style={{
+                                        fontSize: "2rem",
+                                    }}
+                                />
+                            </Badge>
+                            <div
+                                className=""
+                                style={{
+                                    margin: "0",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                }}
+                            >
+                                <p
+                                    style={{
+                                        fontSize: "0.8rem",
+                                        color: "white",
+                                        margin: "0",
+                                    }}
+                                >
+                                    Notifications
+                                </p>
+                            </div>
+                        </div>
+                    </IconButton>
+                    <Button
+                        aria-haspopup="true"
+                        aria-expanded={open2 ? "true" : undefined}
+                        onClick={handleClick2}
+                        style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            justifyContent: "center",
+                        }}
+                    >
+                        <div>
+                            <img
+                                src={userData ? userData.profilePic : ""}
+                                alt="user"
+                                className="userPic"
+                                style={{
+                                    width: "25px",
+                                    height: "25px",
+                                    borderRadius: "50%",
+                                }}
+                            />
+                        </div>
+                        <div
+                            className=""
+                            style={{
+                                margin: "0",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                            }}
+                        >
+                            <p
+                                style={{
+                                    fontSize: "0.8rem",
+                                    color: "white",
+                                    margin: "0",
+                                }}
+                            >
+                                Me
+                            </p>
+                            <ArrowDropDownIcon
+                                style={{
+                                    color: "white",
+                                    width: "15px",
+                                    height: "15px",
+                                }}
+                            />
+                        </div>
+                    </Button>
+                    <Menu
+                        id="basic-menu"
+                        anchorEl={anchorEl2}
+                        open={open2}
+                        onClose={handleClose2}
+                        MenuListProps={{
+                            "aria-labelledby": "basic-button",
+                        }}
+                    >
+                        <MenuItem
+                            onClick={(e) => {
+                                handleClose2(e);
+                                dispatch({
+                                    type: "SET_CURRENT_PAGE",
+                                    payload: 7,
+                                });
+                            }}
+                        >
+                            <NewspaperIcon style={{ marginRight: "20px" }} />
+                            News
+                        </MenuItem>
+                        <MenuItem
+                            onClick={(e) => {
+                                handleClose2(e);
+                                props.notes();
+                            }}
+                        >
+                            <MenuBookIcon style={{ marginRight: "20px" }} />
+                            Study Material
+                        </MenuItem>
+                        <MenuItem
+                            onClick={(e) => {
+                                handleClose2(e);
+                                dispatch({
+                                    type: "SET_CURRENT_PAGE",
+                                    payload: 5,
+                                });
+                            }}
+                        >
+                            <HomeRepairServiceIcon
+                                style={{ marginRight: "20px" }}
+                            />
+                            Utilities
+                        </MenuItem>
+                        <MenuItem
+                            onClick={(e) => {
+                                handleClose2(e);
+                                dispatch({
+                                    type: "SET_CURRENT_PAGE",
+                                    payload: 6,
+                                });
+                            }}
+                        >
+                            <StarIcon style={{ marginRight: "20px" }} />
+                            Popular Posts
+                        </MenuItem>
+                        <hr />
+                        <MenuItem
+                            onClick={(e) => {
+                                handleClose2(e);
+                                props.logout();
+                            }}
+                        >
+                            <LogoutIcon style={{ marginRight: "20px" }} />
+                            Logout
+                        </MenuItem>
+                    </Menu>
+                    {/* <Box sx={{ display: { xs: "none", md: "flex" } }}>
                         <IconButton
                             size="large"
                             color="inherit"
@@ -445,7 +694,7 @@ export default function PrimarySearchAppBar(props) {
                         >
                             <LogoutIcon />
                         </IconButton>
-                    </Box>
+                    </Box> */}
                     <Box sx={{ display: { xs: "flex", md: "none" } }}>
                         <IconButton
                             size="large"
