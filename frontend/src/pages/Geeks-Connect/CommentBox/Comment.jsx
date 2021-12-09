@@ -63,6 +63,7 @@ const CommentBox = () => {
     const [commentsLoading, setCommentsLoading] = useState(false);
     const [postedDate, setPostedDate] = useState("");
     const Comment_Box = useSelector((state) => state.Comment_Box);
+    const [addcommentOp,setaddcommentOp] = useState(false);
     const {
         loading: userDataLoading,
         data: userData,
@@ -163,6 +164,7 @@ const CommentBox = () => {
             });
             setSubmitting(false); // stop loading effect}
             console.log(result);
+            setaddcommentOp(true);
         } catch (err) {
             console.log(err);
         }
@@ -204,7 +206,7 @@ const CommentBox = () => {
                     zIndex: "9999999",
                     backgroundColor: "rgba(0,0,0,.85)",
                 }}
-                onClick={() =>
+                onClick={() =>{
                     dispatch({
                         type: "SET_COMMENT_BOX",
                         payload: {
@@ -212,7 +214,8 @@ const CommentBox = () => {
                             commentBox: false,
                         },
                     })
-                }
+                    addcommentOp && window.location.reload();
+                }}
                 open={Comment_Box.commentBox}
             >
                 <CommentBoxContainer
@@ -248,6 +251,7 @@ const CommentBox = () => {
                                         commentBox: false,
                                     },
                                 });
+                                addcommentOp && window.location.reload();
                             }}
                         >
                             <CloseIcon

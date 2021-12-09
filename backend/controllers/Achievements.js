@@ -53,7 +53,7 @@ const addachievement = async ({res}, {req}) => {
 const getachievements = async ({res}, {req}) => {
     try {
         verify(req.body.token).then(async (username)=>{
-            const user_achievement = await user.findOne({username: username.username});
+            const user_achievement = await user.findOne({username: req.body.username});
             if (!user_achievement) {
                 return res.status(200).json({
                     success: false,

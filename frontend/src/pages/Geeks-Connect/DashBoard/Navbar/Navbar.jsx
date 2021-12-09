@@ -447,7 +447,7 @@ export default function PrimarySearchAppBar(props) {
                         </AutoComplete>
                     </div>
                     <Box sx={{ flexGrow: 1 }} />
-                    <IconButton
+                    {/* <IconButton
                         size="large"
                         // aria-label="show 17 new notifications"
                         color="inherit"
@@ -492,8 +492,8 @@ export default function PrimarySearchAppBar(props) {
                                 </p>
                             </div>
                         </div>
-                    </IconButton>
-                    <Button
+                    </IconButton> */}
+                    {/* <Button
                         aria-haspopup="true"
                         aria-expanded={open2 ? "true" : undefined}
                         onClick={handleClick2}
@@ -542,7 +542,7 @@ export default function PrimarySearchAppBar(props) {
                                 }}
                             />
                         </div>
-                    </Button>
+                    </Button> */}
                     <Menu
                         id="basic-menu"
                         anchorEl={anchorEl2}
@@ -632,7 +632,7 @@ export default function PrimarySearchAppBar(props) {
                             Logout
                         </MenuItem>
                     </Menu>
-                    {/* <Box sx={{ display: { xs: "none", md: "flex" } }}>
+                    <Box sx={{ display: { xs: "none", md: "flex" } }}>
                         {JSON.parse(localStorage.getItem("user")).role ===
                         "Teacher" ? (
                             <IconButton
@@ -738,7 +738,7 @@ export default function PrimarySearchAppBar(props) {
                         >
                             <MoreIcon />
                         </IconButton>
-                    </Box> */}
+                    </Box>
                 </Toolbar>
             </AppBar>
             {renderMobileMenu}

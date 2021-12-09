@@ -76,11 +76,11 @@ export const OtherUserProfile = (props) => {
         },
     });
 
-    const achievements = useSelector((state) => state.achievements);
+    const [achievements,setachievements] = React.useState([]);
 
     const [showAllPhotos, setShowAllPhotos] = React.useState(false);
 
-    const ImagesGridLength = useSelector((state) => state.ImagesGridLength);
+    const [ImagesGridLength,setImagesGridLength] = React.useState(0);
 
     const [tab, setTab] = React.useState(0);
 
@@ -188,64 +188,20 @@ export const OtherUserProfile = (props) => {
                     },
                     data: {
                         token: localStorage.getItem("jwt"),
+                        username: userData.otherUser.username,
                     },
                 });
                 console.log(response);
                 if (response.data.success) {
-                    dispatch({
-                        type: "SET_ACHIEVEMENTS",
-                        payload: response.data.achievements,
-                    });
-                    dispatch({
-                        type: "SET_GRID_LENGTH",
-                        payload: Math.min(response.data.achievements.length, 4),
-                    });
+                    setachievements(response.data.achievements);
+                    setImagesGridLength(Math.min(response.data.achievements.length, 4));
                 }
             } catch (error) {
                 console.log(error);
             }
         };
         getachievements();
-    }, []);
-    const deleteAchievement = async (achievement_index) => {
-        try {
-            dispatch({
-                type: "SET_LOADING",
-                payload: true,
-            });
-            const response = await axios({
-                method: "post",
-                url: `${BaseUrl}/deleteAchievement`,
-                headers: {
-                    "content-type": "application/json",
-                },
-                data: {
-                    token: localStorage.getItem("jwt"),
-                    achievement_index,
-                },
-            });
-            dispatch({
-                type: "SET_LOADING",
-                payload: false,
-            });
-            if (response.data.success) {
-                dispatch({
-                    type: "SET_ACHIEVEMENTS",
-                    payload: response.data.achievements,
-                });
-                dispatch({
-                    type: "SET_GRID_LENGTH",
-                    payload: Math.min(response.data.achievements.length, 4),
-                });
-            }
-        } catch (err) {
-            console.log(err);
-            dispatch({
-                type: "SET_LOADING",
-                payload: false,
-            });
-        }
-    };
+    }, [userData]);
     return userDataLoading ? (
         <div>loading...</div>
     ) : (
@@ -371,16 +327,11 @@ export const OtherUserProfile = (props) => {
                                         onClick={(e) => {
                                             e.preventDefault();
                                             if (ImagesGridLength > 4) {
-                                                dispatch({
-                                                    type: "SET_GRID_LENGTH",
-                                                    payload: 4,
-                                                });
+                                                setImagesGridLength(4);
                                             } else {
-                                                dispatch({
-                                                    type: "SET_GRID_LENGTH",
-                                                    payload:
-                                                        achievements.length,
-                                                });
+                                                setImagesGridLength(
+                                                    achievements.length
+                                                );
                                             }
                                             setShowAllPhotos(!showAllPhotos);
                                         }}
