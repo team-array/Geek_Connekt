@@ -27,6 +27,7 @@ const getUserData = async (args) => {
                 website: user.website,
                 birthDate: user.birthDate,
                 fullName: user.fullName,
+                phoneNumber: user.phoneNumber,
             };
         }
         return {
@@ -68,6 +69,7 @@ const getOtherUserData = async (args) => {
                 website: user.website,
                 birthDate: user.birthDate,
                 fullName: user.fullName,
+                phoneNumber: user.phoneNumber,
             };
         }
         return {
@@ -127,6 +129,7 @@ const userCreateResolver = async (args) => {
             role: args.role,
             rollNumber: args.rollNumber,
             college: args.college,
+            phoneNumber: args.phoneNumber,
         });
         // user.password = bcrypt.hashSync(user.password, 10);
         const token = await user.generateAuthToken();
@@ -148,6 +151,21 @@ const userAuthCheck = async (args) => {
                 username: user.username,
                 result: "Success",
                 role: user.role,
+                email: user.email,
+                rollNumber: user.rollNumber,
+                college: user.college,
+                bio: user.bio,
+                secondarySchool: user.secondarySchool,
+                primarySchool: user.primarySchool,
+                location: user.location,
+                homeTown: user.homeTown,
+                profilePic: user.profilePic,
+                backgroundPic: user.backgroundPic,
+                newNotifications: user.newNotifications,
+                website: user.website,
+                birthDate: user.birthDate,
+                fullName: user.fullName,
+                phoneNumber: user.phoneNumber,
             };
         }
         return {

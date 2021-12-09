@@ -10,7 +10,7 @@ import photo from "./img/photo.png";
 import feeling from "./img/feeling.png";
 import feed from "./img/feed-image-1.png";
 import like from "./img/like-blue.png";
-import comment from "./img/comments.png";
+import Comment from "../../CommentBox/Comment";
 import share from "./img/share.png";
 import job from "./img/profile-job.png";
 import study from "./img/profile-study.png";
@@ -302,6 +302,7 @@ export const Profilepage = () => {
         <div>loading...</div>
     ) : (
         <div className="ProfilepageComponent">
+            <Comment />
             <div className="profile-container">
                 <img
                     src={userData.user.backgroundPic}
@@ -537,7 +538,14 @@ export const Profilepage = () => {
                             {!loading &&
                             (postData.length === 0 ||
                                 postData === undefined) ? (
-                                <h1>Write you first post now!</h1>
+                                <h1
+                                    style={{
+                                        margin: "2rem",
+                                        textAlign: "center",
+                                    }}
+                                >
+                                    Write you first post now!
+                                </h1>
                             ) : postData !== undefined &&
                               postData !== null &&
                               postData.length > 0 ? (

@@ -52,6 +52,7 @@ const UserType = new GraphQLObjectType({
         website: { type: GraphQLString },
         fullName: { type: GraphQLString },
         newNotifications: { type: GraphQLString },
+        phoneNumber: { type: GraphQLString },
     }),
 });
 
@@ -69,7 +70,21 @@ const authCheckType = new GraphQLObjectType({
         result: { type: GraphQLString },
         id: { type: GraphQLString },
         username: { type: GraphQLString },
+        email: { type: GraphQLString },
         role: { type: GraphQLString },
+        rollNumber: { type: GraphQLString },
+        college: { type: GraphQLString },
+        location: { type: GraphQLString },
+        hometown: { type: GraphQLString },
+        bio: { type: GraphQLString },
+        profilePic: { type: GraphQLString },
+        backgroundPic: { type: GraphQLString },
+        birthDate: { type: GraphQLString },
+        secondarySchool: { type: GraphQLString },
+        primarySchool: { type: GraphQLString },
+        website: { type: GraphQLString },
+        fullName: { type: GraphQLString },
+        phoneNumber: { type: GraphQLString },
     }),
 });
 
