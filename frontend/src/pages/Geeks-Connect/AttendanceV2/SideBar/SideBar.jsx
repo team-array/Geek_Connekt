@@ -137,6 +137,8 @@ const LinksContainer = styled.div`
   @media screen and (min-width: 320px) and (max-width: 1080px) {
     width: 100%;
     height: max-content !important;
+    padding-bottom: 1.5rem;
+
   }
 `;
 

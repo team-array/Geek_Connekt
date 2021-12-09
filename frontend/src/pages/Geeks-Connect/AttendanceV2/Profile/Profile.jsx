@@ -83,16 +83,15 @@ const HeaderText = styled.h3`
   color: #fff;
   font-size: 1.5rem;
   display: block;
-  margin: 23px 30px;
+  margin: 2rem 30px;
 `;
 
 const AcadamicInformation = styled.div`
-  height: 250px;
-  width: 850px;
-  background-color: #6100d4;
-  display: block;
-  margin: 43px 30px;
+  // height: 250px;
+  // background-color: #6100d4;
+  margin: auto 10px;
   border-radius: 1rem;
+
 `;
 const AcadamicInformationHeader = styled.div`
   background-color: #091322;
@@ -107,6 +106,9 @@ const MainHeader = styled.h4`
   margin: 30px 30px;
   padding: 18px 15px 14px 15px;
   border-bottom: 1px solid #ddd;
+  @media (max-width: 768px) {
+    margin: 2rem 0px;
+  }
 `;
 
 const Main = styled.div`
@@ -116,7 +118,20 @@ const Main = styled.div`
     padding: 0px 48px;
     align-content: space-between;
     color: #ddd;
-    height: 180px;
+    height: 170px;
+    @media (max-width: 768px) {
+      height: 250px;
+    }
+    @media (max-width: 616px) {
+      height: 270px;
+    }
+    @media (max-width: 576px) {
+      height: 300px;
+    }
+    @media (max-width: 516px) {
+      height: 370px;
+      width: max-content;
+    }
 `;
 
 

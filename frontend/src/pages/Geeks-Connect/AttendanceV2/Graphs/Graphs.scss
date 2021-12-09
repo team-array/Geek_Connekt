@@ -10,5 +10,13 @@
     @media screen and (min-width: 320px) and (max-width: 1080px) {
       width: 100%;
       height: max-content !important;
+      margin-top: 1rem;
+      padding: 3rem;
+    }
+    @media screen and (min-width: 320px) and (max-width: 493px) {
+      width: 100%;
+      height: max-content !important;
+      margin-top: 1rem;
+      padding: 1rem;
     }
 }

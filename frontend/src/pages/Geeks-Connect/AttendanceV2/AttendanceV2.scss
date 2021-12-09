@@ -3,7 +3,12 @@
     box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
     display: flex;
     flex-direction:row;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap: wrap;
     justify-content: space-around;
     align-items: center;
-    background-color: #1976d2;
+    @media (max-width: 468px) {
+        overflow-y: scroll;
+    }
 }
