@@ -2,7 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const WebSocket = require("ws");
 const jwt = require("jsonwebtoken");
-require("../backend/database/connect");
+require("./database/connect");
 const chats = require("./model/chat");
 const path = require("path");
 const app = express();
@@ -36,7 +36,7 @@ const wss = new WebSocket.Server({
           return false;
         }
       } catch (error) {
-        console.lo(error);
+        console.log(error);
         console.log("error");
         return false;
       }
@@ -46,7 +46,7 @@ const wss = new WebSocket.Server({
 
 wss.on("connection", (ws, req, client) => {
   const token = req.headers["sec-websocket-protocol"];
-  const user = require("./Controllers/auth")(token);
+  const user = require("./controllers/auth")(token);
   console.log(client);
   console.log(user);
   ws.on("message", async (data) => {
