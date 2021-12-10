@@ -16,6 +16,9 @@ import NotesBlog from "./pages/Geeks-Connect/Notes/Notes";
 import PreviewPdf from "./pages/PreviewPdf/PreviewPdf";
 import Attendance from "./pages/Geeks-Connect/Attendance/App";
 import AttendaceV2 from "./pages/Geeks-Connect/AttendanceV2/AttendaceV2";
+import Chat from "./Chat/Chat";
+import ChatV2 from "./ChatV2/ChatV2";
+import ChatInterface from "./ChatInterface/ChatInterface";
 
 config.console(config.MODE);
 
@@ -40,6 +43,8 @@ const App = () => {
                     <Route path="/preview" element={<PreviewPdf />} />
                     <Route path="/attendance" element={<AttendaceV2 />} />
                     <Route path="/attendance1" element={<Attendance />} />
+                    <Route path="/chat" element={<ChatV2 />} />
+                    <Route exact path="/chat/:user" component={ChatInterface}/>
                 </Routes>
             </HashRouter>
         </div>
