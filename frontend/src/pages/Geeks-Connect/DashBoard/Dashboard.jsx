@@ -194,6 +194,9 @@ const Dashboard = () => {
         dispatch({ type: "SET_LOADING", payload: false });
     }
 }
+  const chatwindow = () => {
+      navigate("/chatwindow");
+  }
   return (
     <div className="dashboard">
       {open && (
@@ -244,6 +247,7 @@ const Dashboard = () => {
         notifications={notifications}
         notes={notes}
         uploadAttendance={uploadAttendance}
+        chatwindow={chatwindow}
       />
       {showNotifications ? <Notifications /> : ""}
       {currentPage === 0 ? (
