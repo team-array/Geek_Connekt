@@ -27,7 +27,7 @@ services:
       - web-root:/var/www/html
     depends_on:
       - nginx
-    command: certonly --webroot --webroot-path=/var/www/html --email akshaymurar>
+    command: certonly --webroot --webroot-path=/var/www/html --email akshaymurari184@gmail.com --agree-tos --no-eff-email --force-renewal -d webportfolyo.tech -d www.webportfolyo.tech
 volumes:
   certbot-etc:
   certbot-var:
