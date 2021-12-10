@@ -11,8 +11,6 @@ const bodyParser = require("body-parser");
 app.use(cors());
 app.use(bodyParser.urlencoded({ limit: "3mb", extended: true }));
 app.use(bodyParser.json({ limit: "3mb", extended: true }));
-const router = require("./router");
-app.use(router);
 const port = process.env.PORT || 8001;
 const server = app.listen(port, (err) => {
   if (!err) {

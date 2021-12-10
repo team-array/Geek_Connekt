@@ -2,16 +2,16 @@ const mongoose = require("mongoose");
 
 const ChatSchema = new mongoose.Schema({
     user1:{
-        type:STRING,
+        type:String,
         required:true,
     },
     user2:{
-        type:STRING,
+        type:String,
         required:true,
     },
     message:{
-        type:DataTypes.STRING,
-        allowNull:false,
+        type:String,
+        required:true,
     },
     createdAt:{
         type:Date,
