@@ -76,9 +76,9 @@ const getutilities = ({res},{req}) => {
                                         myrating = userrating.rating;
                                     }
                                     rating = rating + userrating.rating;
-                                    return rating;
                                 });
-                                rating = round(totalRating/numberOfRating*1.0,0.5);
+                                rating = round(rating/numberOfRating*1.0,0.5);
+                                console.log(rating,numberOfRating,rating)
                                 return {
                                     success:true,
                                     message: "Utilities fetched successfully",
@@ -164,6 +164,7 @@ const updateRating = ({res}, {req}) => {
                                         rating = rating + userrating.rating;
                                     });
                                     rating = round(rating/numberOfRating*1.0,0.5);
+                                    console.log(rating)
                                     return res.status(200).json({
                                         success:true,
                                         message: "Rating updated successfully",

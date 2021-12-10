@@ -296,7 +296,7 @@ const Feed = () => {
                     fontWeight: "700",
                   }}
                 >
-                  “{Quote.getQuote().text}”
+                  `{(Quote.getQuote()!==undefined)?Quote.getQuote().text:""}`
                 </p>
                 <p>~{Quote.getQuote().author}</p>
               </div>
