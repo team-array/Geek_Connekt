@@ -297,7 +297,7 @@ function NotesBlog() {
                     </Button>
                     {
                       (JSON.parse(localStorage.getItem("user")).username === note.postedBy) &&
-                        <Button danger icon={<DeleteOutlined />} size="large" onClick={()=>deleteNotes(note.file)}>
+                        <Button danger icon={<DeleteOutlined />} size="large" onClick={()=>deleteNotes(note.file,index)}>
                           Delete
                         </Button>
                     }
@@ -341,7 +341,7 @@ function NotesBlog() {
                     </Button>
                     {
                       (JSON.parse(localStorage.getItem("user")).username === note.postedBy) &&
-                        <Button danger icon={<DeleteOutlined />} size="large" onClick={()=>deleteNotes(note.file)}>
+                        <Button danger icon={<DeleteOutlined />} size="large" onClick={()=>deleteNotes(note.file,index)}>
                           Delete
                         </Button>
                     }

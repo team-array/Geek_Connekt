@@ -33,6 +33,7 @@ import axios from "axios";
 import UploadIcon from "@mui/icons-material/Upload";
 import SchoolIcon from "@mui/icons-material/School";
 import { useNavigate } from "react-router-dom";
+import "./Navbar.scss";
 
 const GET_NOTIFCATION_COUNT = gql`
     query user($token: String!) {
@@ -396,10 +397,10 @@ export default function PrimarySearchAppBar(props) {
         </Menu>
     );
     return (
-        <Box sx={{ flexGrow: 1 }} className="NavbarGk">
+        <Box sx={{ flexGrow: 1 }} className="NavbarGk py-0">
             <AppBar
                 position="static"
-                className="py-0"
+                className="py-0 "
                 style={{ position: "fixed", top: 0, zIndex: "999999" }}
             >
                 <Toolbar>

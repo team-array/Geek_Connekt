@@ -33,7 +33,6 @@ const AcheivementsForm = () => {
     const [crop, setCrop] = useState({
         unit: "%",
         width: 30,
-        aspect: 16 / 9,
     });
     const dispatch = useDispatch();
     const handleClose = () => {
@@ -225,11 +224,16 @@ const AcheivementsForm = () => {
                                         src={src}
                                         crop={crop}
                                         onImageLoaded={setImage}
+                                        style={{
+                                            height: "230px",
+                                            width: "300px",
+                                            margin: "auto",
+                                        }}
                                         onChange={(newCrop) => {
                                             setCrop({
                                                 ...newCrop,
-                                                width:160,
-                                                height:160,
+                                                // width:160,
+                                                // height:160,
                                             });
                                         }}
                                     />
@@ -240,7 +244,9 @@ const AcheivementsForm = () => {
                                         <img
                                             src={result}
                                             alt="cropped img"
-                                            style={{ width: "100%" }}
+                                            style={{ width: "100%",
+                                           
+                                         }}
                                         />
                                     </div>
                                 )
@@ -251,7 +257,8 @@ const AcheivementsForm = () => {
                                         <img
                                             src={result}
                                             alt="cropped img"
-                                            // style={{ width: "100%" }}
+                                            style={{margin: "auto",
+                                            display: "block",height:"150px",width:"150px" }}
                                         />
                                     </div>
                                 )
