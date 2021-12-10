@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import * as XLSX from "xlsx";
 import axios from "axios";
+import {BaseUrl} from "../../../constants";
 
 const UploadAttendance = () => {
     const [items, setItems] = useState(null);
@@ -46,7 +47,7 @@ const UploadAttendance = () => {
                 formData.append("file", items);
                 const result = axios({
                     method: "post",
-                    url: `http://localhost:8000/uploadAttendance`,
+                    url: `${BaseUrl}/uploadAttendance`,
                     data: formData,
                     headers: {
                         "Content-Type": "multipart/form-data",

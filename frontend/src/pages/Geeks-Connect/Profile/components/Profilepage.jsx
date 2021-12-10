@@ -673,7 +673,7 @@ export const Profilepage = () => {
                                                                                 await axios(
                                                                                     {
                                                                                         method: "POST",
-                                                                                        url: `http://localhost:8000/deletePost`,
+                                                                                        url: `${BaseUrl}/deletePost`,
                                                                                         data: {
                                                                                             postId: posts[
                                                                                                 deletePostId
@@ -978,7 +978,7 @@ export const Profilepage = () => {
                                                                                 await axios(
                                                                                     {
                                                                                         method: "POST",
-                                                                                        url: `http://localhost:8000/deletePost`,
+                                                                                        url: `${BaseUrl}/deletePost`,
                                                                                         data: {
                                                                                             postId: posts[
                                                                                                 deletePostId
