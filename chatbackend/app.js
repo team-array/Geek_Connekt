@@ -62,7 +62,7 @@ wss.on("connection", (ws, req, client) => {
         console.log(msg.username, user.username);
         const user1 = require("./controllers/auth")(ws._protocol);
         if (ws.readyState == WebSocket.OPEN && (user1.username==msg.username )) {
-            ws.send(JSON.stringify({ isOnline: true,username: user.username,type:"online"}))
+            ws.send(JSON.stringify({ isOnline: true,username: msg.username,type:"online"}))
             return;
         }
       });

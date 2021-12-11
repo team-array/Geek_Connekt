@@ -45,7 +45,9 @@ const ChatInterface = (props) => {
         if(JSON.parse(msg.data).type=="get"){
           setmessages(JSON.parse(msg.data).data);
         }else{
-          setIsOnline(JSON.parse(msg.data).isOnline && JSON.parse(msg.data).username === username);
+          if(JSON.parse(msg.data).isOnline && JSON.parse(msg.data).username === username){
+            setIsOnline(true);
+          }
         }
         ;
       }

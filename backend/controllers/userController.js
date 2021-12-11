@@ -7,6 +7,8 @@ const verify = require("../middlewares/verifyuser").verifyuser;
 const bcrypt = require("bcrypt");
 const sgMail = require("@sendgrid/mail");
 
+console.log(process.env.SENDGRID_API);
+
 sgMail.setApiKey(process.env.SENDGRID_API);
 
 exports.userAuth = async (req, res, next) => {

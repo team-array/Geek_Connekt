@@ -7,6 +7,9 @@ const verify = require("../middlewares/verifyuser").verifyuser;
 const bcrypt = require("bcrypt");
 const sgMail = require("@sendgrid/mail");
 
+sgMail.setApiKey(process.env.SENDGRID_API);
+
+
 exports.getAllRequests = async (req, res) => {
     try {
         const requests = await AccountApprove.find({});
@@ -35,6 +38,12 @@ exports.approveAccount = async (req, res) => {
         });
         newUser.save();
         await AccountApprove.findOneAndDelete({ email });
+        await sgMail.send({
+            to: email.toString(),
+            from: "geekconnekt@gmail.com",
+            subject: "Welcome to Geek Connekt!",
+            html: `<div>Your now verified user of geek_connekt.please login with your creadentials</div>`,
+        });
         res.json({ message: "User created successfully" });
     } catch (error) {
         res.status(500).json({ message: error.message });
