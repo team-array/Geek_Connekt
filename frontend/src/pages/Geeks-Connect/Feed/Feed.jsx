@@ -266,6 +266,19 @@ const Feed = () => {
                 marginTop: "50px",
               }}
             >
+                {/* {temp ? <h1>Liked</h1> : <h1>Like</h1>} */}
+                {/* <div
+                className="profileSectionFeed"
+                    style={{
+                        position: "fixed",
+                        top: "5rem",
+                        left: "10px",
+                        width: "20%",
+                        height: "70%",
+                        borderRadius: "10px",
+                        // border: "grey 1px solid",
+                        display: `${width < 800 ? "none" : "block"}`,
+                    }} */}
               <p
                 style={{
                   fontSize: "1.5rem",

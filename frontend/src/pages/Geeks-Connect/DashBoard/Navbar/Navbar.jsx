@@ -454,7 +454,7 @@ export default function PrimarySearchAppBar(props) {
                             >
                                 <NotificationsIcon
                                     style={{
-                                        fontSize: "2rem",
+                                        fontSize: "1.5rem",
                                     }}
                                 />
                             </Badge>
