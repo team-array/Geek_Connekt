@@ -206,6 +206,7 @@ const Feed = () => {
     };
     getSavedPosts();
   }, []);
+  console.log(posts);
   return (
     <div className="feed-container">
       <Comment />
@@ -327,7 +328,7 @@ const Feed = () => {
                     >
                       <div className="post-row">
                         <div className="user-profile">
-                          <Link to={`/user/${post.user._id}`}>
+                          <Link to={`/user/${post._id}`}>
                             <img
                               src={post.user.profilePic}
                               alt="User profile Pic"
@@ -525,6 +526,7 @@ const Feed = () => {
                     </div>
                   );
                 } else {
+                  console.log(post)
                   return (
                     <div className="post-container mb-5 card mx-auto shadow-sm">
                       <div className="post-row">
@@ -725,7 +727,7 @@ const Feed = () => {
                           </div>
                         </div>
                         <div className="post-profile-icon">
-                          <img src={post.user.profilePic} alt="" />
+                          <img src={post.profilePic} alt="" />
                         </div>
                       </div>
                     </div>

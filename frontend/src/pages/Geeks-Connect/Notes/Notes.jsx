@@ -361,7 +361,7 @@ function NotesBlog() {
                             : notes.map((note, index) => {
                                   return (
                                       <Card hoverable>
-                                          <div
+                                          {/* <div
                                               style={{
                                                   width: "12rem",
                                                   height: "16rem",
@@ -370,7 +370,7 @@ function NotesBlog() {
                                                   backgroundSize: "cover",
                                                   backgroundRepeat: "no-repeat",
                                               }}
-                                          ></div>
+                                          ></div> */}
                                           <h3 className="mb-1">
                                               {note.subject}
                                           </h3>

@@ -39,10 +39,10 @@ exports.rootUserLogin = async (req, res, next) => {
     try {
         console.log(req.body);
         const { email, password } = req.body;
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ email,admin:true });
         if (!user) {
             return res.json({
-                message: "Root User not found",
+                message: "You are not a valid user",
             });
         }
         const isMatch = await bcrypt.compare(password, user.password);
