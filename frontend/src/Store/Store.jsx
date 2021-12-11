@@ -16,7 +16,8 @@ import {
   loading,
   reloadUtilities,
   reloadEvents,
-  pdfFile
+  pdfFile,
+  currentChatProfilePic
 } from "./reducers";
 
 const reducers = combineReducers({
@@ -35,7 +36,8 @@ const reducers = combineReducers({
   loading,
   reloadUtilities,
   reloadEvents,
-  pdfFile
+  pdfFile,
+  currentChatProfilePic
 });
 
 const Store = createStore(reducers);

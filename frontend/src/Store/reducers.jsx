@@ -164,3 +164,13 @@ export const pdfFile = (state = null, action) => {
             return state;
     }
 };
+
+
+export const currentChatProfilePic = (state = "", action) => {
+    switch (action.type) {
+        case "SET_CHAT_PROFILE":
+            return action.payload;
+        default:
+            return state;
+    }
+};
