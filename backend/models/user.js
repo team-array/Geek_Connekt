@@ -171,6 +171,10 @@ const UserSchema = new Schema({
         type:String,
         default:"NA"
     },
+    admin:{
+        type:Boolean,
+        default:false
+    }
 });
 
 UserSchema.methods.generateAuthToken = async function () {

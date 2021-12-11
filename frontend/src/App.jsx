@@ -46,7 +46,7 @@ const App = () => {
                     <Route path="/attendance" element={<AttendaceV2 />} />
                     <Route path="/attendance1" element={<Attendance />} />
                     <Route path="/chat" element={<ChatV2 />} />
-                    <Route exact path="/chat/:user" component={ChatInterface}/>
+                    <Route path="/chat/:user" element={<ChatInterface/>}/>
                 </Routes>
             </HashRouter>
         </div>
