@@ -4,6 +4,18 @@ const userController = require("./controllers/userController");
 const postController = require("./controllers/postController");
 const notifcationController = require("./controllers/notificationController");
 const AttendanceController = require("./controllers/AttendanceController");
+const ApproveAccountsController = require("./controllers/approveAccountsController");
+
+router.get("/getAllRequests", ApproveAccountsController.getAllRequests);
+
+router.post("/approveAccount", ApproveAccountsController.approveAccount);
+
+router.get("/userAuth", userController.userAuth);
+
+router.post("/rootUserLogin", userController.rootUserLogin);
+
+router.post("/signUp", userController.signUpUser);
+router.get("/verifySignUp/:token", userController.verifySignUp);
 
 router.get("/searchUsers", userController.searchUsers);
 
@@ -138,7 +150,7 @@ router.post("/getAllNotes", (req, res) => {
 
 router.post("/getUserDetails", (res, req) => {
     require("./controllers/userController").getUserDetails(res, req);
-})
+});
 
 router.post("/getAttendance", (res, req) => {
     require("./controllers/AttendanceController").getAttendance(res, req);

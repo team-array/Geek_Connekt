@@ -16,6 +16,7 @@ import NotesBlog from "./pages/Geeks-Connect/Notes/Notes";
 import PreviewPdf from "./pages/PreviewPdf/PreviewPdf";
 import Attendance from "./pages/Geeks-Connect/Attendance/App";
 import AttendaceV2 from "./pages/Geeks-Connect/AttendanceV2/AttendaceV2";
+import SignUp from "./pages/Signin/SignUp";
 
 config.console(config.MODE);
 
@@ -33,6 +34,7 @@ const App = () => {
                     <Route path="/" element={<HomePageController />} />
                     {/* <Route path="/" element={<UploadAttendance />} /> */}
                     <Route path="/login" element={<Signin />} />
+                    <Route path="/signUp" element={<SignUp />} />
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/notifications" element={<Notifications />} />
                     <Route path={"/user/:id"} element={<OtherUserProfile />} />
