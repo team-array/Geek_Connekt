@@ -118,20 +118,20 @@ const Feed = () => {
   const lastPostRefChanger = useCallback(
     (post) => {
       if (loading) return;
-      // console.log("Last post:", post);
+      console.log("Last post:", post);
       if (lastPostReference.current) {
-        // console.log("Disconnected");
+        console.log("Disconnected");
         lastPostReference.current.disconnect();
       }
       lastPostReference.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting && hasMore > 0) {
-          // console.log("Visible");
+          console.log("Visible");
           setpageNumber((pageNumber) => (pageNumber += 1));
         }
       });
       if (post) {
         lastPostReference.current.observe(post);
-        // console.log(post);
+        console.log(post);
       }
     },
     [loading, hasMore]

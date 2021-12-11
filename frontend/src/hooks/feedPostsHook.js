@@ -36,7 +36,7 @@ export default function UserPostHook(
             cancelToken: new axios.CancelToken((c) => (cancel = c)),
         })
             .then((res) => {
-                // console.log("Hook: ", res.data.posts);
+                console.log("Hook: ", res.data.posts);
                 setPosts((posts) => {
                     return [...posts].concat(res.data.posts);
                 });
