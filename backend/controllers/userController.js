@@ -74,7 +74,7 @@ exports.forgotPassword = async (req, res, next) => {
         const { username } = req.body;
         const user = await User.findOne({ username });
         console.log(user);
-        if (!user) {
+        if (user===null) {
             return res.json({
                 message: "Your Email is not registered",
             });

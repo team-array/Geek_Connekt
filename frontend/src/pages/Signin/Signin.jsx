@@ -227,7 +227,7 @@ const Signin = () => {
                                         ).value;
                                     const result = await axios({
                                         method: "post",
-                                        url: "http://localhost:8000/forgotPassword",
+                                        url: "http://localhost:80/forgotPassword",
                                         headers: {
                                             "Content-Type": "application/json",
                                         },
@@ -238,7 +238,7 @@ const Signin = () => {
                                     console.log(result);
                                 } catch (err) {
                                     console.log(err);
-                                    setErrorMsg(err.response.data.message);
+                                    setErrorMsg("error retrieving password");
                                 }
                             }}
                         >
