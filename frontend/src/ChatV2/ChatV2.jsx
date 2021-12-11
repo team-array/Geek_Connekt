@@ -8,6 +8,11 @@ import axios from "axios";
 import { BaseUrl } from "../constants";
 import { useNavigate } from "react-router-dom";
 import HighlightOffIcon from "@material-ui/icons/HighlightOff";
+import logo from "../assets/logo1.png";
+import MarkUnreadChatAltIcon from "@mui/icons-material/MarkUnreadChatAlt";
+import Badge from "@mui/material/Badge";
+import MailIcon from "@mui/icons-material/Mail";
+import { useDispatch, useSelector } from "react-redux";
 
 import {
   createStyles,
@@ -74,6 +79,18 @@ const useStyles = makeStyles((theme) =>
     },
   })
 );
+
+function notificationsLabel(count) {
+  if (count === 0) {
+    return 'no notifications';
+  }
+  if (count > 5) {
+    return 'more than 5 notifications';
+  }
+  return `${count} notifications`;
+}
+
+
 const Chat = () => {
   const classes = useStyles();
   const [value, setvalue] = React.useState("");
@@ -81,7 +98,9 @@ const Chat = () => {
   const [onsearch, setonsearch] = React.useState([]);
   const [usernames, setusernames] = React.useState([]);
   const H = useNavigate();
+  const dispatch = useDispatch();
   React.useEffect(() => {
+    dispatch({ type: "SET_LOADING", payload: true });
     const chats = async () => {
       try {
         const result = await axios({
@@ -93,14 +112,16 @@ const Chat = () => {
           },
           data: { token: localStorage.getItem("jwt"), data: value },
         });
-        if(result.data.success){
-          if(value!==""){
+        dispatch({ type: "SET_LOADING", payload: false });
+        if (result.data.success) {
+          if (value !== "") {
             setonsearch(result.data.chats);
-          }else{
+          } else {
             setusernames(result.data.chats);
           }
         }
       } catch (error) {
+        dispatch({ type: "SET_LOADING", payload: false });
         console.log(error);
       }
     };
@@ -111,12 +132,31 @@ const Chat = () => {
       <div className="container">
         <div
           className="shadow"
-          style={{ marginTop: "3rem", background: "", position: "relative",height:"80vh", }}
+          style={{
+            marginTop: "3rem",
+            background: "",
+            position: "relative",
+            height: "80vh",
+          }}
         >
           <AppBar position="static">
             <Toolbar>
-              <Typography className={classes.title} variant="h6" style={{color:"white"}} noWrap>
-                searchuser
+              <Typography
+                className={classes.title}
+                variant="h6"
+                style={{ color: "white" }}
+                noWrap
+              >
+                <img
+                  src={logo}
+                  alt="chats"
+                  style={{
+                    width: "50px",
+                    height: "50px",
+                    marginLeft: "-8px",
+                  }}
+                ></img>{" "}
+                Chats
               </Typography>
               <div className={classes.search}>
                 <div className={classes.searchIcon}>
@@ -152,7 +192,6 @@ const Chat = () => {
                   wordWrap: "break-word",
                 }}
               >
-
                 <IconButton
                   style={{
                     // position:"fixed",
@@ -182,17 +221,50 @@ const Chat = () => {
               </div>
             </Toolbar>
           </AppBar>
-          {usernames.map((ele, index) => (
-            <div
-              className="Searchbox nndffkfkf mt-0"
-              onClick={() => {
-                H(`/chat/${ele.user2}`);
-              }}                
-              style={{ color: "black", cursor: "pointer", padding:"1rem 1rem 1rem 1rem" }}
-            >
-              {ele.user2}
-            </div>
-          ))}
+          <div className="mt-3">
+            {usernames.map((ele, index) => (
+              <div
+                className="Searchbox nndffkfkf"
+                onClick={() => {
+                  H(`/chat/${ele.user2}`);
+                }}
+                style={{
+                  color: "black",
+                  cursor: "pointer",
+                  padding: "0.8rem 1rem 0.8rem 0rem",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  borderBottom: "1px solid #e0e0e0",
+                  marginLeft: "2rem",
+                  marginRight: "2rem",
+                }}
+              >
+                <div style={{ display: "block" }}>
+                  <img
+                    src={ele.profilePic}
+                    alt="chats"
+                    style={{
+                      width: "40px",
+                      height: "40px",
+                      marginLeft: "8px",
+                      borderRadius: "100%",
+                      marginRight: "1rem",
+                    }}
+                  ></img>{" "}
+                  {ele.user2}
+                </div>
+                <div style={{ display: "inline-block", textAlign: "end" }}>
+                  {ele.role}{" "}
+                  <IconButton aria-label={notificationsLabel(ele.count)}>
+                    <Badge badgeContent={ele.count} color="primary">
+                      <MarkUnreadChatAltIcon />
+                    </Badge>
+                  </IconButton>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>

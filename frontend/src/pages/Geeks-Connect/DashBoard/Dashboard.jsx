@@ -195,7 +195,7 @@ const Dashboard = () => {
     }
 }
   const chatwindow = () => {
-      navigate("/chatwindow");
+      navigate("/chat");
   }
   return (
     <div className="dashboard">

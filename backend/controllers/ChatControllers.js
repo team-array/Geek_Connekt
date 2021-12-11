@@ -9,16 +9,17 @@ const getAllChats = async (req, res) => {
 
                 if (result) {
                     if(req.body.data===""){
-                        console.log(result);
                         const userId = result.username;
                         let chatss = await chats.find({ user1: userId });
                         let topchats=[];
+                        let chatIds = {};
+                        console.log(chatss);
                         for (let i = 0; i < chatss.length; i++) {
                             let user2 = chatss[i].user2;
+                            if(chatIds[chatss[i].user2]){
+                                continue;
+                            }
                             topchats.push({user2});
-                        }
-                        let chatIds = {};
-                        for (let i = 0; i < chatss.length; i++) {
                             chatIds[chatss[i].user2] = true;
                         }
                         let users = await user.find({}).select({username: 1, _id: 0});
@@ -30,6 +31,21 @@ const getAllChats = async (req, res) => {
                                 topchats.push({user2: users[i].username});
                             }
                         }
+                        await Promise.all(topchats.map(async (chat) => {
+                            let user2 = chat.user2;
+                            let profilePic = await user.findOne({username: user2}).select({profilePic: 1,role:1});
+                            chat.profilePic = profilePic.profilePic;
+                            chat.role = profilePic.role;
+                        }));
+                        await Promise.all(topchats.map(async (chat) => {
+                            let user2 = chat.user2;
+                            let count = await chats.find({user1: result.username, user2: user2,"$or":[
+                                {seen:"none"},
+                                {seen:user2}
+                            ]});
+                            console.log(count);
+                            chat.count = count.length;
+                        }));
                         res.status(200).json({ success: true, chats: topchats });
                     }else{
                         console.log(result);
@@ -38,12 +54,13 @@ const getAllChats = async (req, res) => {
                             { "$regex": req.body.data, "$options": "i" }
                         });
                         let topchats=[];
-                        for (let i = 0; i < chatss.length; i++) {
-                            let user2 = chatss[i].user2;
-                            topchats.push({user2});
-                        }
                         let chatIds = {};
                         for (let i = 0; i < chatss.length; i++) {
+                            let user2 = chatss[i].user2;
+                            if(chatIds[chatss[i].user2]){
+                                continue;
+                            }
+                            topchats.push({user2});
                             chatIds[chatss[i].user2] = true;
                         }
                         let users = await user.find({
