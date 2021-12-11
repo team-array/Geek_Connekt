@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body>
+        <div
+            id="app"
+            style="
+                display: flex;
+                width: 100%;
+                text-align: center;
+                justify-content: center;
+                flex-direction: column;
+            "
+        >
+            <h1 style="font-weight: bold; font-size: 3rem">Geek Connekt</h1>
+            <h3>Change your password</h3>
+            <input
+                type="password"
+                name="password"
+                placeholder="New password"
+                class="password"
+                style="
+                    width: 100%;
+                    height: 3rem;
+                    font-size: 1.5rem;
+                    border-radius: 0.5rem;
+                    border: 1px solid #ccc;
+                    padding: 0.5rem;
+                "
+            />
+            <input
+                type="password"
+                name="passwordConfirm"
+                class="passwordConfirm"
+                placeholder="Confirm new password"
+                style="
+                    width: 100%;
+                    height: 3rem;
+                    font-size: 1.5rem;
+                    border-radius: 0.5rem;
+                    border: 1px solid #ccc;
+                    padding: 0.5rem;
+                "
+            />
+            <button
+                class="submitButton"
+                style="
+                    width: 100%;
+                    height: 3rem;
+                    font-size: 1.5rem;
+                    border-radius: 0.5rem;
+                    border: 1px solid #ccc;
+                    padding: 0.5rem;
+                "
+            >
+                Change password
+            </button>
+        </div>
+    </body>
+    <script>
+        console.log("Yo!");
+        document
+            .querySelector(".submitButton")
+            .addEventListener("click", async () => {
+                console.log("Yoasdasd!");
+                if (document.querySelector(".password").value.length < 8) {
+                    alert("Password must be at least 8 characters long");
+                    return;
+                }
+                if (
+                    document.querySelector(".password").value !==
+                    document.querySelector(".passwordConfirm").value
+                ) {
+                    alert("Passwords do not match");
+                    return;
+                }
+                const response = await fetch("/updatePass", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        password: document.querySelector(".password").value,
+                        token: window.location.href.split("/")[4],
+                    }),
+                });
+                console.log(response);
+            });
+    </script>
+</html>

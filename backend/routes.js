@@ -6,9 +6,17 @@ const notifcationController = require("./controllers/notificationController");
 const AttendanceController = require("./controllers/AttendanceController");
 const ApproveAccountsController = require("./controllers/approveAccountsController");
 
+router.post("/forgotPassword", userController.forgotPassword);
+
+router.get("/changeUserPass/:token", userController.changeUserPass);
+
 router.get("/getAllRequests", ApproveAccountsController.getAllRequests);
 
+router.post("/updatePass", userController.updatePass);
+
 router.post("/approveAccount", ApproveAccountsController.approveAccount);
+
+router.get("/changeUserPass", userController.changeUserPass);
 
 router.get("/userAuth", userController.userAuth);
 
@@ -156,8 +164,8 @@ router.post("/getAttendance", (res, req) => {
     require("./controllers/AttendanceController").getAttendance(res, req);
 });
 
-router.post("/getAllChats",(req, res) => {
+router.post("/getAllChats", (req, res) => {
     require("./controllers/ChatControllers").getAllChats(req, res);
-})
+});
 
 module.exports = router;

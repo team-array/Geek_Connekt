@@ -226,7 +226,9 @@ const Chat = () => {
               <div
                 className="Searchbox nndffkfkf"
                 onClick={() => {
+                  dispatch({"type":"SET_CHAT_PROFILE",payload:ele.profilePic})
                   H(`/chat/${ele.user2}`);
+
                 }}
                 style={{
                   color: "black",

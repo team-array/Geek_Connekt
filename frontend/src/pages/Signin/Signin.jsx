@@ -5,11 +5,13 @@ import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { useLazyQuery, useQuery, gql } from "@apollo/client";
 import CircularProgress from "@mui/material/CircularProgress";
 import Alert from "@mui/material/Alert";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/logo1.png";
 import { AppName } from "../../constants";
+import axios from "axios";
 
 import "./Signin.scss";
+import { ButtonBase } from "@mui/material";
 
 const LOGIN_USER = gql`
     query auth($username: String!, $password: String!, $college: String!) {
@@ -97,45 +99,53 @@ const Signin = () => {
     return authCheckLoading ? (
         <div>Loading...</div>
     ) : (
-        <div className="Signin" style={{
-            fontFamily: "Barlow"
-        }}>
+        <div
+            className="Signin"
+            style={{
+                fontFamily: "Barlow",
+            }}
+        >
             <ImgBlock>
                 <BgCover />
             </ImgBlock>
-            <div className="Main" style={{
-                display: "flex",
-                flexDirection: "row",
-                flexWrap: "wrap",
-                justifyContent: "space-around",
-                alignItems: "center",
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-            }}
+            <div
+                className="Main"
+                style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    flexWrap: "wrap",
+                    justifyContent: "space-around",
+                    alignItems: "center",
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                }}
             >
-                <div style={{
-                    width:"max-content",
-                    marginBottom: "60px"
-                }}>
-                    <img src={logo} alt="logo" style={{
-                        width: "100px",
-                        height: "100px",
-                        objectFit: "cover",
-                        objectPosition: "center",
-                        borderRadius: "100px",    
-                        marginTop: "3px"            
-                    }}/>
-                    <span className="AppName" >{AppName} 
-                    </span>
+                <div
+                    style={{
+                        width: "max-content",
+                        marginBottom: "60px",
+                    }}
+                >
+                    <img
+                        src={logo}
+                        alt="logo"
+                        style={{
+                            width: "100px",
+                            height: "100px",
+                            objectFit: "cover",
+                            objectPosition: "center",
+                            borderRadius: "100px",
+                            marginTop: "3px",
+                        }}
+                    />
+                    <span className="AppName">{AppName}</span>
                     <div className="AppDesc">
                         Connects colleagues in college
                     </div>
                 </div>
-                <FormBox
-                    data-aos="fade-right"
-                >
+                <FormBox data-aos="fade-right">
                     <h2
                         style={{ fontWeight: "bold" }}
                         className="text-center mb-4"
@@ -164,6 +174,7 @@ const Signin = () => {
                         >
                             <Input
                                 size="large"
+                                id="username"
                                 prefix={
                                     <UserOutlined className="site-form-item-icon" />
                                 }
@@ -181,6 +192,7 @@ const Signin = () => {
                         >
                             <Input.Password
                                 size="large"
+                                id="password"
                                 prefix={
                                     <LockOutlined className="site-form-item-icon" />
                                 }
@@ -188,7 +200,7 @@ const Signin = () => {
                                 placeholder="Password"
                             />
                         </Form.Item>
-                        <Form.Item>
+                        {/* <Form.Item>
                             <Form.Item
                                 size="large"
                                 name="remember"
@@ -197,7 +209,41 @@ const Signin = () => {
                             >
                                 <Checkbox size="large">Remember me</Checkbox>
                             </Form.Item>
-                        </Form.Item>
+                        </Form.Item> */}
+                        <button
+                            style={{
+                                border: "none",
+                                margin: "1rem 1rem 1rem 0",
+                                paddingLeft: "0",
+                                color: "blue",
+                                background: "transparent",
+                            }}
+                            onClick={async (e) => {
+                                e.preventDefault();
+                                try {
+                                    const username =
+                                        document.querySelector(
+                                            "#username"
+                                        ).value;
+                                    const result = await axios({
+                                        method: "post",
+                                        url: "http://localhost:8000/forgotPassword",
+                                        headers: {
+                                            "Content-Type": "application/json",
+                                        },
+                                        data: {
+                                            username: !username ? "" : username,
+                                        },
+                                    });
+                                    console.log(result);
+                                } catch (err) {
+                                    console.log(err);
+                                    setErrorMsg(err.response.data.message);
+                                }
+                            }}
+                        >
+                            Forgot Password?
+                        </button>
 
                         <Form.Item>
                             {loading ? (
@@ -225,7 +271,6 @@ const Signin = () => {
                         </Form.Item>
                     </Form>
                 </FormBox>
-
             </div>
         </div>
     );

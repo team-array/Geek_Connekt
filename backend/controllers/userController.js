@@ -6,6 +6,7 @@ const AccountApprove = require("../models/accountApprove.js");
 const verify = require("../middlewares/verifyuser").verifyuser;
 const bcrypt = require("bcrypt");
 const sgMail = require("@sendgrid/mail");
+const path = require("path");
 
 console.log(process.env.SENDGRID_API);
 
@@ -41,7 +42,7 @@ exports.rootUserLogin = async (req, res, next) => {
     try {
         console.log(req.body);
         const { email, password } = req.body;
-        const user = await User.findOne({ email,admin:true });
+        const user = await User.findOne({ email, admin: true });
         if (!user) {
             return res.json({
                 message: "You are not a valid user",
@@ -60,6 +61,68 @@ exports.rootUserLogin = async (req, res, next) => {
         // const { _id, name, email, role, avatar } = user;
         return res.status(200).json({
             token,
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message: "Internal server error",
+        });
+    }
+};
+
+exports.forgotPassword = async (req, res, next) => {
+    try {
+        const { username } = req.body;
+        const user = await User.findOne({ username });
+        console.log(user);
+        if (!user) {
+            return res.json({
+                message: "Your Email is not registered",
+            });
+        }
+        console.log("SENDING EMAIL TO: ", user.email);
+        const userToken = jwt.sign(
+            {
+                username: user.username,
+                email: user.email,
+            },
+            process.env.JWT_SECRET
+        );
+        const res = await sgMail.send({
+            to: user.email,
+            from: "geekconnekt@gmail.com",
+            subject: "Change PassWord!",
+            html: `<div><h1>Change Password Request!</h1><p>Click the Below link to change the password of your account</p><br/><br/><br/><a href=http://localhost:8000/changeUserPass/${userToken}>Change Password</a></div>`,
+        });
+        console.log("Email res: ", res);
+    } catch (error) {
+        return res.status(500).json({
+            message: "Internal server error",
+        });
+    }
+};
+
+exports.changeUserPass = async (req, res, next) => {
+    // console.log(path.join(__dirname, "../../views/passChange.html"));
+    res.sendFile(path.join(__dirname, "../views/passChange.html"));
+};
+
+exports.updatePass = async (req, res, next) => {
+    try {
+        // console.log(req.body);
+        const { password } = req.body;
+        const { username } = jwt.verify(req.body.token, process.env.JWT_SECRET);
+        console.log(username);
+        const user = await User.findOne({ username });
+        console.log(user);
+        if (!user) {
+            return res.json({
+                message: "User not found",
+            });
+        }
+        user.password = bcrypt.hashSync(password, 10);
+        await user.save();
+        return res.status(200).json({
+            message: "Password updated successfully",
         });
     } catch (error) {
         return res.status(500).json({
