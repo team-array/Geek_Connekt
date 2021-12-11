@@ -151,13 +151,14 @@ const EditProfile = () => {
     editUserPersonalInfo({
       variables: {
         token: userToken,
-        username: values.name,
-        email: values.email,
-        birthDate: values.date,
-        website: values.website,
+        username: values.name || "",
+        email: values.email || "",
+        birthDate: values.date || "",
+        website: values.website || "",
       },
     });
     alert("Personal Info Updated");
+    window.location.reload();
   };
 
   useEffect(() => {

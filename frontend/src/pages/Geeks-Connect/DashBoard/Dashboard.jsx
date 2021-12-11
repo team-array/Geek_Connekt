@@ -14,7 +14,7 @@ import Notifications from "../Notifications/Notifications";
 import StarOfTheMonth from "../StarOfTheMonth/StarOfTheMonth";
 import AcheivementsForm from "../AcheivementsForm/AcheivementsForm";
 import axios from "axios";
-import { BaseUrl } from "../../../constants";
+import { BaseUrl,Ws } from "../../../constants";
 import News from "../News/News";
 import { io } from "socket.io-client";
 import Button from "@mui/material/Button";
@@ -47,7 +47,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    socket = io(BaseUrl);
+    socket = io(Ws);
     // console.log(socket);
   }, []);
 
@@ -194,6 +194,9 @@ const Dashboard = () => {
         dispatch({ type: "SET_LOADING", payload: false });
     }
 }
+  const chatwindow = () => {
+      navigate("/chatwindow");
+  }
   return (
     <div className="dashboard">
       {open && (
@@ -244,6 +247,7 @@ const Dashboard = () => {
         notifications={notifications}
         notes={notes}
         uploadAttendance={uploadAttendance}
+        chatwindow={chatwindow}
       />
       {showNotifications ? <Notifications /> : ""}
       {currentPage === 0 ? (

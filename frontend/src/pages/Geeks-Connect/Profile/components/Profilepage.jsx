@@ -240,6 +240,7 @@ export const Profilepage = () => {
                     },
                     data: {
                         token: localStorage.getItem("jwt"),
+                        username: JSON.parse(localStorage.getItem("user")).username
                     },
                 });
                 console.log(response);
@@ -280,6 +281,7 @@ export const Profilepage = () => {
                 type: "SET_LOADING",
                 payload: false,
             });
+            console.log(response.data);
             if (response.data.success) {
                 dispatch({
                     type: "SET_ACHIEVEMENTS",
@@ -560,7 +562,7 @@ export const Profilepage = () => {
                                                 ref={lastPostRefChanger}
                                             >
                                                 {/* <p>{idx}</p> */}
-                                                <div className="post-row">
+                                                <div className="pt-2">
                                                     <div
                                                         className="user-profile"
                                                         style={{
@@ -671,7 +673,7 @@ export const Profilepage = () => {
                                                                                 await axios(
                                                                                     {
                                                                                         method: "POST",
-                                                                                        url: `http://localhost:8000/deletePost`,
+                                                                                        url: `${BaseUrl}/deletePost`,
                                                                                         data: {
                                                                                             postId: posts[
                                                                                                 deletePostId
@@ -712,7 +714,7 @@ export const Profilepage = () => {
                                                     alt=""
                                                     className="post-img"
                                                 />
-                                                <div className="post-row">
+                                                <div className="post-row pt-2">
                                                     <div className="activity-icons">
                                                         <div>
                                                             <ThumbUpIcon
@@ -850,13 +852,6 @@ export const Profilepage = () => {
                                                                     .length
                                                             }
                                                         </div>
-                                                        <div>
-                                                            <img
-                                                                src={share}
-                                                                alt=""
-                                                            />
-                                                            120
-                                                        </div>
                                                     </div>
                                                     <div className="post-profile-icon">
                                                         <img
@@ -878,7 +873,7 @@ export const Profilepage = () => {
                                                 //     console.log(idx);
                                                 // }}
                                             >
-                                                <p>{idx}</p>
+                                                {/* <p>{idx}</p> */}
                                                 <div className="post-row">
                                                     <div
                                                         className="user-profile"
@@ -983,7 +978,7 @@ export const Profilepage = () => {
                                                                                 await axios(
                                                                                     {
                                                                                         method: "POST",
-                                                                                        url: `http://localhost:8000/deletePost`,
+                                                                                        url: `${BaseUrl}/deletePost`,
                                                                                         data: {
                                                                                             postId: posts[
                                                                                                 deletePostId
@@ -1024,7 +1019,7 @@ export const Profilepage = () => {
                                                     alt=""
                                                     className="post-img"
                                                 />
-                                                <div className="post-row">
+                                                <div className="post-row pt-2">
                                                     <div className="activity-icons">
                                                         <div>
                                                             <ThumbUpIcon
@@ -1174,16 +1169,12 @@ export const Profilepage = () => {
                                                                     .length
                                                             }
                                                         </div>
-                                                        <div>
-                                                            <img
-                                                                src={share}
-                                                                alt=""
-                                                            />
-                                                            120
-                                                        </div>
                                                     </div>
                                                     <div className="post-profile-icon">
-                                                        <img src={pp} alt="" />
+                                                        <img src={
+                                                                userData.user
+                                                                    .profilePic
+                                                            } alt="" />
                                                     </div>
                                                 </div>
                                             </div>

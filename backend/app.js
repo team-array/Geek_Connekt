@@ -13,6 +13,7 @@ const app = express();
 
 app.use(cors());
 app.use(morgan("dev"));
+app.enable("trust proxy");
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.urlencoded({ extended: true }));

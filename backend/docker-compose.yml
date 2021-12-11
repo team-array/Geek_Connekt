@@ -1,22 +1,45 @@
 version: "3"
 services:
-    geek_connekt:
-      build:
-        context: .
-        dockerfile: Dockerfile
-      ports:
-        - "8000:8000"
-      volumes:
-        - ./:/app
-        - /app/node_modules
-    redis:
-        image: redis
-    nginx:
-        image: nginx:stable-alpine
-        ports:
-            - "80:80"
-            - "443:443"
-        depends_on:
-            - geek_connekt
-        volumes:
-            - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+  geek_connekt:
+    build: .
+    env_file:
+      - ./.env
+  redis:
+    image: redis
+  nginx:
+    image: nginx:mainline-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - web-root:/var/www/html
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - dhparam:/etc/ssl/certs
+    depends_on:
+      - geek_connekt
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - web-root:/var/www/html
+    depends_on:
+      - nginx
+    command: certonly --webroot --webroot-path=/var/www/html --email akshaymurari184@gmail.com --agree-tos --no-eff-email --force-renewal -d webportfolyo.tech -d www.webportfolyo.tech
+volumes:
+  certbot-etc:
+  certbot-var:
+  web-root:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./
+      o: bind
+  dhparam:
+    driver: local
+    driver_opts:
+      type: none
+      device: dhparam/
+      o: bind

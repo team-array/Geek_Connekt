@@ -144,6 +144,7 @@ const userCreateResolver = async (args) => {
 
 const userAuthCheck = async (args) => {
     try {
+        console.log(args);
         const { username } = jwt.verify(args.token, process.env.JWT_SECRET);
         const user = await User.findOne({ username: username });
         if (user) {

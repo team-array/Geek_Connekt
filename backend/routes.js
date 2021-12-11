@@ -156,4 +156,8 @@ router.post("/getAttendance", (res, req) => {
     require("./controllers/AttendanceController").getAttendance(res, req);
 });
 
+router.post("/getAllChats",(req, res) => {
+    require("./controllers/ChatControllers").getAllChats(req, res);
+})
+
 module.exports = router;
